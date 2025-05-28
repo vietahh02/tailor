@@ -1,0 +1,16 @@
+.list-container {
+  box-shadow: rgba(64, 87, 109, 0.3) 0px 4px 32px -10px;
+  overflow: hidden;
+  .list-wrapper {
+    margin: 0;
+    background: lightcyan;
+    .list-content1 {
+      background-color: rgb(255, 255, 255);
+      direction: ltr;
+      position: relative;
+      .list-content2 {
+        position: relative;
+      }
+    }
+  }
+}

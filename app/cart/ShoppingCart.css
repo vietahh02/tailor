@@ -1,0 +1,138 @@
+/* Container */
+.ct-container {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 0;
+  font-family: sans-serif;
+}
+
+/* Title and notes */
+.ct-title {
+  font-size: 4rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.ct-shipping-note {
+  color: #ff1493;
+  font-weight: bold;
+}
+
+.ct-return-note {
+  color: #777;
+}
+
+/* Main layout */
+.ct-main {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+/* Left Section */
+.ct-left {
+  flex: 2;
+}
+
+.ct-item-count {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.ct-item {
+  border-top: 1px solid #ccc;
+  padding: 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ct-item-info {
+  display: flex;
+  align-items: center;
+}
+
+.ct-item-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin-right: 1rem;
+}
+
+.ct-item-weight {
+  color: #888;
+}
+
+.ct-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ct-qty-control {
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+
+.ct-qty-btn {
+  border: none;
+  background: none;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.ct-qty-value {
+  margin: 0 0.5rem;
+}
+
+.ct-remove-btn {
+  border: none;
+  background: none;
+  color: #ff1493;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.ct-price {
+  font-weight: bold;
+}
+
+/* Right Section */
+.ct-right {
+  flex: 1;
+  margin-left: 2rem;
+}
+
+.ct-summary-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.ct-summary {
+  border-top: 1px solid #ccc;
+  padding-top: 1rem;
+}
+
+.ct-summary-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.ct-summary-note {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.ct-checkout-btn {
+  margin-top: 1rem;
+  background-color: #ff1493;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}

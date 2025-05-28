@@ -1,0 +1,29 @@
+.background-container {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  outline: none;
+  overflow: hidden;
+  pointer-events: all;
+  touch-action: pan-x pan-y pinch-zoom;
+  .background-wrapper {
+    height: 100%;
+    width: 100%;
+    transition: "transform 0.3s";
+    .background-content {
+      // transform: translate(0px, -420px) rotate(0deg);
+      position: relative;
+      .background-img {
+        object-fit: fill;
+        display: block;
+        height: 100%;
+        width: 100%;
+        pointer-events: none;
+        position: absolute;
+        overflow: clip;
+      }
+    }
+  }
+}

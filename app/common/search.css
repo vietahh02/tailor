@@ -1,0 +1,85 @@
+.search {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  padding-top: 8rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.search.show-search {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.search__form {
+  position: relative;
+  background: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1rem);
+  transition: transform 0.3s ease;
+}
+
+.search.show-search .search__form {
+  transform: translateY(0);
+}
+
+/* Dấu X để đóng modal */
+.search__modal-close {
+  position: absolute;
+  font-size: 2rem;
+  text-align: center;
+  top: 50px;
+  cursor: pointer;
+}
+
+.search__input-wrapper {
+  position: relative;
+}
+
+.search__input {
+  width: 100%;
+  padding: 1rem 2.5rem 1rem 2.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.search__icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.search__clear {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  color: #666;
+  cursor: pointer;
+}
+
+.search__search {
+  position: absolute;
+  font-size: 1rem;
+  text-align: center;
+  top: 200px;
+  cursor: pointer;
+  background-color: aliceblue;
+  padding: 10px;
+  border-radius: 10px;
+}
