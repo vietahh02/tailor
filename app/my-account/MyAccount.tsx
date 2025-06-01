@@ -1,45 +1,113 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Button, Form, Input, Upload, message } from "antd";
-import type { UploadChangeParam } from "antd/es/upload";
+import React, { useState, useEffect, useRef } from "react";
+import { Button, Form, Input, Upload, Modal, Image } from "antd";
 import { RcFile, UploadFile } from "antd/es/upload/interface";
-import { UserOutlined, UploadOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
+import { getInfoUser, updateUser } from "../util/api";
+import { toast } from "react-toastify";
 
 interface UserInfo {
-  avatarUrl: string;
-  fullName: string;
-  nickName: string;
+  id: number;
+  avatar_image: string;
+  full_name: string;
+  user_name: string;
   phone: string;
   address: string;
   email: string;
 }
 
 const initialUserInfo: UserInfo = {
-  avatarUrl: "", // mặc định chưa có ảnh
-  fullName: "Nguyen Van A",
-  nickName: "vanA",
-  phone: "0912345678",
-  address: "123 Đường ABC, Quận 1, TP.HCM",
-  email: "vana@example.com",
+  id: 0,
+  avatar_image: "",
+  full_name: "",
+  user_name: "",
+  phone: "",
+  address: "",
+  email: "",
 };
 
 export default function ProfilePage() {
   const [form] = Form.useForm();
   const [userInfo, setUserInfo] = useState<UserInfo>(initialUserInfo);
   const [avatarFileList, setAvatarFileList] = useState<UploadFile[]>([]);
+  const [previewImage, setPreviewImage] = useState<string>("");
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewTitle, setPreviewTitle] = useState("");
   const [isChanged, setIsChanged] = useState(false);
+  const userOld = useRef<UserInfo>();
 
-  // Hàm so sánh thông tin mới với ban đầu để enable nút lưu
-  const checkChanged = (values: UserInfo) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getInfoUser();
+      if (!res?.message) {
+        setUserInfo({
+          id: res.id,
+          avatar_image: res.avatar_image,
+          full_name: res.full_name,
+          user_name: res.user_name,
+          phone: res.phone,
+          address: res.address,
+          email: res.email,
+        });
+        userOld.current = userInfo;
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    form.setFieldsValue(userInfo);
+    if (userInfo.avatar_image) {
+      const fileList: UploadFile[] = [
+        {
+          uid: "-1",
+          name: "avatar.png",
+          status: "done",
+          url: userInfo.avatar_image,
+        },
+      ];
+      setAvatarFileList(fileList);
+      setPreviewImage(userInfo.avatar_image);
+    }
+  }, [userInfo, form]);
+
+  const normFile = (e: any) => {
+    if (Array.isArray(e)) return e;
+    return e?.fileList;
+  };
+
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj as RcFile);
+        reader.onload = () => resolve(reader.result as string);
+      });
+    }
+
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
+    setPreviewTitle(file.name || "Xem trước ảnh");
+  };
+
+  const handleChange = (info: { fileList: UploadFile[] }) => {
+    setAvatarFileList(info.fileList.slice(-1)); // chỉ giữ 1 ảnh
+    setIsChanged(true);
+  };
+
+  const onValuesChange = (_: unknown, allValues: UserInfo) => {
+    const hasAvatarChanged =
+      avatarFileList.length > 0 &&
+      avatarFileList[0].originFileObj !== undefined;
+
     if (
-      values.fullName !== userInfo.fullName ||
-      values.nickName !== userInfo.nickName ||
-      values.phone !== userInfo.phone ||
-      values.address !== userInfo.address ||
-      values.email !== userInfo.email ||
-      (avatarFileList.length > 0 &&
-        avatarFileList[0].url !== userInfo.avatarUrl)
+      allValues.full_name !== userInfo.full_name ||
+      allValues.user_name !== userInfo.user_name ||
+      allValues.phone !== userInfo.phone ||
+      allValues.address !== userInfo.address ||
+      allValues.email !== userInfo.email ||
+      hasAvatarChanged
     ) {
       setIsChanged(true);
     } else {
@@ -47,117 +115,83 @@ export default function ProfilePage() {
     }
   };
 
-  // Khi form thay đổi
-  const onValuesChange = (_: any, allValues: UserInfo) => {
-    checkChanged(allValues);
-  };
+  const onSave = async () => {
+    try {
+      const values = await form.validateFields();
 
-  // Xử lý upload ảnh avatar
-  const handleAvatarChange = (info: UploadChangeParam<UploadFile<any>>) => {
-    let fileList = [...info.fileList];
+      const avatarFile =
+        avatarFileList.length > 0 ? avatarFileList[0].originFileObj : undefined;
 
-    // Giữ lại chỉ 1 file (avatar)
-    fileList = fileList.slice(-1);
+      const res = await updateUser(
+        userInfo.id,
+        userOld?.current?.email !== values.email ? values.email : undefined,
+        userOld?.current?.phone !== values.phone ? values.phone : undefined,
+        values.address,
+        avatarFile,
+        values.full_name
+      );
 
-    // Đọc ảnh để preview
-    fileList = fileList.map((file) => {
-      if (file.originFileObj) {
-        file.url = URL.createObjectURL(file.originFileObj);
+      if (res.message === "User updated successfully") {
+        toast.success("Lưu thông tin thành công!");
+        setIsChanged(false);
+      } else {
+        toast.error("Cập nhật thông tin thất bại");
       }
-      return file;
-    });
-
-    setAvatarFileList(fileList);
-
-    // Check thay đổi (ảnh có thể đã khác avatarUrl ban đầu)
-    setIsChanged(true);
+    } catch (error) {
+      toast.error("Lỗi khi lưu thông tin!");
+    }
   };
-
-  const onSave = () => {
-    form.validateFields().then((values) => {
-      // Cập nhật user info mới
-      const newAvatarUrl =
-        avatarFileList.length > 0
-          ? avatarFileList[0].url || ""
-          : userInfo.avatarUrl;
-
-      const newUserInfo = {
-        avatarUrl: newAvatarUrl,
-        ...values,
-      };
-
-      setUserInfo(newUserInfo);
-      setIsChanged(false);
-      message.success("Thông tin cá nhân đã được lưu!");
-    });
-  };
-
-  // Load dữ liệu ban đầu vào form khi userInfo thay đổi
-  useEffect(() => {
-    form.setFieldsValue(userInfo);
-    setAvatarFileList(
-      userInfo.avatarUrl
-        ? [
-            {
-              uid: "-1",
-              name: "avatar.png",
-              status: "done",
-              url: userInfo.avatarUrl,
-            },
-          ]
-        : []
-    );
-  }, [userInfo, form]);
 
   return (
-    <div
-      style={{
-        maxWidth: 650,
-        margin: "30px auto",
-        padding: "20px",
-        border: "1px solid #ddd",
-        borderRadius: 6,
-      }}
-    >
+    <div style={{ maxWidth: 650, margin: "30px auto", padding: "20px" }}>
       <h2>Thông tin cá nhân</h2>
 
       <Form
         form={form}
         layout="vertical"
-        initialValues={userInfo}
         onValuesChange={onValuesChange}
+        initialValues={userInfo}
       >
-        <Form.Item label="Ảnh đại diện">
+        <Form.Item
+          label="Ảnh đại diện"
+          name="avatar"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+        >
+          <Image src={previewImage} alt="" style={{ display: "none" }} />
           <Upload
             listType="picture-circle"
+            beforeUpload={() => false}
             fileList={avatarFileList}
-            onChange={handleAvatarChange}
-            beforeUpload={(file: RcFile) => {
-              // Chặn upload tự động, chỉ giữ trong state
-              return false;
-            }}
+            onChange={handleChange}
+            onPreview={handlePreview}
             maxCount={1}
+            showUploadList={{
+              showRemoveIcon: true,
+              showPreviewIcon: true,
+            }}
           >
-            {avatarFileList.length === 0 && (
-              <UserOutlined style={{ fontSize: 40 }} />
-            )}
+            <div>
+              <PlusOutlined />
+              <div style={{ marginTop: 8 }}>Thay ảnh</div>
+            </div>
           </Upload>
         </Form.Item>
 
         <Form.Item
           label="Họ tên đầy đủ"
-          name="fullName"
+          name="full_name"
           rules={[{ required: true, message: "Vui lòng nhập họ tên" }]}
         >
-          <Input placeholder="Họ tên đầy đủ" />
+          <Input />
         </Form.Item>
 
         <Form.Item
           label="Nickname"
-          name="nickName"
+          name="user_name"
           rules={[{ required: true, message: "Vui lòng nhập nick name" }]}
         >
-          <Input placeholder="Nickname" />
+          <Input disabled />
         </Form.Item>
 
         <Form.Item
@@ -171,11 +205,11 @@ export default function ProfilePage() {
             },
           ]}
         >
-          <Input placeholder="Số điện thoại" maxLength={11} />
+          <Input maxLength={11} />
         </Form.Item>
 
         <Form.Item label="Địa chỉ nhà" name="address">
-          <Input.TextArea placeholder="Địa chỉ nhà" rows={2} />
+          <Input.TextArea rows={2} />
         </Form.Item>
 
         <Form.Item
@@ -186,7 +220,7 @@ export default function ProfilePage() {
             { type: "email", message: "Email không hợp lệ" },
           ]}
         >
-          <Input placeholder="Email" />
+          <Input />
         </Form.Item>
 
         <Form.Item>
@@ -195,6 +229,15 @@ export default function ProfilePage() {
           </Button>
         </Form.Item>
       </Form>
+
+      <Modal
+        open={previewOpen}
+        title={previewTitle}
+        footer={null}
+        onCancel={() => setPreviewOpen(false)}
+      >
+        <Image src={previewImage} alt="Xem trước" style={{ width: "100%" }} />
+      </Modal>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { Cascader, Spin } from "antd";
 import React, { useEffect, useState } from "react";
+import { Prev } from "react-bootstrap/esm/PageItem";
 
 interface AddressOption {
   label: string;
@@ -9,7 +10,22 @@ interface AddressOption {
   children?: AddressOption[];
 }
 
-const AddressSelector = () => {
+type FormDataType = {
+  fullName: string;
+  phone: string;
+  address: string[];
+  address2: string;
+  note: string;
+  feeShip: number;
+  image: File | null;
+};
+
+type Props = {
+  formData: FormDataType;
+  setFormData: React.Dispatch<FormDataType>;
+};
+
+const AddressSelector = ({ formData, setFormData }: Props) => {
   const [options, setOptions] = useState<AddressOption[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -88,12 +104,22 @@ const AddressSelector = () => {
         <Spin />
       ) : (
         <Cascader
+          size="large"
           options={options}
           loadData={handleLoadData}
           changeOnSelect
           placeholder="Chọn địa chỉ"
           onChange={(value, selectedOptions) => {
+            setFormData({
+              ...formData,
+              address: selectedOptions.map((option) => option.label),
+            });
             console.log("Selected:", selectedOptions);
+          }}
+          style={{
+            width: "100%",
+            borderRadius: "4px",
+            marginBottom: "15px",
           }}
         />
       )}

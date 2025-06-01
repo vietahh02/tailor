@@ -1,9 +1,16 @@
+"use client";
+
 import React from "react";
 import im from "../../assets/images/about-nail.jpg";
 import Image from "next/image";
-import Link from "next/link";
+// import Link from "next/link";
+import { Button } from "antd";
+import { toast } from "react-toastify";
 
 const DesignNail = () => {
+  const handleDesign = () => {
+    toast.info("Chức năng đang trong thời gian nâng cấp hãy thử lại sau");
+  };
   return (
     <div className="about_section layout_padding">
       <div className="container">
@@ -22,7 +29,13 @@ const DesignNail = () => {
                   ullamco laboris nisi ut aliquip ex ea commodo consequat
                 </p>
                 <div className="readmore_bt">
-                  <Link href="/design">Design Now</Link>
+                  {/* <Link href="/design">Design Now</Link> */}
+                  <Button
+                    onClick={() => handleDesign()}
+                    style={{ padding: 20 }}
+                  >
+                    Design Now
+                  </Button>
                 </div>
               </div>
             </div>

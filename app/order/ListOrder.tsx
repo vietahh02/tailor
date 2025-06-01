@@ -1,83 +1,66 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { NextPage } from "next";
+import { Layout, Typography, Table, Button, Modal, Tag, Image } from "antd";
+import ProductReviewModal from "./ProductReviewModal";
 import {
-  Layout,
-  Typography,
-  Table,
-  Button,
-  Modal,
-  Tag,
-  Pagination,
-} from "antd";
-import Image from "next/image";
-import n1 from "../assets/images/nailbox2.png";
-import ProductReviewModal from "./ModalListProductOrdered";
+  changeStatusOrderApi,
+  getAllOrderUser,
+  getAllReviewForOrder,
+} from "../util/api";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const { Content } = Layout;
 const { Title, Paragraph, Text } = Typography;
 
-interface OrderItem {
-  name: string;
+type OrderItem = {
+  product_id: number;
+  product_name: string;
+  image: string;
   quantity: number;
   price: number;
-}
+  reviewed: boolean;
+  review?: Review;
+};
+
+type Review = {
+  id: number;
+  rating: number;
+  comment: string;
+  images: { id: number; url: string }[];
+};
 
 interface Order {
-  key: string;
-  id: string;
-  customer: string;
-  phone: string;
-  address: string;
-  date: string;
+  id: number;
+  customer_name: string;
+  customer_phone: string;
+  shipping_address: string;
+  shipping_fee: number;
+  created_at: string;
   status: string;
-  items: OrderItem[];
-  size?: string;
+  order_items: OrderItem[];
+  image_url?: string;
   note?: string;
+  total_price: number;
+  order_code: string;
 }
 
-const orders: Order[] = [
-  {
-    key: "1",
-    id: "ORD001",
-    customer: "Nguyen Van A",
-    phone: "0909123456",
-    address: "123 Đường ABC, Quận 1, TP.HCM",
-    date: "2025-05-20",
-    status: "Đang xử lý",
-    items: [
-      { name: "Sách Lập trình Java", quantity: 1, price: 250000 },
-      { name: "Chuột không dây", quantity: 2, price: 300000 },
-    ],
-    size: n1.blurDataURL,
-  },
-  {
-    key: "2",
-    id: "ORD002",
-    customer: "Tran Thi B",
-    phone: "0912345678",
-    address: "456 Đường XYZ, Quận 3, TP.HCM",
-    date: "2025-05-18",
-    status: "Đã giao",
-    items: [{ name: "Bàn phím cơ", quantity: 1, price: 1200000 }],
-    size: n1.blurDataURL,
-  },
-  {
-    key: "3",
-    id: "ORD003",
-    customer: "Le Van C",
-    phone: "0988765432",
-    address: "789 Đường MNO, Quận 5, TP.HCM",
-    date: "2025-05-19",
-    status: "Đang giao",
-    items: [
-      { name: "Tai nghe Bluetooth", quantity: 1, price: 500000 },
-      { name: "USB 16GB", quantity: 3, price: 150000 },
-    ],
-    size: n1.blurDataURL,
-  },
-];
+interface OrderDetail {
+  id: number;
+  customer_name: string;
+  customer_phone: string;
+  shipping_address: string;
+  shipping_fee: number;
+  created_at: string;
+  status: string;
+  items: OrderItem[];
+  image_url?: string;
+  note?: string;
+  total_price: number;
+  order_code: string;
+}
 
 function formatCurrency(number: number) {
   return number.toLocaleString("vi-VN", {
@@ -87,12 +70,37 @@ function formatCurrency(number: number) {
 }
 
 const Orders: NextPage = () => {
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<OrderDetail | null>(null);
   const [open, setOpen] = useState(false);
   const [openReview, setOpenReview] = useState(false);
 
-  const handleOpen = (order: Order) => {
-    setSelectedOrder(order);
+  const [orders, setOrders] = useState<Order[]>([]);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getAllOrderUser();
+      console.log(res);
+      if (!res.message) {
+        setOrders(res);
+      } else {
+        toast.info("Hãy đăng nhập để xem danh sách đơn hàng");
+        router.push("/login");
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleOpen = async (order: Order) => {
+    const res = await getAllReviewForOrder(order.id);
+    console.log(res);
+    if (!res.detail) {
+      setSelectedOrder(res.order);
+    } else {
+      toast.error("Lỗi hệ thống");
+    }
+    console.log(selectedOrder?.items);
     setOpen(true);
   };
 
@@ -106,18 +114,38 @@ const Orders: NextPage = () => {
     setOpen(false);
   };
 
+  const handleCancelOrder = async () => {
+    if (!selectedOrder) return;
+
+    const res = await changeStatusOrderApi(selectedOrder?.id, "cancelled");
+    if (!res) {
+      toast.error("Có lỗi thử lại sau");
+      return;
+    }
+
+    const updatedOrders = orders.map((order) =>
+      order.id === selectedOrder.id ? { ...order, status: "cancelled" } : order
+    );
+    setOrders(updatedOrders);
+    setSelectedOrder((prev) =>
+      prev ? { ...prev, status: "cancelled" } : null
+    );
+    toast.success(`Cập nhật trạng thái sang cancelled thành công`);
+  };
+
   const getStatusTag = (status: string) => {
     let color = "default";
-    if (status === "Đã giao") color = "green";
-    else if (status === "Đang giao") color = "blue";
-    else if (status === "Đang xử lý") color = "orange";
+    if (status === "completed") color = "green";
+    else if (status === "shipping") color = "blue";
+    else if (status === "pending") color = "orange";
+    else if (status === "cancelled") color = "red";
     return <Tag color={color}>{status}</Tag>;
   };
 
   const columns = [
-    { title: "Mã đơn hàng", dataIndex: "id", key: "id" },
-    { title: "Khách hàng", dataIndex: "customer", key: "customer" },
-    { title: "Ngày đặt", dataIndex: "date", key: "date" },
+    { title: "Mã đơn hàng", dataIndex: "order_code", key: "order_code" },
+    { title: "Khách hàng", dataIndex: "customer_name", key: "customer_name" },
+    { title: "Ngày đặt", dataIndex: "created_at", key: "created_at" },
     {
       title: "Trạng thái",
       dataIndex: "status",
@@ -144,7 +172,7 @@ const Orders: NextPage = () => {
           style={{ marginTop: 24 }}
           dataSource={orders}
           columns={columns}
-          pagination={false}
+          pagination={{ pageSize: 10 }}
         />
 
         <Modal
@@ -161,30 +189,34 @@ const Orders: NextPage = () => {
           {selectedOrder && (
             <>
               <Paragraph>
-                <Text strong>Mã đơn hàng:</Text> {selectedOrder.id}
+                <Text strong>Mã đơn hàng:</Text> {selectedOrder.order_code}
               </Paragraph>
               <Paragraph>
-                <Text strong>Khách hàng:</Text> {selectedOrder.customer}
+                <Text strong>Khách hàng:</Text> {selectedOrder.customer_name}
               </Paragraph>
               <Paragraph>
-                <Text strong>Số điện thoại:</Text> {selectedOrder.phone}
+                <Text strong>Số điện thoại:</Text>{" "}
+                {selectedOrder.customer_phone}
               </Paragraph>
               <Paragraph>
-                <Text strong>Địa chỉ:</Text> {selectedOrder.address}
+                <Text strong>Địa chỉ:</Text> {selectedOrder.shipping_address}
               </Paragraph>
               <Paragraph>
-                <Text strong>Ngày đặt:</Text> {selectedOrder.date}
+                <Text strong>Ngày đặt:</Text> {selectedOrder.created_at}
               </Paragraph>
               <Paragraph>
                 <Text strong>Trạng thái:</Text> {selectedOrder.status}
               </Paragraph>
               <Paragraph>
+                <Text strong>Phí Ship:</Text> {selectedOrder.shipping_fee} ₫
+              </Paragraph>
+              <Paragraph>
                 <Text strong>Size:</Text>
                 <br />
                 <Image
-                  src={n1}
+                  src={selectedOrder.image_url || ""}
                   alt="size"
-                  style={{ maxWidth: 500, maxHeight: 300, padding: 10 }}
+                  style={{ maxWidth: 300, maxHeight: 150, padding: 10 }}
                 />
               </Paragraph>
               <Paragraph>
@@ -201,8 +233,16 @@ const Orders: NextPage = () => {
                 columns={[
                   {
                     title: "Tên sản phẩm",
-                    dataIndex: "name",
-                    key: "name",
+                    dataIndex: "product_name",
+                    key: "product_name",
+                  },
+                  {
+                    title: "Ảnh",
+                    dataIndex: "image",
+                    key: "image",
+                    render: (src) => (
+                      <Image src={src} width={80} height={80} alt="" />
+                    ),
                   },
                   {
                     title: "Số lượng",
@@ -226,24 +266,38 @@ const Orders: NextPage = () => {
                 style={{ marginTop: 24 }}
                 size="small"
                 footer={() => (
-                  <strong>
-                    Tổng cộng:{" "}
-                    {formatCurrency(
-                      selectedOrder.items.reduce(
-                        (sum, item) => sum + item.price * item.quantity,
-                        0
-                      )
-                    )}
-                  </strong>
+                  <div
+                    style={{
+                      width: "100%",
+                      textAlign: "end",
+                      paddingRight: 30,
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <strong>Tổng cộng: </strong>
+                    <strong>
+                      {formatCurrency(
+                        selectedOrder.items.reduce(
+                          (sum, item) => sum + item.price * item.quantity,
+                          0
+                        )
+                      )}
+                    </strong>
+                  </div>
                 )}
               />
 
-              {selectedOrder.status === "Đang xử lý" && (
-                <Button danger style={{ marginTop: 16 }}>
+              {selectedOrder.status === "pending" && (
+                <Button
+                  danger
+                  style={{ marginTop: 16 }}
+                  onClick={handleCancelOrder}
+                >
                   Hủy đơn
                 </Button>
               )}
-              {selectedOrder.status === "Đã giao" && (
+              {selectedOrder.status === "completed" && (
                 <Button
                   type="primary"
                   style={{ marginTop: 16 }}
@@ -258,12 +312,8 @@ const Orders: NextPage = () => {
         <ProductReviewModal
           openReview={openReview}
           setOpenReview={setOpenReview}
-        />
-        <Pagination
-          className="mt-4"
-          align="center"
-          defaultCurrent={1}
-          total={50}
+          orderItem={selectedOrder?.items || []}
+          setOrders={setOrders}
         />
       </Content>
     </Layout>

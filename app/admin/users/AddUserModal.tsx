@@ -15,8 +15,8 @@ interface Props {
 }
 
 const roles = [
-  { key: 1, role: "Admin" },
-  { key: 2, role: "User" },
+  { key: "admin", role: "Admin" },
+  { key: "user", role: "User" },
 ];
 
 const AddUserModal: React.FC<Props> = ({ open, onCreate, onCancel }) => {
@@ -70,7 +70,7 @@ const AddUserModal: React.FC<Props> = ({ open, onCreate, onCancel }) => {
         >
           <BootstrapForm.Select aria-label="Default select example">
             {roles.map((r) => (
-              <option key={r.key} value={r.key} selected={2 === r.key}>
+              <option key={r.key} value={r.key} selected={"user" === r.key}>
                 {r.role}
               </option>
             ))}

@@ -6,7 +6,7 @@ const Contact = () => {
       <div className="container">
         <div className="row">
           <div className="col-md-6">
-            <h1 className="contact_taital">Get In Touch</h1>
+            <h1 className="contact_taital">Theo dõi </h1>
             <p className="contact_text">
               Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
               labore et dolore magna aliqua. Ut enim ad minim veniam, quis

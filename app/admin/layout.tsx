@@ -1,25 +1,32 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { Layout } from "antd";
-import type { Metadata } from "next";
 import HeaderAdmin from "./HeaderAdmin";
 import FooterAdmin from "./FooterAdmin";
-
-export const metadata: Metadata = {
-  title: "Tailor Nail | Admin",
-  description: "Discover our range of nail products and services.",
-};
+import { useAuth } from "../context/auth.context";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { checkAdmin, loadingAuth } = useAuth();
+  const router = useRouter();
+
+  if (loadingAuth) {
+    return <p>Đang kiểm tra xác thực...</p>;
+  }
+
+  if (!checkAdmin()) {
+    router.push("/");
+  }
+
   return (
-    <>
-      <Layout style={{ height: "100vh" }}>
-        <HeaderAdmin />
-        {children}
-        <FooterAdmin />
-      </Layout>
-    </>
+    <Layout style={{ minHeight: "100vh" }}>
+      <HeaderAdmin />
+      {children}
+      <FooterAdmin />
+    </Layout>
   );
 }

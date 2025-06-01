@@ -1,13 +1,28 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Product from "./Product";
+import { getTopSell } from "../util/api";
 
 const ListProduct = () => {
+  const [products, setProducts] = useState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getTopSell();
+      if (!res?.message) {
+        setProducts(res);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className="product_section layout_padding">
       <div className="container">
         <div className="row">
           <div className="col-sm-12">
-            <h1 className="product_taital">Nail Box Xinh Yêu</h1>
+            <h1 className="product_taital">BESTSELLERS</h1>
             <p className="product_text">
               💖 Nailbox siêu xinh cho nàng xinh – chỉ cần mở hộp là có ngay bộ
               móng lung linh ✨, xinh hết nấc! 💅
@@ -15,17 +30,20 @@ const ListProduct = () => {
           </div>
         </div>
         <div className="row product_section_2 layout_padding">
-          <Product />
-          <Product />
-          <Product />
-          <Product />
-          <Product />
-          <Product />
-          <Product />
-          <Product />
-          {/* <div className="seemore_bt">
-            <a href="#">See More</a>
-          </div> */}
+          {products?.map((p) => (
+            <Product
+              key={p.id}
+              id={p.id}
+              name={p.name}
+              category={p.category}
+              image={p.images[0]}
+              price={p.price}
+              discount={p.discount | 0}
+              is_favorite={p.is_favorite}
+              favorite_id={p.favorite_id}
+              setProducts={setProducts}
+            />
+          ))}
         </div>
       </div>
     </div>

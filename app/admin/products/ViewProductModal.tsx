@@ -1,14 +1,19 @@
 import React, { useState } from "react";
-import { Modal, Descriptions, Image, Tag } from "antd";
+import { Modal, Descriptions, Image } from "antd";
 
 interface Product {
   id: number;
   name: string;
   price: number;
-  images: string[];
+  images: { id: number; url: string }[];
   description?: string;
   discount?: number;
-  categories?: string[];
+  category: string;
+  job?: string;
+  pattern?: string;
+  nail_length?: string;
+  purpose?: string;
+  occasion?: string;
 }
 
 interface ViewProductModalProps {
@@ -55,20 +60,28 @@ const ViewProductModal: React.FC<ViewProductModalProps> = ({
             {product.description || "Không có"}
           </Descriptions.Item>
           <Descriptions.Item label="Thể loại">
-            {(product.categories || []).map((cat) => (
-              <Tag color="blue" key={cat}>
-                {cat}
-              </Tag>
-            ))}
+            {product.category || "Không có"}
+          </Descriptions.Item>
+          <Descriptions.Item label="Nghề nghiệp">
+            {product.job || "Không có"}
+          </Descriptions.Item>
+          <Descriptions.Item label="Độ dài móng">
+            {product.nail_length || "Không có"}
+          </Descriptions.Item>
+          <Descriptions.Item label="Mục đích làm móng">
+            {product.purpose || "Không có"}
+          </Descriptions.Item>
+          <Descriptions.Item label="Dịp đặc biệt">
+            {product.occasion || "Không có"}
           </Descriptions.Item>
           <Descriptions.Item label="Hình ảnh">
             {(product.images || []).map((imgUrl, idx) => (
               <Image
                 key={idx}
                 width={80}
-                src={imgUrl}
+                src={imgUrl.url}
                 style={{ paddingRight: 4, cursor: "pointer" }}
-                onClick={() => handleImageClick(imgUrl)}
+                onClick={() => handleImageClick(imgUrl.url)}
                 preview={false}
                 alt=""
               />

@@ -97,6 +97,8 @@
 
 .ct-price {
   font-weight: bold;
+  width: 100px;
+  text-align: right;
 }
 
 /* Right Section */

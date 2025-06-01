@@ -1,66 +1,127 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Form, Input, InputNumber, Upload, Checkbox, Image } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import {
+  Modal,
+  Form,
+  Input,
+  InputNumber,
+  Upload,
+  Checkbox,
+  Image,
+  Button,
+  Space,
+  Radio,
+} from "antd";
+import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import type { UploadFile } from "antd/es/upload/interface";
-import type { UploadFileStatus } from "antd/es/upload/interface";
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  images: string[];
-  description?: string;
-  discount?: number;
-  categories?: string[];
-}
+import type { UploadChangeParam } from "antd/es/upload";
+import type { RcFile } from "antd/es/upload/interface";
 
 const { TextArea } = Input;
 
-interface EditProductModalProps {
-  visible: boolean;
-  product: Product | null;
-  onCancel: () => void;
-  onSubmit: (updatedProduct: Product) => void;
+export interface ProductFormValues {
+  id: number;
+  name: string;
+  price: number;
+  discount: number;
+  description: string;
+  category: string[];
+  images?: File[];
+  job?: string;
+  pattern?: string;
+  nail_length?: string;
+  purpose?: string;
+  occasion?: string;
+  delete_image_ids?: string;
 }
 
-const categoryOptions = ["Thời trang", "Điện tử", "Đồ gia dụng", "Thực phẩm"];
+interface EditProductModalProps {
+  visible: boolean;
+  onCancel: () => void;
+  onSubmit: (values: ProductFormValues) => void;
+  product: {
+    id: number;
+    name: string;
+    price: number;
+    images: { id: number; url: string }[];
+    description?: string;
+    discount?: number;
+    category: string;
+    job?: string;
+    pattern?: string;
+    nail_length?: string;
+    purpose?: string;
+    occasion?: string;
+  };
+}
+
+const categoryOptions = [
+  "Nữ tính / dịu dàng",
+  "Cá tính / nổi bật",
+  "Tối giản / thanh lịch",
+  "Sang trọng / quý phái",
+  "Dễ thương / năng động",
+];
+
+const jobs = [
+  "Văn phòng",
+  "Nghệ thuật",
+  "Sinh viên",
+  "Lao động tay chân",
+  "Tự do",
+];
+
+const patterns = ["Hoa lá", "Hoạt hình", "Đá", "Kim tuyến", "Trơn", "Vẽ tay"];
+
+const length = ["Ngắn", "Trung bình", "Dài"];
+
+const purpose = ["Đi chơi", "Đi làm", "Du lịch", "Dịp đặc biệt"];
+
+const occasion = ["Valentine", "Giáng sinh", "Tết"];
 
 const EditProductModal: React.FC<EditProductModalProps> = ({
   visible,
-  product,
   onCancel,
   onSubmit,
+  product,
 }) => {
   const [form] = Form.useForm();
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [previewImage, setPreviewImage] = useState<string>("");
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewTitle, setPreviewTitle] = useState("");
 
-  const convertImagesToFileList = (urls: string[]): UploadFile[] => {
-    return urls.map((url, index) => ({
-      uid: `-${index}`,
-      name: `image-${index}.jpg`,
-      status: "done" as UploadFileStatus,
-      url: url,
-    }));
-  };
+  const [oldImages, setOldImages] = useState<{ id: number; url: string }[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedJobs, setSelectedJobs] = useState<string[]>([]);
+  const [selectedPatterns, setSelectedPatterns] = useState<string[]>([]);
+  const [selectedPurpose, setSelectedPurpose] = useState<string[]>([]);
+  const [selectedOccasion, setSelectedOccasion] = useState<string[]>([]);
+  const [selectedLength, setSelectedLength] = useState<string>();
+  const [deleteImage, setDeleteImage] = useState<string[]>([]);
 
   useEffect(() => {
-    if (visible && product) {
-      form.setFieldsValue({ ...product });
-      setFileList(convertImagesToFileList(product.images));
+    if (product) {
+      form.setFieldsValue({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        discount: product.discount,
+        description: product.description,
+        category: product.category ? product.category.split(",") : [],
+        job: product.job ? product.job.split(",") : [],
+        pattern: product.pattern ? product.pattern.split(",") : [],
+        purpose: product.purpose ? product.purpose.split(",") : [],
+        occasion: product.occasion ? product.occasion.split(",") : [],
+        nail_length: product.nail_length,
+      });
+      setOldImages(product.images || []);
+      setSelectedCategories(product.category?.split(",") || []);
+      setSelectedJobs(product.job?.split(",") || []);
+      setSelectedPatterns(product.pattern?.split(",") || []);
+      setSelectedPurpose(product.purpose?.split(",") || []);
+      setSelectedOccasion(product.occasion?.split(",") || []);
+      setSelectedLength(product.nail_length);
     }
-  }, [visible, product]);
-
-  const normFile = (e: any) => {
-    if (Array.isArray(e)) return e;
-    return e?.fileList;
-  };
-
-  const handleChange = ({ fileList }: { fileList: UploadFile[] }) => {
-    setFileList(fileList);
-  };
+  }, [product]);
 
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
@@ -74,108 +135,196 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
     setPreviewImage(file.url || (file.preview as string));
     setPreviewOpen(true);
     setPreviewTitle(
-      file.name || file.url?.substring(file.url.lastIndexOf("/") + 1) || ""
+      file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
     );
+  };
+
+  const normFile = (
+    e: UploadChangeParam<UploadFile<RcFile>> | UploadFile<RcFile>[]
+  ) => {
+    if (Array.isArray(e)) return e;
+    return e?.fileList;
+  };
+
+  const handleRemoveOldImage = (i: { id: number; url: string }) => {
+    setOldImages((prev) => prev.filter((img) => img.id !== i.id));
+    setDeleteImage((prev) => [...prev, String(i.id)]);
   };
 
   const handleOk = () => {
     form.validateFields().then((values) => {
-      const newImages = fileList.map((file: any) =>
-        file.originFileObj ? URL.createObjectURL(file.originFileObj) : file.url
+      const newImages = values.images?.map(
+        (file: UploadFile) => file.originFileObj
       );
+      onSubmit({
+        ...values,
+        id: product.id,
+        category: selectedCategories,
+        job: selectedJobs,
+        pattern: selectedPatterns,
+        purpose: selectedPurpose,
+        occasion: selectedOccasion,
+        nail_length: selectedLength,
+        delete_image_ids: deleteImage?.toString(),
 
-      onSubmit({ ...product!, ...values, images: newImages });
+        images: newImages || [],
+      });
       form.resetFields();
-      setFileList([]);
     });
   };
 
-  const handleCancel = () => {
-    form.resetFields();
-    setFileList([]);
-    onCancel();
-  };
-
   return (
-    <>
-      <Modal
-        title="Chỉnh sửa sản phẩm"
-        open={visible}
-        onCancel={handleCancel}
-        onOk={handleOk}
-        okText="Cập nhật"
-        cancelText="Hủy"
-      >
-        <Form form={form} layout="vertical">
-          <Form.Item
-            label="Tên sản phẩm"
-            name="name"
-            rules={[{ required: true, message: "Vui lòng nhập tên sản phẩm!" }]}
-          >
-            <Input />
-          </Form.Item>
+    <Modal
+      title="Chỉnh sửa sản phẩm"
+      open={visible}
+      onCancel={onCancel}
+      onOk={handleOk}
+      okText="Lưu"
+      cancelText="Hủy"
+    >
+      <Form form={form} layout="vertical">
+        <Form.Item
+          label="Tên sản phẩm"
+          name="name"
+          rules={[{ required: true, message: "Vui lòng nhập tên sản phẩm!" }]}
+        >
+          <Input />
+        </Form.Item>
 
-          <Form.Item
-            label="Giá"
-            name="price"
-            rules={[{ required: true, message: "Vui lòng nhập giá!" }]}
-          >
-            <InputNumber min={0} style={{ width: "100%" }} />
-          </Form.Item>
+        <Form.Item
+          label="Giá"
+          name="price"
+          rules={[{ required: true, message: "Vui lòng nhập giá!" }]}
+        >
+          <InputNumber min={0} style={{ width: "100%" }} />
+        </Form.Item>
 
-          <Form.Item
-            label="Giảm giá (0% - 100%)"
-            name="discount"
-            rules={[
-              { required: true, message: "Vui lòng nhập giảm giá!" },
-              {
-                type: "number",
-                min: 0,
-                max: 100,
-                message: "Giảm giá phải từ 0 đến 100",
-              },
-            ]}
-          >
-            <InputNumber step={1} min={0} max={100} style={{ width: "100%" }} />
-          </Form.Item>
+        <Form.Item
+          label="Giảm giá (0% - 100%)"
+          name="discount"
+          rules={[
+            { required: true, message: "Vui lòng nhập giảm giá!" },
+            {
+              type: "number",
+              min: 0,
+              max: 100,
+              message: "Giảm giá từ 0 đến 100",
+            },
+          ]}
+        >
+          <InputNumber step={1} min={0} max={100} style={{ width: "100%" }} />
+        </Form.Item>
 
-          <Form.Item label="Mô tả" name="description">
-            <TextArea rows={3} />
-          </Form.Item>
+        <Form.Item label="Mô tả" name="description">
+          <TextArea rows={3} />
+        </Form.Item>
 
-          <Form.Item
-            label="Thể loại"
-            name="categories"
-            rules={[{ required: true, message: "Vui lòng chọn thể loại!" }]}
-          >
-            <Checkbox.Group options={categoryOptions} />
-          </Form.Item>
+        <Form.Item
+          label="Thể loại"
+          name="category"
+          rules={[{ required: true, message: "Vui lòng chọn thể loại!" }]}
+        >
+          <Checkbox.Group
+            options={categoryOptions}
+            onChange={(checked) => setSelectedCategories(checked as string[])}
+          />
+        </Form.Item>
 
-          <Form.Item
-            label="Ảnh sản phẩm"
-            name="images"
-            valuePropName="fileList"
-            getValueFromEvent={normFile}
-          >
-            <Upload
-              listType="picture-card"
-              fileList={fileList}
-              onChange={handleChange}
-              beforeUpload={() => false}
-              onPreview={handlePreview}
-            >
-              {fileList.length < 8 && (
-                <div>
-                  <PlusOutlined />
-                  <div style={{ marginTop: 8 }}>Thêm ảnh</div>
+        <Form.Item label="Nghề nghiệp" name="job">
+          <Checkbox.Group
+            options={jobs}
+            onChange={(checked) => setSelectedJobs(checked as string[])}
+          />
+        </Form.Item>
+
+        <Form.Item label="Họa tiết" name="pattern">
+          <Checkbox.Group
+            options={patterns}
+            onChange={(checked) => setSelectedPatterns(checked as string[])}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Độ dài móng"
+          name="nail_length"
+          rules={[
+            { required: true, message: "Vui lòng chọn độ dài móng phù hợp!" },
+          ]}
+        >
+          <Radio.Group
+            options={length}
+            onChange={(e) => setSelectedLength(e.target.value)}
+          />
+        </Form.Item>
+
+        <Form.Item label="Mục đích làm móng" name="purpose">
+          <Checkbox.Group
+            options={purpose}
+            onChange={(checked) => setSelectedPurpose(checked as string[])}
+          />
+        </Form.Item>
+
+        <Form.Item label="Dịp đặc biệt" name="occasion">
+          <Checkbox.Group
+            options={occasion}
+            onChange={(checked) => setSelectedOccasion(checked as string[])}
+          />
+        </Form.Item>
+
+        {/* Old Images Display */}
+        {oldImages.length > 0 && (
+          <Form.Item label="Ảnh cũ">
+            <Space wrap>
+              {oldImages.map((image) => (
+                <div key={image.id} style={{ position: "relative" }}>
+                  <Image
+                    width={80}
+                    height={80}
+                    src={image.url}
+                    style={{ borderRadius: 6 }}
+                    alt=""
+                  />
+                  <Button
+                    type="primary"
+                    danger
+                    icon={<DeleteOutlined />}
+                    size="small"
+                    onClick={() => handleRemoveOldImage(image)}
+                    style={{
+                      position: "absolute",
+                      top: -8,
+                      right: -8,
+                      borderRadius: "50%",
+                    }}
+                  />
                 </div>
-              )}
-            </Upload>
+              ))}
+            </Space>
           </Form.Item>
-        </Form>
-      </Modal>
+        )}
 
-      {/* Modal preview ảnh */}
+        {/* New Images Upload */}
+        <Form.Item
+          label="Thêm ảnh mới"
+          name="images"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+        >
+          <Upload
+            listType="picture-card"
+            multiple
+            beforeUpload={() => false}
+            onPreview={handlePreview}
+          >
+            <div>
+              <PlusOutlined />
+              <div style={{ marginTop: 8 }}>Thêm ảnh</div>
+            </div>
+          </Upload>
+        </Form.Item>
+      </Form>
+
+      {/* Preview Modal */}
       <Modal
         open={previewOpen}
         title={previewTitle}
@@ -184,7 +333,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
       >
         <Image alt="preview" style={{ width: "100%" }} src={previewImage} />
       </Modal>
-    </>
+    </Modal>
   );
 };
 

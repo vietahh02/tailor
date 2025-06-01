@@ -1,6 +1,12 @@
 import React from "react";
 import logo from "../assets/images/logonew.png";
 import Image from "next/image";
+import {
+  FaFacebookSquare,
+  FaInstagramSquare,
+  FaTwitterSquare,
+} from "react-icons/fa";
+import Link from "next/link";
 
 const Footer = () => {
   return (
@@ -22,7 +28,7 @@ const Footer = () => {
                       <a href="#">
                         <i className="fa fa-map-marker" aria-hidden="true"></i>
                         <span className="padding_left10">
-                          Address : Loram Ipusm
+                          Address : Hòa Lạc, Thạch Thất, Hà Nội
                         </span>
                       </a>
                     </li>
@@ -30,7 +36,7 @@ const Footer = () => {
                       <a href="#">
                         <i className="fa fa-phone" aria-hidden="true"></i>
                         <span className="padding_left10">
-                          Call : +01 1234567890
+                          Call : +84 1234567890
                         </span>
                       </a>
                     </li>
@@ -38,7 +44,7 @@ const Footer = () => {
                       <a href="#">
                         <i className="fa fa-envelope" aria-hidden="true"></i>
                         <span className="padding_left10">
-                          Email : demo@gmail.com
+                          Email : tailornail@gmail.com
                         </span>
                       </a>
                     </li>
@@ -51,19 +57,12 @@ const Footer = () => {
                     <Image src={logo} alt="Logo" />
                   </a>
                 </div>
-                <p className="dummy_text">
-                  commodo consequat. Duis aute irure dolor in reprehenderit in
-                  voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                  Excepteur sint occaecat cupidatat non
-                </p>
+                <p className="dummy_text">Theo dõi Tailor Nail</p>
               </div>
               <div className="col-sm-4">
                 <div className="main">
-                  <h3 className="address_text">Best Products</h3>
-                  <p className="ipsum_text">
-                    dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                    cupidatat non
-                  </p>
+                  <h3 className="address_text">Chưa biết để gì</h3>
+                  <p className="ipsum_text">Đang nghĩ ....</p>
                 </div>
               </div>
             </div>
@@ -71,24 +70,19 @@ const Footer = () => {
           <div className="social_icon">
             <ul>
               <li>
-                <a href="#">
-                  <i className="fa fa-facebook" aria-hidden="true"></i>
-                </a>
+                <Link href="#">
+                  <FaFacebookSquare />
+                </Link>
               </li>
               <li>
-                <a href="#">
-                  <i className="fa fa-twitter" aria-hidden="true"></i>
-                </a>
+                <Link href="#">
+                  <FaTwitterSquare />
+                </Link>
               </li>
               <li>
-                <a href="#">
-                  <i className="fa fa-linkedin" aria-hidden="true"></i>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <i className="fa fa-instagram" aria-hidden="true"></i>
-                </a>
+                <Link href="#">
+                  <FaInstagramSquare />
+                </Link>
               </li>
             </ul>
           </div>
@@ -97,7 +91,7 @@ const Footer = () => {
       <div className="copyright_section">
         <div className="container">
           <p className="copyright_text">
-            2020 All Rights Reserved. Design by Vkay
+            2025 All Rights Reserved. Design by Tailor Nail
           </p>
         </div>
       </div>

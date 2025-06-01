@@ -1,8 +1,34 @@
-import React from "react";
-import Product from "../products/Product";
-import { Pagination } from "antd";
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { Col, Empty, Pagination, Row } from "antd";
+import { getAllFavoriteApi } from "../util/api";
+import { toast } from "react-toastify";
+import ProductCard from "./Card";
+const PRODUCTS_PER_PAGE = 12;
 
 const Favorite = () => {
+  const [products, setProducts] = useState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getAllFavoriteApi();
+      if (res?.message === "Success") {
+        setProducts(res.data);
+      } else {
+        toast.error("lỗi hệ thống");
+      }
+    };
+    fetchData();
+  }, []);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
+  const endIndex = startIndex + PRODUCTS_PER_PAGE;
+  const currentProducts = products?.slice(startIndex, endIndex);
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
   return (
     <div className="product_section layout_padding">
       <div className="container">
@@ -16,20 +42,40 @@ const Favorite = () => {
           </div>
         </div>
         <div className="row product_section_2 layout_padding">
-          <Product />
-          <Product />
-          <Product />
-          <Product />
-          <Product />
-          <Product />
-          <Product />
-          <Product />
-          <Pagination
-            className="mt-4"
-            align="center"
-            defaultCurrent={1}
-            total={50}
-          />
+          {currentProducts && currentProducts?.length > 0 ? (
+            <>
+              <Row gutter={[16, 16]}>
+                {currentProducts?.map((product) => (
+                  <Col xs={24} sm={12} md={6} key={product.product.id}>
+                    {" "}
+                    <ProductCard
+                      product={{
+                        id: product?.product.id,
+                        name: product?.product.name,
+                        image: product?.product.images[0],
+                        price: product?.product.price,
+                        discountedPrice: product?.product.discount,
+                        average_rating: product?.product.average_rating,
+                        is_favorite: product?.product.is_favorite,
+                      }}
+                      id_favor={product.id}
+                      setProducts={setProducts}
+                    />
+                  </Col>
+                ))}
+              </Row>
+              <Pagination
+                className="mt-5"
+                current={currentPage}
+                pageSize={PRODUCTS_PER_PAGE}
+                total={products?.length}
+                onChange={handlePageChange}
+                align="center"
+              />
+            </>
+          ) : (
+            <Empty description="Hãy bắt đầu thăm quan shop của bọn mình nào" />
+          )}
         </div>
       </div>
     </div>

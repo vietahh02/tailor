@@ -14,6 +14,7 @@ const routeMap: Record<string, string> = {
   "2": "/admin/users",
   "3": "/admin/products",
   "4": "/admin/orders",
+  "5": "/",
 };
 
 const items = [
@@ -21,6 +22,7 @@ const items = [
   { key: "2", label: "Users" },
   { key: "3", label: "Products" },
   { key: "4", label: "Orders" },
+  { key: "5", label: "Home" },
 ];
 
 const HeaderAdmin = () => {

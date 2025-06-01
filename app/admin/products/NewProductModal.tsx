@@ -6,8 +6,8 @@ import {
   InputNumber,
   Upload,
   Checkbox,
-  message,
   Image,
+  Radio,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import type { UploadFile } from "antd/es/upload/interface";
@@ -17,10 +17,15 @@ const { TextArea } = Input;
 export interface ProductFormValues {
   name: string;
   price: number;
-  discount: number;
-  description: string;
-  categories: string[];
+  discount?: number;
+  description?: string;
+  category: string[];
   images: File[];
+  job?: string[];
+  pattern?: string[];
+  nail_length?: string;
+  purpose?: string[];
+  occasion?: string[];
 }
 
 interface AddProductModalProps {
@@ -29,7 +34,29 @@ interface AddProductModalProps {
   onSubmit: (values: ProductFormValues) => void;
 }
 
-const categoryOptions = ["Thời trang", "Điện tử", "Đồ gia dụng", "Thực phẩm"];
+const categoryOptions = [
+  "Nữ tính / dịu dàng",
+  "Cá tính / nổi bật",
+  "Tối giản / thanh lịch",
+  "Sang trọng / quý phái",
+  "Dễ thương / năng động",
+];
+
+const jobs = [
+  "Văn phòng",
+  "Nghệ thuật",
+  "Sinh viên",
+  "Lao động tay chân",
+  "Tự do",
+];
+
+const patterns = ["Hoa lá", "Hoạt hình", "Đá", "Kim tuyến", "Trơn", "Vẽ tay"];
+
+const length = ["Ngắn", "Trung bình", "Dài"];
+
+const purpose = ["Đi chơi", "Đi làm", "Du lịch", "Dịp đặc biệt"];
+
+const occasion = ["Valentine", "Giáng sinh", "Tết"];
 
 const AddProductModal: React.FC<AddProductModalProps> = ({
   visible,
@@ -41,7 +68,9 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewTitle, setPreviewTitle] = useState("");
 
-  const normFile = (e: any) => {
+  const normFile = (
+    e: import("antd/es/upload/interface").UploadChangeParam<UploadFile>
+  ) => {
     if (Array.isArray(e)) return e;
     return e?.fileList;
   };
@@ -123,16 +152,71 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 
         <Form.Item
           label="Thể loại"
-          name="categories"
+          name="category"
           rules={[{ required: true, message: "Vui lòng chọn thể loại!" }]}
         >
           <Checkbox.Group options={categoryOptions} />
         </Form.Item>
 
         <Form.Item
+          label="Nghề nghiệp"
+          name="job"
+          rules={
+            [
+              // { required: true, message: "Vui lòng chọn nghề nghiệp phù hợp!" },
+            ]
+          }
+        >
+          <Checkbox.Group options={jobs} />
+        </Form.Item>
+
+        <Form.Item
+          label="Họa tiết"
+          name="pattern"
+          rules={
+            [
+              // { required: true, message: "Vui lòng chọn họa tiết phù hợp!" },
+            ]
+          }
+        >
+          <Checkbox.Group options={patterns} />
+        </Form.Item>
+
+        <Form.Item
+          label="Độ dài móng"
+          name="nail_length"
+          rules={
+            [
+              // { required: true, message: "Vui lòng chọn độ dài móng phù hợp!" },
+            ]
+          }
+        >
+          <Radio.Group options={length} />
+        </Form.Item>
+
+        <Form.Item
+          label="Mục đích làm móng"
+          name="purpose"
+          rules={[
+            { required: true, message: "Vui lòng chọn độ dài móng phù hợp!" },
+          ]}
+        >
+          <Checkbox.Group options={purpose} />
+        </Form.Item>
+
+        <Form.Item
+          label="Dịp đặc biệt"
+          name="occasion"
+          // rules={[{ required: true, message: "Vui lòng chọn dịp phù hợp!" }]}
+        >
+          <Checkbox.Group options={occasion} />
+        </Form.Item>
+
+        <Form.Item
           label="Ảnh sản phẩm"
           name="images"
           valuePropName="fileList"
+          rules={[{ required: true, message: "Vui lòng thêm ảnh!" }]}
           getValueFromEvent={normFile}
         >
           <Upload

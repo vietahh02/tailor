@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Breadcrumb, Layout, theme } from "antd";
-import ListUser from "./UserTable";
+import UserTable from "./UserTable";
 
 const { Content } = Layout;
 
@@ -26,7 +26,7 @@ const App: React.FC = () => {
             borderRadius: borderRadiusLG,
           }}
         >
-          <ListUser />
+          <UserTable />
         </div>
       </Content>
     </>

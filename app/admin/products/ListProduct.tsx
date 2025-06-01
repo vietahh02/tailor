@@ -2,8 +2,8 @@
 
 "use client";
 
-import React, { useState } from "react";
-import { Table, Button, Image, Space, message } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { Table, Button, Image, Space } from "antd";
 import {
   EyeOutlined,
   EditOutlined,
@@ -13,53 +13,82 @@ import {
 import AddProductModal from "./NewProductModal";
 import EditProductModal from "./EditProductModal";
 import ViewProductModal from "./ViewProductModal";
+import {
+  createProduct,
+  deleteProduct,
+  updateProductApi,
+} from "@/app/util/apiAdmin";
+import { toast } from "react-toastify";
+import { getAllProduct } from "@/app/util/api";
+import ConfirmModal from "@/app/common/ConfirmModal";
 
 interface Product {
   id: number;
   name: string;
   price: number;
-  images: string[];
+  images: { id: number; url: string }[];
   description?: string;
   discount?: number;
-  categories?: string[];
+  category: string;
+  job?: string;
+  pattern?: string;
+  nail_length?: string;
+  purpose?: string;
+  occasion?: string;
+}
+
+interface ProductForEdit {
+  id: number;
+  name: string;
+  price: number;
+  discount: number;
+  description: string;
+  category: string[];
+  images?: File[];
+  job?: string;
+  pattern?: string;
+  nail_length?: string;
+  purpose?: string;
+  occasion?: string;
+  delete_image_ids?: string;
 }
 
 export interface ProductFormValues {
   name: string;
   price: number;
-  discount: number;
-  description: string;
-  categories: string[];
   images: File[];
+  description?: string;
+  discount?: number;
+  category: string[];
+  job?: string[];
+  pattern?: string[];
+  nail_length?: string;
+  purpose?: string[];
+  occasion?: string[];
 }
 
-const initialData: Product[] = [
-  {
-    id: 1,
-    name: "Sản phẩm A",
-    price: 100000,
-    discount: 45,
-    images: [
-      "https://file.hstatic.net/200000201143/article/nail-co-nep_6358360d5e664b3ea8860922d116322b_1024x1024.jpg",
-    ],
-  },
-  {
-    id: 2,
-    name: "Sản phẩm B",
-    price: 200000,
-    images: [
-      "https://file.hstatic.net/200000201143/article/nail-co-nep_6358360d5e664b3ea8860922d116322b_1024x1024.jpg",
-    ],
-  },
-];
-
 const ProductTable = () => {
-  const [data, setData] = useState<Product[]>(initialData);
+  const [data, setData] = useState<Product[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isViewVisible, setIsViewVisible] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const idDelete = useRef(-1);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getAllProduct();
+      setData(response);
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (editModalVisible) return;
+    setEditingProduct(null);
+  }, [editModalVisible]);
 
   const handleEdit = (product: Product) => {
     setEditingProduct(product);
@@ -71,25 +100,74 @@ const ProductTable = () => {
     setIsViewVisible(true);
   };
 
-  const handleUpdateProduct = (updatedProduct: Product) => {
-    setData((prevData) =>
-      prevData.map((item) =>
-        item.id === updatedProduct.id ? updatedProduct : item
-      )
+  const handleUpdateProduct = async (product: ProductForEdit) => {
+    const res = await updateProductApi(
+      product.id,
+      product.name,
+      product.price,
+      product.category.toString(),
+      product.description,
+      product.discount,
+      product.images,
+      product.job?.toString(),
+      product.pattern?.toString(),
+      product.nail_length,
+      product.purpose?.toString(),
+      product.occasion?.toString(),
+      `[${product.delete_image_ids?.toString()}]`
     );
-    message.success("Cập nhật sản phẩm thành công!");
+
+    if (res.message === "successful") {
+      setData((prev) => {
+        return prev.map((p) => {
+          if (p.id === res.data.id) return res.data;
+          return p;
+        });
+      });
+      toast.success("Cập nhật sản phẩm thành công!");
+    } else {
+      toast.error("Cập nhật thất bại");
+      console.log(res);
+    }
     setEditModalVisible(false);
     setEditingProduct(null);
   };
 
-  const handleAddProduct = (values: ProductFormValues) => {
+  const handleAddProduct = async (values: ProductFormValues) => {
     console.log("Giá trị sản phẩm:", values);
-    message.success("Thêm sản phẩm thành công!");
+    console.log(values.images);
+
+    const res = await createProduct(
+      values.name,
+      values.price,
+      values.category.toString(),
+      values.description,
+      values.discount,
+      values.images,
+      values.job?.toString(),
+      values.pattern?.toString(),
+      values.nail_length,
+      values.purpose?.toString(),
+      values.occasion?.toString()
+    );
+    console.log(res);
+    const response = await getAllProduct();
+    setData(response);
+    toast.success("Thêm sản phẩm thành công!");
+
     setOpenModal(false);
   };
 
-  const handleDelete = (record: Product) => {
-    setData((prev) => prev.filter((p) => p.id !== record.id));
+  const handleDelete = async () => {
+    const res = await deleteProduct(idDelete.current);
+    if (res.message === "successful") {
+      toast.success("Xóa thành công sản phẩm");
+      setData((prev) => prev.filter((p) => p.id !== idDelete.current));
+    } else {
+      toast.error("Xóa không thành công");
+    }
+    setOpenConfirm(false);
+    idDelete.current = -1;
   };
 
   const columns = [
@@ -100,9 +178,12 @@ const ProductTable = () => {
     {
       title: "Ảnh",
       dataIndex: "images",
-      render: (images: string[]) => (
-        <Image src={images[0]} width={100} height={80} alt="3" />
-      ),
+      render: (images?: string[]) =>
+        images && images.length > 0 ? (
+          <Image src={images[0]?.url} width={100} height={80} alt="3" />
+        ) : (
+          <span>Không có ảnh</span>
+        ),
     },
     {
       title: "Tên",
@@ -115,7 +196,7 @@ const ProductTable = () => {
     },
     {
       title: "Hành động",
-      render: (_: any, record: Product) => (
+      render: (_: unknown, record: Product) => (
         <Space>
           <Button
             shape="circle"
@@ -131,7 +212,10 @@ const ProductTable = () => {
             shape="circle"
             danger
             icon={<DeleteOutlined />}
-            onClick={() => handleDelete(record)}
+            onClick={() => {
+              setOpenConfirm(true);
+              idDelete.current = record.id;
+            }}
           />
         </Space>
       ),
@@ -160,17 +244,28 @@ const ProductTable = () => {
         onCancel={() => setOpenModal(false)}
         onSubmit={handleAddProduct}
       />
-      <EditProductModal
-        visible={editModalVisible}
-        product={editingProduct}
-        onCancel={() => setEditModalVisible(false)}
-        onSubmit={handleUpdateProduct}
-      />
+      {editingProduct && (
+        <EditProductModal
+          visible={editModalVisible}
+          product={editingProduct}
+          onCancel={() => setEditModalVisible(false)}
+          onSubmit={handleUpdateProduct}
+        />
+      )}
       <ViewProductModal
         visible={isViewVisible}
         product={selectedProduct}
         onClose={() => setIsViewVisible(false)}
       />
+      <ConfirmModal
+        open={openConfirm}
+        title="Xác nhận xóa sản phẩm"
+        onCancel={() => {
+          setOpenConfirm(false);
+          idDelete.current = -1;
+        }}
+        onConfirm={() => handleDelete()}
+      ></ConfirmModal>
     </>
   );
 };

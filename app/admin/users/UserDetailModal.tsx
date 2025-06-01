@@ -3,13 +3,13 @@ import { Modal, Descriptions, Avatar } from "antd";
 
 interface User {
   id: number;
-  avatar: string;
-  name: string;
-  status: boolean;
-  username: string;
+  avatar_image: string;
+  user_name: string;
+  status: string;
+  full_name: string;
   address: string;
   phone: string;
-  role: number;
+  role: string;
 }
 
 interface Props {
@@ -24,17 +24,17 @@ const UserDetailModal: React.FC<Props> = ({ open, user, onClose }) => {
   return (
     <Modal
       open={open}
-      title={`Thông tin chi tiết - ${user.name}`}
+      title={`Thông tin chi tiết - ${user.user_name}`}
       onCancel={onClose}
       footer={null}
     >
       <div style={{ textAlign: "center", marginBottom: 20 }}>
-        <Avatar src={user.avatar} size={100} />
+        <Avatar src={user.avatar_image} size={100} />
       </div>
       <Descriptions column={1} bordered>
         <Descriptions.Item label="ID">{user.id}</Descriptions.Item>
-        <Descriptions.Item label="Tên">{user.name}</Descriptions.Item>
-        <Descriptions.Item label="Username">{user.username}</Descriptions.Item>
+        <Descriptions.Item label="Tên">{user.user_name}</Descriptions.Item>
+        <Descriptions.Item label="Username">{user.user_name}</Descriptions.Item>
         <Descriptions.Item label="Địa chỉ">{user.address}</Descriptions.Item>
         <Descriptions.Item label="Số điện thoại">
           {user.phone}

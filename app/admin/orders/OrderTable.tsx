@@ -1,158 +1,89 @@
 "use client";
 
+import { changeStatusOrderApi } from "@/app/util/api";
+import { getAllOrderForAdmin } from "@/app/util/apiAdmin";
 import { Table, Button, Modal, Tag, Image, message } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
-type Product = {
+type OrderStatus = "pending" | "shipping" | "completed" | "cancelled";
+
+type OrderItem = {
   name: string;
   quantity: number;
   price: number;
   image: string;
 };
 
-type OrderStatus = "pending" | "shipping" | "completed" | "cancelled";
-
 type Order = {
-  id: string;
-  customerName: string;
-  phone: string;
-  address: string;
-  orderDate: string;
-  status: OrderStatus;
-  sizeImage: string;
-  note: string;
-  products: Product[];
+  id: number;
+  customer_name: string;
+  customer_phone: string;
+  shipping_address: string;
+  shipping_fee: number;
+  created_at: string;
+  status: string;
+  items: OrderItem[];
+  image_url?: string;
+  note?: string;
+  total_price: number;
+  order_code: string;
 };
 
-const sampleData: Order[] = [
-  {
-    id: "O001",
-    customerName: "Nguyễn Văn A",
-    phone: "0901234567",
-    address: "123 Lê Lợi, TP.HCM",
-    orderDate: "2024-05-20",
-    status: "pending",
-    sizeImage: "/images/size1.png",
-    note: "Giao hàng sau 18h",
-    products: [
-      {
-        name: "Áo thun",
-        quantity: 2,
-        price: 150000,
-        image: "/images/product1.jpg",
-      },
-      {
-        name: "Quần jeans",
-        quantity: 1,
-        price: 350000,
-        image: "/images/product2.jpg",
-      },
-    ],
-  },
-  {
-    id: "O001",
-    customerName: "Nguyễn Văn A",
-    phone: "0901234567",
-    address: "123 Lê Lợi, TP.HCM",
-    orderDate: "2024-05-20",
-    status: "shipping",
-    sizeImage: "/images/size1.png",
-    note: "Giao hàng sau 18h",
-    products: [
-      {
-        name: "Áo thun",
-        quantity: 2,
-        price: 150000,
-        image: "/images/product1.jpg",
-      },
-      {
-        name: "Quần jeans",
-        quantity: 1,
-        price: 350000,
-        image: "/images/product2.jpg",
-      },
-    ],
-  },
-  {
-    id: "O001",
-    customerName: "Nguyễn Văn A",
-    phone: "0901234567",
-    address: "123 Lê Lợi, TP.HCM",
-    orderDate: "2024-05-20",
-    status: "completed",
-    sizeImage: "/images/size1.png",
-    note: "Giao hàng sau 18h",
-    products: [
-      {
-        name: "Áo thun",
-        quantity: 2,
-        price: 150000,
-        image: "/images/product1.jpg",
-      },
-      {
-        name: "Quần jeans",
-        quantity: 1,
-        price: 350000,
-        image: "/images/product2.jpg",
-      },
-    ],
-  },
-  {
-    id: "O001",
-    customerName: "Nguyễn Văn A",
-    phone: "0901234567",
-    address: "123 Lê Lợi, TP.HCM",
-    orderDate: "2024-05-20",
-    status: "cancelled",
-    sizeImage: "/images/size1.png",
-    note: "Giao hàng sau 18h",
-    products: [
-      {
-        name: "Áo thun",
-        quantity: 2,
-        price: 150000,
-        image: "/images/product1.jpg",
-      },
-      {
-        name: "Quần jeans",
-        quantity: 1,
-        price: 350000,
-        image: "/images/product2.jpg",
-      },
-    ],
-  },
-];
-
 const OrderTable: React.FC = () => {
-  const [orders, setOrders] = useState<Order[]>(sampleData);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getAllOrderForAdmin();
+      console.log(res);
+      if (!res.detail) {
+        setOrders(res);
+      } else {
+        toast.info("Hãy đăng nhập để xem danh sách đơn hàng");
+        router.push("/login");
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleViewDetail = (record: Order) => {
     setSelectedOrder(record);
     setModalVisible(true);
   };
 
-  const updateOrderStatus = (newStatus: OrderStatus) => {
+  const updateOrderStatus = async (idOrder: number, newStatus: OrderStatus) => {
     if (!selectedOrder) return;
+
+    const res = await changeStatusOrderApi(idOrder, newStatus);
+    if (!res) {
+      toast.error("Có lỗi thử lại sau");
+      return;
+    }
 
     const updatedOrders = orders.map((order) =>
       order.id === selectedOrder.id ? { ...order, status: newStatus } : order
     );
     setOrders(updatedOrders);
     setSelectedOrder((prev) => (prev ? { ...prev, status: newStatus } : null));
-    message.success(`Cập nhật trạng thái sang "${newStatus}" thành công`);
+    toast.success(`Cập nhật trạng thái sang "${newStatus}" thành công`);
   };
-
-  const calculateTotal = (products: Product[]) =>
-    products.reduce((total, p) => total + p.quantity * p.price, 0);
 
   const columns: ColumnsType<Order> = [
     { title: "ID", dataIndex: "id", key: "id" },
-    { title: "Tên khách hàng", dataIndex: "customerName", key: "customerName" },
-    { title: "SĐT", dataIndex: "phone", key: "phone" },
-    { title: "Ngày đặt", dataIndex: "orderDate", key: "orderDate" },
+    {
+      title: "Tên khách hàng",
+      dataIndex: "customer_name",
+      key: "customer_name",
+    },
+    { title: "SĐT", dataIndex: "customer_phone", key: "customer_phone" },
+    { title: "Ngày đặt", dataIndex: "created_at", key: "created_at" },
     {
       title: "Trạng thái",
       dataIndex: "status",
@@ -179,6 +110,12 @@ const OrderTable: React.FC = () => {
       ),
     },
   ];
+  function formatCurrency(number: number) {
+    return number.toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    });
+  }
 
   return (
     <>
@@ -193,7 +130,9 @@ const OrderTable: React.FC = () => {
             <Button
               key="confirm-processing"
               type="primary"
-              onClick={() => updateOrderStatus("shipping")}
+              onClick={() =>
+                selectedOrder && updateOrderStatus(selectedOrder.id, "shipping")
+              }
             >
               Xác nhận xử lý
             </Button>
@@ -202,7 +141,10 @@ const OrderTable: React.FC = () => {
             <Button
               key="confirm-completed"
               type="primary"
-              onClick={() => updateOrderStatus("completed")}
+              onClick={() =>
+                selectedOrder &&
+                updateOrderStatus(selectedOrder.id, "completed")
+              }
             >
               Đã giao hàng
             </Button>
@@ -212,7 +154,10 @@ const OrderTable: React.FC = () => {
               <Button
                 key="cancel-order"
                 danger
-                onClick={() => updateOrderStatus("cancelled")}
+                onClick={() =>
+                  selectedOrder &&
+                  updateOrderStatus(selectedOrder.id, "cancelled")
+                }
               >
                 Hủy đơn
               </Button>
@@ -221,6 +166,7 @@ const OrderTable: React.FC = () => {
             Đóng
           </Button>,
         ]}
+        width={800}
       >
         {selectedOrder && (
           <div>
@@ -228,19 +174,22 @@ const OrderTable: React.FC = () => {
               <strong>ID:</strong> {selectedOrder.id}
             </p>
             <p>
-              <strong>Tên khách hàng:</strong> {selectedOrder.customerName}
+              <strong>Tên khách hàng:</strong> {selectedOrder.customer_name}
             </p>
             <p>
-              <strong>SĐT:</strong> {selectedOrder.phone}
+              <strong>SĐT:</strong> {selectedOrder.customer_phone}
             </p>
             <p>
-              <strong>Địa chỉ:</strong> {selectedOrder.address}
+              <strong>Địa chỉ:</strong> {selectedOrder.shipping_address}
             </p>
             <p>
-              <strong>Ngày đặt:</strong> {selectedOrder.orderDate}
+              <strong>Ngày đặt:</strong> {selectedOrder.created_at}
             </p>
             <p>
               <strong>Trạng thái:</strong> {selectedOrder.status}
+            </p>
+            <p>
+              <strong>Phí Ship:</strong> {selectedOrder.shipping_fee || 0} ₫
             </p>
             <p>
               <strong>Ghi chú:</strong> {selectedOrder.note}
@@ -248,13 +197,13 @@ const OrderTable: React.FC = () => {
             <p>
               <strong>Hình ảnh size:</strong>
             </p>
-            <Image src={selectedOrder.sizeImage} alt="Size" width={150} />
+            <Image src={selectedOrder.image_url} alt="Size" width={150} />
 
             <p>
               <strong>Sản phẩm:</strong>
             </p>
             <Table
-              dataSource={selectedOrder.products}
+              dataSource={selectedOrder.items}
               pagination={false}
               rowKey={(record) => record.name}
               columns={[
@@ -263,7 +212,9 @@ const OrderTable: React.FC = () => {
                   title: "Ảnh",
                   dataIndex: "image",
                   key: "image",
-                  render: (src) => <Image src={src} width={80} />,
+                  render: (src) => (
+                    <Image src={src} width={80} height={80} alt="" />
+                  ),
                 },
                 { title: "Số lượng", dataIndex: "quantity", key: "quantity" },
                 {
@@ -275,16 +226,32 @@ const OrderTable: React.FC = () => {
                 {
                   title: "Tổng",
                   key: "total",
-                  render: (_, record: Product) =>
+                  render: (_, record: OrderItem) =>
                     (record.price * record.quantity).toLocaleString(),
                 },
               ]}
+              footer={() => (
+                <div
+                  style={{
+                    width: "100%",
+                    textAlign: "end",
+                    paddingRight: 30,
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <strong>Tổng cộng: </strong>
+                  <strong>
+                    {formatCurrency(
+                      selectedOrder?.items?.reduce(
+                        (sum, item) => sum + item.price * item.quantity,
+                        0
+                      ) || 0
+                    )}
+                  </strong>
+                </div>
+              )}
             />
-
-            <p style={{ marginTop: 16 }}>
-              <strong>Tổng đơn hàng:</strong>{" "}
-              {calculateTotal(selectedOrder.products).toLocaleString()} VNĐ
-            </p>
           </div>
         )}
       </Modal>

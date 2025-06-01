@@ -1,16 +1,12 @@
 "use client";
 
 import React from "react";
-import { Breadcrumb, Layout, theme } from "antd";
+import { Breadcrumb, Layout } from "antd";
 import ChartMoney from "./ChartMoney";
 
 const { Content } = Layout;
 
 const App: React.FC = () => {
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
-
   return (
     <>
       <Content style={{ padding: "0 48px" }}>
@@ -22,8 +18,8 @@ const App: React.FC = () => {
           style={{
             padding: 24,
             minHeight: "100%",
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
+            background: "#fff",
+            borderRadius: 10,
           }}
         >
           <ChartMoney />

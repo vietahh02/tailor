@@ -10,10 +10,17 @@ import { GoHeart } from "react-icons/go";
 import { SlHandbag } from "react-icons/sl";
 import { FaUserAlt } from "react-icons/fa";
 import Search from "./SearchModal";
+import { useAuth } from "../context/auth.context";
+import { Button } from "antd";
+import { IoMdExit } from "react-icons/io";
+import { logoutApi } from "../util/api";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
   const [showSearch, setShowSearch] = useState(false);
   const refMenu = React.useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const { auth, numberCart, numberFavorite, setAuth } = useAuth();
 
   function openNav() {
     refMenu.current?.style.setProperty("width", "100%");
@@ -22,6 +29,8 @@ const Header = () => {
   function closeNav() {
     refMenu.current?.style.setProperty("width", "0%");
   }
+
+  console.log(auth);
 
   return (
     <div className="header_section">
@@ -51,17 +60,50 @@ const Header = () => {
           <form className="form-inline ">
             <div className="login_text">
               <ul>
-                <li>
-                  <Link href="/admin">Admin</Link>
-                </li>
-                <li>
-                  <Link href="/my-account">My Account</Link>
-                </li>
-                <li>
-                  <Link href="/login">
-                    <FaUserAlt />
-                  </Link>
-                </li>
+                {auth?.user?.role === "admin" && (
+                  <li>
+                    <Link href="/admin">Admin</Link>
+                  </li>
+                )}
+                {!auth?.isAuthenticated ? (
+                  <li>
+                    <Link href="/login" title="Login">
+                      <FaUserAlt />
+                    </Link>
+                  </li>
+                ) : (
+                  <>
+                    <li>
+                      <div
+                        onClick={async () => {
+                          await logoutApi();
+                          localStorage.removeItem("access_token");
+                          setAuth({
+                            isAuthenticated: false,
+                            user: {
+                              email: "",
+                              user_name: "",
+                              role: "",
+                            },
+                          });
+                        }}
+                        title="Logout"
+                        style={{
+                          color: "red",
+                          fontSize: "24px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <IoMdExit />
+                      </div>
+                    </li>
+                    <li>
+                      <Link href="/my-account" title="My Account">
+                        <FaUserAlt />
+                      </Link>
+                    </li>
+                  </>
+                )}
                 <li
                   style={{
                     position: "relative",
@@ -87,7 +129,7 @@ const Header = () => {
                         boxShadow: "0 0 2px rgba(0,0,0,0.3)",
                       }}
                     >
-                      2
+                      {numberCart}
                     </span>
                   </Link>
                 </li>
@@ -117,7 +159,7 @@ const Header = () => {
                         boxShadow: "0 0 2px rgba(0,0,0,0.3)",
                       }}
                     >
-                      2
+                      {numberFavorite}
                     </span>
                   </Link>
                 </li>
