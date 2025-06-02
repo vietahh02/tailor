@@ -1,11 +1,7 @@
 import React from "react";
 import logo from "../assets/images/logonew.png";
 import Image from "next/image";
-import {
-  FaFacebookSquare,
-  FaInstagramSquare,
-  FaTwitterSquare,
-} from "react-icons/fa";
+import { FaFacebookSquare, FaInstagramSquare } from "react-icons/fa";
 import Link from "next/link";
 
 const Footer = () => {
@@ -14,9 +10,9 @@ const Footer = () => {
       <div className="footer_section layout_padding s">
         <div className="container">
           <div className="footer_logo">
-            <a href="index.html">
+            <Link href="/">
               <Image src={logo} alt="Logo" />
-            </a>
+            </Link>
           </div>
           <div className="contact_section_2">
             <div className="row">
@@ -53,16 +49,20 @@ const Footer = () => {
               </div>
               <div className="col-sm-4">
                 <div className="footer_logo_1">
-                  <a href="index.html">
+                  <Link href="/">
                     <Image src={logo} alt="Logo" />
-                  </a>
+                  </Link>
                 </div>
                 <p className="dummy_text">Theo dõi Tailor Nail</p>
               </div>
               <div className="col-sm-4">
                 <div className="main">
-                  <h3 className="address_text">Chưa biết để gì</h3>
-                  <p className="ipsum_text">Đang nghĩ ....</p>
+                  <h3 className="address_text">Về TailorNail</h3>
+                  <p className="ipsum_text">
+                    TailorNail ra đời với mong muốn mang đến những bộ móng “may
+                    đo” dành riêng cho bạn, với thiết kế tinh tế, màu sắc và
+                    kiểu dáng do chính bạn lựa chọn.
+                  </p>
                 </div>
               </div>
             </div>
@@ -70,17 +70,17 @@ const Footer = () => {
           <div className="social_icon">
             <ul>
               <li>
-                <Link href="#">
+                <Link href="https://www.facebook.com/profile.php?id=61576755897790">
                   <FaFacebookSquare />
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="#">
                   <FaTwitterSquare />
                 </Link>
-              </li>
+              </li> */}
               <li>
-                <Link href="#">
+                <Link href="https://www.instagram.com/tailornails868/">
                   <FaInstagramSquare />
                 </Link>
               </li>

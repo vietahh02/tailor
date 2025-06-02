@@ -20,12 +20,16 @@ const Banner = () => {
               💖, lung linh như ý muốn! 🌸
             </p>
             <div className="read_bt">
-              <Link href="/">Ghé thăm</Link>
+              <Link href="/search">Ghé thăm</Link>
             </div>
           </div>
           <div className="col-sm-5">
             <div className="banner_img">
-              <Image src={banner} alt="Banner Image" />
+              <Image
+                src={banner}
+                alt="Banner Image"
+                // style={{ borderRadius: 20 }}
+              />
             </div>
           </div>
         </div>

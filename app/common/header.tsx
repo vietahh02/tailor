@@ -11,15 +11,15 @@ import { SlHandbag } from "react-icons/sl";
 import { FaUserAlt } from "react-icons/fa";
 import Search from "./SearchModal";
 import { useAuth } from "../context/auth.context";
-import { Button } from "antd";
+// import { Button } from "antd";
 import { IoMdExit } from "react-icons/io";
 import { logoutApi } from "../util/api";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 const Header = () => {
   const [showSearch, setShowSearch] = useState(false);
   const refMenu = React.useRef<HTMLDivElement>(null);
-  const router = useRouter();
+  // const router = useRouter();
   const { auth, numberCart, numberFavorite, setAuth } = useAuth();
 
   function openNav() {
@@ -52,7 +52,7 @@ const Header = () => {
             <Link href="/order">Đơn hàng</Link>
           </div>
           <span className="toggle_icon" onClick={() => openNav()}>
-            <Image src={toggle} alt="oke" />
+            <Image src={toggle} alt="oke" style={{ borderRadius: 0 }} />
           </span>
           <Link className="logo" href="/">
             <Image src={logo} alt="oke" />

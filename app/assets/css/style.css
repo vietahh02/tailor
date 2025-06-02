@@ -42,6 +42,10 @@ html {
   scroll-behavior: smooth;
 }
 
+img {
+  border-radius: 20px;
+}
+
 .navbar .logo {
   margin-left: auto;
   margin-right: auto;
@@ -567,6 +571,7 @@ button {
   width: 100%;
   float: left;
   /* background-color: #fef4ec; */
+  /* font-family: cursive; */
   height: auto;
   padding-bottom: 90px;
 }
@@ -598,6 +603,7 @@ button {
   font-size: 14px;
   color: #252525;
   margin: 0px;
+  font-family: cursive;
 }
 
 .image_3 {
@@ -846,7 +852,9 @@ button {
 .footer_section {
   width: 100%;
   float: left;
-  background-color: #363636;
+  /* background-color: #ebc4d5; */
+  background-color: pink;
+  /* color: #000 !important; */
   height: auto;
   background-size: 100%;
   padding-bottom: 30px;
@@ -877,12 +885,12 @@ button {
 
 .address_bt li {
   font-size: 16px;
-  color: #ffffff;
+  color: #000;
   padding: 10px 0px 0px 0px;
 }
 
 .address_bt li a {
-  color: #ffffff;
+  color: #000;
 }
 
 .address_bt li a:hover {
@@ -895,7 +903,7 @@ button {
 
 .address_text {
   font-size: 24px;
-  color: #ffffff;
+  color: #000;
   text-transform: uppercase;
 }
 
@@ -903,17 +911,17 @@ button {
   width: 100%;
   float: left;
   font-size: 14px;
-  color: #ffffff;
+  color: #000;
   margin: 0px;
   text-align: center;
   padding-top: 20px;
 }
 
 .ipsum_text {
-  width: 65%;
+  width: 100%;
   float: left;
   font-size: 14px;
-  color: #ffffff;
+  color: #000;
   margin: 0px;
   padding-top: 10px;
 }
@@ -951,7 +959,7 @@ button {
 }
 
 .social_icon li a:hover {
-  color: #ffffff;
+  color: #000;
 }
 
 /* footer section end */
@@ -965,14 +973,14 @@ button {
 
 .copyright_text {
   width: 100%;
-  color: #ffffff;
+  color: #000;
   text-align: center;
   font-size: 16px;
   margin: 20px 0px;
 }
 
 .copyright_text a {
-  color: #ffffff;
+  color: #000;
 }
 
 .copyright_text a:hover {

@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 
-import about from "../assets/images/about-nail.jpg";
+import about from "../assets/images/new1.jpg";
 import Link from "next/link";
 const About = () => {
   return (
@@ -15,14 +15,13 @@ const About = () => {
                   Nailbox – chiếc hộp nhỏ cho đôi tay thêm xinh 💅✨
                 </h1>
                 <p className="about_text">
-                  Bạn không cần ra tiệm mà vẫn có thể sở hữu những bộ móng xinh
-                  lung linh tại nhà! Với Nailbox, mỗi hộp là một bộ sưu tập đầy
-                  màu sắc gồm các mẫu móng giả, phụ kiện trang trí, keo dán và
-                  hướng dẫn dễ hiểu – giúp bạn dễ dàng biến hóa phong cách chỉ
-                  trong vài phút. Dù bạn thích nhẹ nhàng, bánh bèo hay cá tính
-                  nổi bật, chúng mình đều có mẫu phù hợp cho bạn. Cùng nâng niu
-                  đôi tay và tự thưởng cho mình một chút “xinh” mỗi ngày nhé!
-                  💖🌷
+                  TailorNail xin chào cả nhà! TailorNail là nền tảng giúp bạn
+                  yêu thích làm nail có thể tự thiết kế, thử mẫu và đặt hàng
+                  Nail Box ngay tại nhà với sự hỗ trợ từ công nghệ AI/AR. Chúng
+                  mình biến đam mê làm đẹp thành trải nghiệm cá nhân hóa cho
+                  từng bạn! 💖 TailorNail ra đời để mang đến những bộ móng “may
+                  đo” chuẩn gu, giúp bạn tự tin thể hiện cá tính theo cách riêng
+                  của mình – nhanh, đẹp, tiện và không cần ra tiệm! ✨
                 </p>
                 <div className="readmore_bt">
                   <Link href="#">Read More</Link>

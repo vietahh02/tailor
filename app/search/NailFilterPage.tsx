@@ -77,9 +77,16 @@ export default function NailFilterPage() {
       <div className="container" style={{ display: "flex", padding: 20 }}>
         {/* FILTER COLUMN */}
         <div style={{ width: 300, marginRight: 20 }}>
-          <h3>🧍‍♀️ Thông tin cá nhân & sở thích</h3>
+          <h3>
+            🧍‍♀️ <strong>Thông tin cá nhân & sở thích</strong>
+          </h3>
 
-          <Divider plain>Phong cách yêu thích</Divider>
+          <Divider plain>
+            <strong>
+              {" "}
+              <strong>Phong cách yêu thích</strong>{" "}
+            </strong>
+          </Divider>
           <Checkbox.Group
             value={selectedStyles}
             options={[
@@ -92,7 +99,10 @@ export default function NailFilterPage() {
             onChange={(val) => setSelectedStyles(val as string[])}
           />
 
-          <Divider plain>Nghề nghiệp</Divider>
+          <Divider plain>
+            {" "}
+            <strong>Nghề nghiệp</strong>
+          </Divider>
           <Checkbox.Group
             value={selectedJobs}
             options={[
@@ -105,7 +115,10 @@ export default function NailFilterPage() {
             onChange={(val) => setSelectedJobs(val as string[])}
           />
 
-          <Divider plain>Họa tiết</Divider>
+          <Divider plain>
+            {" "}
+            <strong>Họa tiết</strong>
+          </Divider>
           <Checkbox.Group
             value={patterns}
             options={[
@@ -119,21 +132,27 @@ export default function NailFilterPage() {
             onChange={(val) => setPatterns(val as string[])}
           />
 
-          <Divider plain>Độ dài móng</Divider>
+          <Divider plain>
+            <strong>Độ dài móng</strong>{" "}
+          </Divider>
           <Checkbox.Group
             options={["Ngắn", "Trung bình", "Dài"]}
             value={length}
             onChange={(checkedValues) => setLength(checkedValues)}
           />
 
-          <Divider plain>Mục đích làm móng</Divider>
+          <Divider plain>
+            <strong>Mục đích làm móng</strong>{" "}
+          </Divider>
           <Checkbox.Group
             value={purpose}
             options={["Đi chơi", "Đi làm", "Du lịch", "Dịp đặc biệt"]}
             onChange={(val) => setPurpose(val as string[])}
           />
 
-          <Divider plain>Dịp đặc biệt</Divider>
+          <Divider plain>
+            <strong>Dịp đặc biệt</strong>
+          </Divider>
           <Checkbox.Group
             value={specialOccasions}
             options={["Valentine", "Giáng sinh", "Tết"]}

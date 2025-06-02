@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const Description = ({ des }: { des: string }) => {
@@ -26,9 +27,21 @@ const Description = ({ des }: { des: string }) => {
       <p>
         Đặt hàng trực tiếp trên website này hoặc liên hệ với chúng tôi qua:
         <br />
-        Instagram: https://www.instagram.com/
+        Instagram:{" "}
+        <Link
+          href={"https://www.instagram.com/tailornails868/"}
+          style={{ color: "pink" }}
+        >
+          Tailor Nails
+        </Link>
         <br />
-        Facebook: https://www.facebook.com/
+        Facebook:{" "}
+        <Link
+          href={"https://www.facebook.com/profile.php?id=61576755897790"}
+          style={{ color: "pink" }}
+        >
+          Tailor Nails
+        </Link>
       </p>
     </div>
   );
