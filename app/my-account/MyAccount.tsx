@@ -36,7 +36,7 @@ export default function ProfilePage() {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewTitle, setPreviewTitle] = useState("");
   const [isChanged, setIsChanged] = useState(false);
-  const userOld = useRef<UserInfo>();
+  const userOld = useRef<UserInfo>(initialUserInfo);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
