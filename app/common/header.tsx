@@ -30,8 +30,6 @@ const Header = () => {
     refMenu.current?.style.setProperty("width", "0%");
   }
 
-  console.log(auth);
-
   return (
     <div className="header_section">
       <div className="container">
@@ -45,10 +43,22 @@ const Header = () => {
               &times;
             </Link>
             <Link href="/">Trang chủ</Link>
+            {auth.isAuthenticated ? (
+              <>
+                <Link href={"/my-account"}>Thông tin cá nhân</Link>
+              </>
+            ) : (
+              <Link href={"/login"}>Đăng nhập</Link>
+            )}
+            {auth?.user?.role === "admin" && (
+              <Link href={"/admin"}>Trang Admin</Link>
+            )}
             <Link href="/search">Sản phẩm</Link>
             <Link href="/about">Giới thiệu</Link>
             <Link href="/customers">Khách hàng</Link>
             <Link href="/contact">Liên hệ</Link>
+            <Link href="/cart">Giỏ hàng</Link>
+            <Link href="/favorite">Yêu thích</Link>
             <Link href="/order">Đơn hàng</Link>
           </div>
           <span className="toggle_icon" onClick={() => openNav()}>

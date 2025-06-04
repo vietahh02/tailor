@@ -1,0 +1,30 @@
+/* Trong globals.css hoặc style jsx */
+.responsive-columns {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.responsive-columns > div:first-child {
+  width: 300px;
+}
+
+.responsive-columns > div:last-child {
+  flex: 1;
+}
+
+/* Khi màn hình nhỏ hơn 768px (điện thoại) */
+@media (max-width: 768px) {
+  .responsive-columns {
+    flex-direction: column;
+  }
+
+  .responsive-columns > div:first-child {
+    width: 100%;
+    order: 1;
+  }
+
+  .responsive-columns > div:last-child {
+    order: 2;
+  }
+}

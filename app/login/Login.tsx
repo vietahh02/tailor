@@ -16,7 +16,7 @@ const Login = () => {
   const router = useRouter();
 
   const onFinish = async () => {
-    const res = await loginApi(userName, password);
+    const res = (await loginApi(userName, password)) as any;
     if (!res?.user) {
       toast.error("Tài khoản hoặc mật khẩu không chính xác");
     } else {

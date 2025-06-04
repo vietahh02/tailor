@@ -5,6 +5,7 @@ import { Col, Empty, Pagination, Row } from "antd";
 import { getAllProduct } from "../util/api";
 import { toast } from "react-toastify";
 import ProductCard from "./Card";
+import CatLoader from "../loading/CatLoader";
 const PRODUCTS_PER_PAGE = 12;
 
 type Props = {
@@ -26,21 +27,23 @@ const ListProduct = ({
   purpose,
   specialOccasions,
 }: Props) => {
-  const [products, setProducts] = useState();
+  const [products, setProducts] = useState<any>();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await getAllProduct();
+      const res = (await getAllProduct()) as any;
       if (res?.message) {
         toast.error("Lỗi hệ thống hãy thử lại sau");
       } else {
         setProducts(res);
       }
+      setIsLoading(false);
     };
     fetchData();
   }, []);
 
-  const filterProducts = products?.filter((p) => {
+  const filterProducts = products?.filter((p: any) => {
     const a =
       (isSubstring(search, p?.name) || isSubstring(search, p?.description)) &&
       hasCommonElement(selectedStyles, p?.category?.split(",") || []) &&
@@ -81,45 +84,51 @@ const ListProduct = ({
   };
 
   return (
-    <div className="product_section ">
-      <div className="container">
-        {currentProducts?.length > 0 ? (
-          <>
-            <Row gutter={[16, 16]}>
-              {currentProducts?.length &&
-                currentProducts?.map((product) => (
-                  <Col xs={24} sm={12} md={8} key={product.id}>
-                    {" "}
-                    <ProductCard
-                      product={{
-                        id: product?.id,
-                        name: product?.name,
-                        image: product?.images[0]?.url,
-                        price: product?.price,
-                        discountedPrice: product?.discount,
-                        average_rating: product?.average_rating,
-                        is_favorite: product?.is_favorite,
-                        favorite_id: product?.favorite_id,
-                      }}
-                      setProducts={setProducts}
-                    />
-                  </Col>
-                ))}
-            </Row>
-            <Pagination
-              className="mt-5"
-              current={currentPage}
-              pageSize={PRODUCTS_PER_PAGE}
-              total={products?.length}
-              onChange={handlePageChange}
-              align="center"
-            />
-          </>
-        ) : (
-          <Empty description="Không tìm thấy sản phẩm nào" />
-        )}
-      </div>
-    </div>
+    <>
+      {isLoading ? (
+        <CatLoader />
+      ) : (
+        <div className="product_section ">
+          <div className="container">
+            {currentProducts?.length > 0 ? (
+              <>
+                <Row gutter={[16, 16]}>
+                  {currentProducts?.length &&
+                    currentProducts?.map((product: any) => (
+                      <Col xs={24} sm={12} md={8} key={product.id}>
+                        {" "}
+                        <ProductCard
+                          product={{
+                            id: product?.id,
+                            name: product?.name,
+                            image: product?.images[0]?.url,
+                            price: product?.price,
+                            discountedPrice: product?.discount,
+                            average_rating: product?.average_rating,
+                            is_favorite: product?.is_favorite,
+                            favorite_id: product?.favorite_id,
+                          }}
+                          setProducts={setProducts}
+                        />
+                      </Col>
+                    ))}
+                </Row>
+                <Pagination
+                  className="mt-5"
+                  current={currentPage}
+                  pageSize={PRODUCTS_PER_PAGE}
+                  total={products?.length}
+                  onChange={handlePageChange}
+                  align="center"
+                />
+              </>
+            ) : (
+              <Empty description="Không tìm thấy sản phẩm nào" />
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

@@ -50,7 +50,7 @@ const AddressSelector = ({ formData, setFormData }: Props) => {
 
   // Load quận/huyện và xã/phường khi người dùng chọn tỉnh
   const loadData = async (selectedOptions: AddressOption[]) => {
-    const targetOption = selectedOptions[selectedOptions.length - 1];
+    const targetOption = selectedOptions[selectedOptions.length - 1] as any;
     targetOption.loading = true;
 
     // Lấy quận/huyện của tỉnh
@@ -72,7 +72,7 @@ const AddressSelector = ({ formData, setFormData }: Props) => {
   // Load xã/phường của quận/huyện
   const loadWardData = async (selectedOptions: AddressOption[]) => {
     const parent = selectedOptions[selectedOptions.length - 2];
-    const district = selectedOptions[selectedOptions.length - 1];
+    const district = selectedOptions[selectedOptions.length - 1] as any;
     district.loading = true;
 
     const res = await fetch(

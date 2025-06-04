@@ -33,7 +33,7 @@ const UserTable: React.FC = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const response = await getAllUsers();
+      const response = (await getAllUsers()) as any;
       setUsers(response);
       console.log(response);
     };
@@ -55,10 +55,10 @@ const UserTable: React.FC = () => {
   };
 
   const handleBan = async (record: User) => {
-    const res = await changeStatus(
+    const res = (await changeStatus(
       record.id,
       record.status === "active" ? "inactive" : "active"
-    );
+    )) as any;
     if (record.status === "active") {
       record.status = "inactive";
     } else {
@@ -86,7 +86,7 @@ const UserTable: React.FC = () => {
     } else {
       role = "user";
     }
-    const res = await changeRole(id, role);
+    const res = (await changeRole(id, role)) as any;
     if (res?.message === "successful") {
       toast.success("Thay đổi thành công");
     } else {

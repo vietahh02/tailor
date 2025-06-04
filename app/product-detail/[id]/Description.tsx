@@ -18,10 +18,8 @@ const Description = ({ des }: { des: string }) => {
       </p>
 
       <p>
-        Được ra đời từ năm 2018, Nailbox được thành lập để đáp ứng xu hướng làm
+        Được ra đời từ năm 2025, Nailbox được thành lập để đáp ứng xu hướng làm
         đẹp mới... <br />
-        ...Nailbox hiện đã phục vụ hơn 10000 bộ móng, hơn 50000 lượt theo dõi
-        trên Instagram...
       </p>
 
       <p>

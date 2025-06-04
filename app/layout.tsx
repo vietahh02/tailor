@@ -17,6 +17,9 @@ import { AuthWrapper } from "./context/auth.context";
 export const metadata: Metadata = {
   title: "Tailor Nail",
   description: "",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({

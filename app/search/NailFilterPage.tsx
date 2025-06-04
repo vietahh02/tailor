@@ -1,11 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Checkbox, Row, Divider } from "antd";
 import "antd/dist/reset.css";
 import ListProduct from "./ListProduct";
 import { useSearchParams } from "next/navigation";
 import { Input } from "antd";
+import "./search.css";
+import FullScreenSpinner from "../loading/Spiner";
+
 const { Search } = Input;
 
 export default function NailFilterPage() {
@@ -59,123 +62,126 @@ export default function NailFilterPage() {
   };
 
   return (
-    <div className="container">
-      <Search
-        placeholder="Nhập từ khóa..."
-        className="mt-4"
-        allowClear
-        enterButton="Search"
-        size="large"
-        onSearch={onSearch}
-      />
-      {search && (
-        <h3 style={{ marginTop: 20 }}>
-          kết quả tìm kiếm từ: <strong>{search}</strong>
-        </h3>
-      )}
-
-      <div className="container" style={{ display: "flex", padding: 20 }}>
-        {/* FILTER COLUMN */}
-        <div style={{ width: 300, marginRight: 20 }}>
-          <h3>
-            🧍‍♀️ <strong>Thông tin cá nhân & sở thích</strong>
+    <Suspense fallback={<FullScreenSpinner></FullScreenSpinner>}>
+      <div className="container">
+        <Search
+          placeholder="Nhập từ khóa..."
+          className="mt-4"
+          allowClear
+          enterButton="Search"
+          size="large"
+          onSearch={onSearch}
+          defaultValue={search}
+        />
+        {search && (
+          <h3 style={{ marginTop: 20 }}>
+            kết quả tìm kiếm từ: <strong>{search}</strong>
           </h3>
+        )}
 
-          <Divider plain>
-            <strong>
-              {" "}
-              <strong>Phong cách yêu thích</strong>{" "}
-            </strong>
-          </Divider>
-          <Checkbox.Group
-            value={selectedStyles}
-            options={[
-              "Nữ tính / dịu dàng",
-              "Cá tính / nổi bật",
-              "Tối giản / thanh lịch",
-              "Sang trọng / quý phái",
-              "Dễ thương / năng động",
-            ]}
-            onChange={(val) => setSelectedStyles(val as string[])}
-          />
+        <div className="container responsive-columns" style={{ padding: 20 }}>
+          {/* FILTER COLUMN */}
+          <div style={{ width: 300, marginRight: 20 }}>
+            <h3>
+              🧍‍♀️ <strong>Thông tin cá nhân & sở thích</strong>
+            </h3>
 
-          <Divider plain>
-            {" "}
-            <strong>Nghề nghiệp</strong>
-          </Divider>
-          <Checkbox.Group
-            value={selectedJobs}
-            options={[
-              "Văn phòng",
-              "Nghệ thuật",
-              "Sinh viên",
-              "Lao động tay chân",
-              "Tự do",
-            ]}
-            onChange={(val) => setSelectedJobs(val as string[])}
-          />
-
-          <Divider plain>
-            {" "}
-            <strong>Họa tiết</strong>
-          </Divider>
-          <Checkbox.Group
-            value={patterns}
-            options={[
-              "Hoa lá",
-              "Hoạt hình",
-              "Đá",
-              "Kim tuyến",
-              "Trơn",
-              "Vẽ tay",
-            ]}
-            onChange={(val) => setPatterns(val as string[])}
-          />
-
-          <Divider plain>
-            <strong>Độ dài móng</strong>{" "}
-          </Divider>
-          <Checkbox.Group
-            options={["Ngắn", "Trung bình", "Dài"]}
-            value={length}
-            onChange={(checkedValues) => setLength(checkedValues)}
-          />
-
-          <Divider plain>
-            <strong>Mục đích làm móng</strong>{" "}
-          </Divider>
-          <Checkbox.Group
-            value={purpose}
-            options={["Đi chơi", "Đi làm", "Du lịch", "Dịp đặc biệt"]}
-            onChange={(val) => setPurpose(val as string[])}
-          />
-
-          <Divider plain>
-            <strong>Dịp đặc biệt</strong>
-          </Divider>
-          <Checkbox.Group
-            value={specialOccasions}
-            options={["Valentine", "Giáng sinh", "Tết"]}
-            onChange={(val) => setSpecialOccasions(val as string[])}
-          />
-        </div>
-
-        {/* PRODUCT DISPLAY COLUMN */}
-        <div style={{ flex: 1 }}>
-          <h3>Sản phẩm</h3>
-          <Row gutter={[16, 16]}>
-            <ListProduct
-              search={search}
-              selectedStyles={selectedStyles}
-              selectedJobs={selectedJobs}
-              patterns={patterns}
-              length={length}
-              purpose={purpose}
-              specialOccasions={specialOccasions}
+            <Divider plain>
+              <strong>
+                {" "}
+                <strong>Phong cách yêu thích</strong>{" "}
+              </strong>
+            </Divider>
+            <Checkbox.Group
+              value={selectedStyles}
+              options={[
+                "Nữ tính / dịu dàng",
+                "Cá tính / nổi bật",
+                "Tối giản / thanh lịch",
+                "Sang trọng / quý phái",
+                "Dễ thương / năng động",
+              ]}
+              onChange={(val) => setSelectedStyles(val as string[])}
             />
-          </Row>
+
+            <Divider plain>
+              {" "}
+              <strong>Nghề nghiệp</strong>
+            </Divider>
+            <Checkbox.Group
+              value={selectedJobs}
+              options={[
+                "Văn phòng",
+                "Nghệ thuật",
+                "Sinh viên",
+                "Lao động tay chân",
+                "Tự do",
+              ]}
+              onChange={(val) => setSelectedJobs(val as string[])}
+            />
+
+            <Divider plain>
+              {" "}
+              <strong>Họa tiết</strong>
+            </Divider>
+            <Checkbox.Group
+              value={patterns}
+              options={[
+                "Hoa lá",
+                "Hoạt hình",
+                "Đá",
+                "Kim tuyến",
+                "Trơn",
+                "Vẽ tay",
+              ]}
+              onChange={(val) => setPatterns(val as string[])}
+            />
+
+            <Divider plain>
+              <strong>Độ dài móng</strong>{" "}
+            </Divider>
+            <Checkbox.Group
+              options={["Ngắn", "Trung bình", "Dài"]}
+              value={length}
+              onChange={(checkedValues) => setLength(checkedValues)}
+            />
+
+            <Divider plain>
+              <strong>Mục đích làm móng</strong>{" "}
+            </Divider>
+            <Checkbox.Group
+              value={purpose}
+              options={["Đi chơi", "Đi làm", "Du lịch", "Dịp đặc biệt"]}
+              onChange={(val) => setPurpose(val as string[])}
+            />
+
+            <Divider plain>
+              <strong>Dịp đặc biệt</strong>
+            </Divider>
+            <Checkbox.Group
+              value={specialOccasions}
+              options={["Valentine", "Giáng sinh", "Tết"]}
+              onChange={(val) => setSpecialOccasions(val as string[])}
+            />
+          </div>
+
+          {/* PRODUCT DISPLAY COLUMN */}
+          <div style={{ flex: 1 }}>
+            <h3>Sản phẩm</h3>
+            <Row gutter={[16, 16]}>
+              <ListProduct
+                search={search}
+                selectedStyles={selectedStyles}
+                selectedJobs={selectedJobs}
+                patterns={patterns}
+                length={length}
+                purpose={purpose}
+                specialOccasions={specialOccasions}
+              />
+            </Row>
+          </div>
         </div>
       </div>
-    </div>
+    </Suspense>
   );
 }

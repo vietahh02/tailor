@@ -6,6 +6,7 @@ import { RcFile, UploadFile } from "antd/es/upload/interface";
 import { PlusOutlined } from "@ant-design/icons";
 import { getInfoUser, updateUser } from "../util/api";
 import { toast } from "react-toastify";
+import FullScreenSpinner from "../loading/Spiner";
 
 interface UserInfo {
   id: number;
@@ -36,10 +37,11 @@ export default function ProfilePage() {
   const [previewTitle, setPreviewTitle] = useState("");
   const [isChanged, setIsChanged] = useState(false);
   const userOld = useRef<UserInfo>();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await getInfoUser();
+      const res = (await getInfoUser()) as any;
       if (!res?.message) {
         setUserInfo({
           id: res.id,
@@ -52,6 +54,7 @@ export default function ProfilePage() {
         });
         userOld.current = userInfo;
       }
+      setIsLoading(false);
     };
     fetchData();
   }, []);
@@ -122,14 +125,14 @@ export default function ProfilePage() {
       const avatarFile =
         avatarFileList.length > 0 ? avatarFileList[0].originFileObj : undefined;
 
-      const res = await updateUser(
+      const res = (await updateUser(
         userInfo.id,
         userOld?.current?.email !== values.email ? values.email : undefined,
         userOld?.current?.phone !== values.phone ? values.phone : undefined,
         values.address,
         avatarFile,
         values.full_name
-      );
+      )) as any;
 
       if (res.message === "User updated successfully") {
         toast.success("Lưu thông tin thành công!");
@@ -146,89 +149,93 @@ export default function ProfilePage() {
     <div style={{ maxWidth: 650, margin: "30px auto", padding: "20px" }}>
       <h2>Thông tin cá nhân</h2>
 
-      <Form
-        form={form}
-        layout="vertical"
-        onValuesChange={onValuesChange}
-        initialValues={userInfo}
-      >
-        <Form.Item
-          label="Ảnh đại diện"
-          name="avatar"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
+      {isLoading ? (
+        <FullScreenSpinner />
+      ) : (
+        <Form
+          form={form}
+          layout="vertical"
+          onValuesChange={onValuesChange}
+          initialValues={userInfo}
         >
-          <Image src={previewImage} alt="" style={{ display: "none" }} />
-          <Upload
-            listType="picture-circle"
-            beforeUpload={() => false}
-            fileList={avatarFileList}
-            onChange={handleChange}
-            onPreview={handlePreview}
-            maxCount={1}
-            showUploadList={{
-              showRemoveIcon: true,
-              showPreviewIcon: true,
-            }}
+          <Form.Item
+            label="Ảnh đại diện"
+            name="avatar"
+            valuePropName="fileList"
+            getValueFromEvent={normFile}
           >
-            <div>
-              <PlusOutlined />
-              <div style={{ marginTop: 8 }}>Thay ảnh</div>
-            </div>
-          </Upload>
-        </Form.Item>
+            <Image src={previewImage} alt="" style={{ display: "none" }} />
+            <Upload
+              listType="picture-circle"
+              beforeUpload={() => false}
+              fileList={avatarFileList}
+              onChange={handleChange}
+              onPreview={handlePreview}
+              maxCount={1}
+              showUploadList={{
+                showRemoveIcon: true,
+                showPreviewIcon: true,
+              }}
+            >
+              <div>
+                <PlusOutlined />
+                <div style={{ marginTop: 8 }}>Thay ảnh</div>
+              </div>
+            </Upload>
+          </Form.Item>
 
-        <Form.Item
-          label="Họ tên đầy đủ"
-          name="full_name"
-          rules={[{ required: true, message: "Vui lòng nhập họ tên" }]}
-        >
-          <Input />
-        </Form.Item>
+          <Form.Item
+            label="Họ tên đầy đủ"
+            name="full_name"
+            rules={[{ required: true, message: "Vui lòng nhập họ tên" }]}
+          >
+            <Input />
+          </Form.Item>
 
-        <Form.Item
-          label="Nickname"
-          name="user_name"
-          rules={[{ required: true, message: "Vui lòng nhập nick name" }]}
-        >
-          <Input disabled />
-        </Form.Item>
+          <Form.Item
+            label="Nickname"
+            name="user_name"
+            rules={[{ required: true, message: "Vui lòng nhập nick name" }]}
+          >
+            <Input disabled />
+          </Form.Item>
 
-        <Form.Item
-          label="Số điện thoại"
-          name="phone"
-          rules={[
-            { required: true, message: "Vui lòng nhập số điện thoại" },
-            {
-              pattern: /^\d{10,11}$/,
-              message: "Số điện thoại phải gồm 10 hoặc 11 chữ số",
-            },
-          ]}
-        >
-          <Input maxLength={11} />
-        </Form.Item>
+          <Form.Item
+            label="Số điện thoại"
+            name="phone"
+            rules={[
+              { required: true, message: "Vui lòng nhập số điện thoại" },
+              {
+                pattern: /^\d{10,11}$/,
+                message: "Số điện thoại phải gồm 10 hoặc 11 chữ số",
+              },
+            ]}
+          >
+            <Input maxLength={11} />
+          </Form.Item>
 
-        <Form.Item label="Địa chỉ nhà" name="address">
-          <Input.TextArea rows={2} />
-        </Form.Item>
+          <Form.Item label="Địa chỉ nhà" name="address">
+            <Input.TextArea rows={2} />
+          </Form.Item>
 
-        <Form.Item
-          label="Email"
-          name="email"
-          rules={[
-            { required: true, message: "Vui lòng nhập email" },
-            { type: "email", message: "Email không hợp lệ" },
-          ]}
-        >
-          <Input />
-        </Form.Item>
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[
+              { required: true, message: "Vui lòng nhập email" },
+              { type: "email", message: "Email không hợp lệ" },
+            ]}
+          >
+            <Input />
+          </Form.Item>
 
-        <Form.Item>
-          <Button type="primary" onClick={onSave} disabled={!isChanged} block>
-            Lưu
-          </Button>
-        </Form.Item>
-      </Form>
+          <Form.Item>
+            <Button type="primary" onClick={onSave} disabled={!isChanged} block>
+              Lưu
+            </Button>
+          </Form.Item>
+        </Form>
+      )}
 
       <Modal
         open={previewOpen}

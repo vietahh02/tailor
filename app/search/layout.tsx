@@ -3,7 +3,7 @@ import Header from "../common/header";
 import Footer from "../common/footer";
 
 export const metadata: Metadata = {
-  title: "Tailor Nail | About",
+  title: "Tailor Nail | Search",
   description: "Discover our range of nail products and services.",
 };
 

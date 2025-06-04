@@ -41,7 +41,7 @@ const OrderTable: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await getAllOrderForAdmin();
+      const res = (await getAllOrderForAdmin()) as any;
       console.log(res);
       if (!res.detail) {
         setOrders(res);

@@ -11,16 +11,17 @@ import {
 } from "../util/api";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/auth.context";
+import CatLoader from "../loading/CatLoader";
 
 const ShoppingCart: React.FC = () => {
-  const [cart, setCart] = useState();
+  const [cart, setCart] = useState<any>();
   const router = useRouter();
 
   const { setNumberCart } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await getAllCartApi();
+      const res = (await getAllCartApi()) as any;
       console.log(res);
       setCart(res.items);
     };
@@ -32,11 +33,11 @@ const ShoppingCart: React.FC = () => {
   };
 
   const handleIncrease = async (id: number, quantityNow: number) => {
-    const res = await updateQuantityCartApi(id, quantityNow + 1);
+    const res = (await updateQuantityCartApi(id, quantityNow + 1)) as any;
     if (res.message === "successful") {
       setNumberCart((prev) => (prev ? prev + 1 : 1));
-      setCart((prev) =>
-        prev?.map((p) => {
+      setCart((prev: any) =>
+        prev?.map((p: any) => {
           if (p.product_id === id) {
             return { ...p, quantity: quantityNow + 1 };
           }
@@ -50,12 +51,12 @@ const ShoppingCart: React.FC = () => {
 
   const handleDecrease = async (id: number, quantityNow: number) => {
     if (quantityNow === 1) return;
-    const res = await updateQuantityCartApi(id, quantityNow - 1);
+    const res = (await updateQuantityCartApi(id, quantityNow - 1)) as any;
     console.log(res);
     if (res.message === "successful") {
       setNumberCart((prev) => (prev ? prev - 1 : 0));
-      setCart((prev) =>
-        prev?.map((p) => {
+      setCart((prev: any) =>
+        prev?.map((p: any) => {
           if (p.product_id === id) {
             return { ...p, quantity: quantityNow - 1 };
           }
@@ -68,11 +69,11 @@ const ShoppingCart: React.FC = () => {
   };
 
   const handleDeleteCart = async (id: number, quantity: number) => {
-    const res = await removeCartApi(id);
+    const res = (await removeCartApi(id)) as any;
     console.log(res);
     if (res.message === "successful") {
-      setNumberCart((prev) => (prev ? prev - quantity : 0));
-      setCart((prev) => prev?.filter((p) => p.product_id !== id));
+      setNumberCart((prev: any) => (prev ? prev - quantity : 0));
+      setCart((prev: any) => prev?.filter((p: any) => p.product_id !== id));
       toast.success("Xóa sản phẩm thành công ra khỏi giỏ hàng");
     } else {
       toast.error("Lỗi hệ thống hãy thử lại sau");
@@ -87,13 +88,13 @@ const ShoppingCart: React.FC = () => {
         Miễn phí đổi trả trong vòng 7 ngày nếu có lỗi từ phía shop
       </p>
 
-      <div className="ct-main">
-        {/* Left Column */}
-        <div className="ct-left">
-          {cart ? (
-            <>
+      {cart ? (
+        <>
+          <div className="ct-main">
+            {/* Left Column */}
+            <div className="ct-left">
               <h2 className="ct-item-count">{cart?.length} Sản phẩm</h2>
-              {cart?.map((c) => (
+              {cart?.map((c: any) => (
                 <div className="ct-item" key={c.id}>
                   <div className="ct-item-info">
                     <Image
@@ -141,38 +142,38 @@ const ShoppingCart: React.FC = () => {
                   </div>
                 </div>
               ))}
-            </>
-          ) : (
-            <>Loading...</>
-          )}
-        </div>
-
-        {/* Right Column */}
-        <div className="ct-right">
-          <h2 className="ct-summary-title">ORDER SUMMARY</h2>
-          <div className="ct-summary">
-            <div className="ct-summary-line">
-              <span>SUBTOTAL</span>
-
-              <span>
-                {cart
-                  ?.reduce((total, item) => {
-                    const priceAfterDiscount =
-                      (item.product?.price * (100 - item.product?.discount)) /
-                      100;
-                    return total + item.quantity * priceAfterDiscount;
-                  }, 0)
-                  .toLocaleString()}{" "}
-                ₫
-              </span>
             </div>
-            <p className="ct-summary-note">Discounts applied at checkout</p>
-            <button className="ct-checkout-btn" onClick={handleCheckout}>
-              Tiếp tục thanh toán
-            </button>
+            {/* Right Column */}
+            <div className="ct-right">
+              <h2 className="ct-summary-title">ORDER SUMMARY</h2>
+              <div className="ct-summary">
+                <div className="ct-summary-line">
+                  <span>SUBTOTAL</span>
+
+                  <span>
+                    {cart
+                      ?.reduce((total: any, item: any) => {
+                        const priceAfterDiscount =
+                          (item.product?.price *
+                            (100 - item.product?.discount)) /
+                          100;
+                        return total + item.quantity * priceAfterDiscount;
+                      }, 0)
+                      .toLocaleString()}{" "}
+                    ₫
+                  </span>
+                </div>
+                <p className="ct-summary-note">Discounts applied at checkout</p>
+                <button className="ct-checkout-btn" onClick={handleCheckout}>
+                  Tiếp tục thanh toán
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      ) : (
+        <CatLoader />
+      )}
     </div>
   );
 };

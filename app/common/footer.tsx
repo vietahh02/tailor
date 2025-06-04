@@ -74,11 +74,6 @@ const Footer = () => {
                   <FaFacebookSquare />
                 </Link>
               </li>
-              {/* <li>
-                <Link href="#">
-                  <FaTwitterSquare />
-                </Link>
-              </li> */}
               <li>
                 <Link href="https://www.instagram.com/tailornails868/">
                   <FaInstagramSquare />

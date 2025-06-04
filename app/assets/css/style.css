@@ -46,6 +46,10 @@ img {
   border-radius: 20px;
 }
 
+body {
+  /* background: #f9f9f9; */
+}
+
 .navbar .logo {
   margin-left: auto;
   margin-right: auto;
@@ -61,6 +65,13 @@ img {
   position: relative;
   width: 150px;
   left: 30%;
+}
+@media only screen and (max-width: 769px) {
+  .logo img {
+    position: relative;
+    width: 100px;
+    left: 30%;
+  }
 }
 
 .banner_img {

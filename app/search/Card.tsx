@@ -43,7 +43,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, setProducts }) => {
   };
 
   const handleAddToCart = async () => {
-    const res = await addToCartApi(product?.id, 1);
+    const res = (await addToCartApi(product?.id, 1)) as any;
     if (res.message === "successful") {
       setNumberCart((prev) => (prev ? prev + 1 : 1));
       toast.success("Thêm sản phẩm thành công");
@@ -51,13 +51,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, setProducts }) => {
       toast.error("Thêm sản phẩm khoogn thành công");
     }
   };
-  const handleFavorite = async (id_favor: number, status: boolean) => {
+  const handleFavorite = async (id_favor: any, status: boolean) => {
     if (status) {
-      const res = await removeFavoriteApi(id_favor);
+      const res = (await removeFavoriteApi(id_favor)) as any;
       if (res.message === "successful") {
         setNumberFavorite((prev) => (prev ? prev - 1 : 0));
-        setProducts((prev) =>
-          prev?.map((p) => {
+        setProducts((prev: any) =>
+          prev?.map((p: any) => {
             if (p.id === product.id)
               return { ...p, is_favorite: false, favorite_id: null };
             return p;
@@ -68,11 +68,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, setProducts }) => {
         toast.error("Hệ thống đang lỗi hoặc quá tải vui lòng thử lại sau");
       }
     } else {
-      const res = await addNewFavoriteApi(product.id);
+      const res = (await addNewFavoriteApi(product.id)) as any;
       if (res.message === "successful") {
         setNumberFavorite((prev) => (prev ? prev + 1 : 1));
-        setProducts((prev) =>
-          prev?.map((p) => {
+        setProducts((prev: any) =>
+          prev?.map((p: any) => {
             if (p.id === product.id)
               return { ...p, is_favorite: true, favorite_id: res.data.id };
             return p;

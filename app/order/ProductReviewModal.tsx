@@ -94,12 +94,12 @@ const ProductReviewModal = ({
       return;
     }
 
-    const res = await createNewReviewApi(
+    const res = (await createNewReviewApi(
       selectedOrderItem.product_id,
       values.rating,
       values.comment,
       newImages
-    );
+    )) as any;
     if (res.detail) {
       toast.error("Lỗi hệ thống");
       return;
@@ -152,13 +152,13 @@ const ProductReviewModal = ({
       return;
     }
 
-    const res = await updateReviewApi(
+    const res = (await updateReviewApi(
       selectedOrderItem.review.id,
       values.rating,
       values.comment,
       `[${removedImageIds.toString()}]`,
       newImages
-    );
+    )) as any;
     if (res.detail) {
       toast.error("Lỗi hệ thống");
       return;
@@ -239,13 +239,19 @@ const ProductReviewModal = ({
                   {product.reviewed ? "Đã đánh giá" : "Chưa đánh giá"}
                 </div>
               </div>
-              <div style={{ display: "flex", gap: "8px" }}>
+              <div>
                 {product.reviewed ? (
                   <>
-                    <Button onClick={() => showDetailModal(product)}>
+                    <Button
+                      style={{ marginLeft: 10, marginTop: 10 }}
+                      onClick={() => showDetailModal(product)}
+                    >
                       Xem chi tiết
                     </Button>
-                    <Button onClick={() => showRatingModal(product)}>
+                    <Button
+                      style={{ marginLeft: 10, marginTop: 10 }}
+                      onClick={() => showRatingModal(product)}
+                    >
                       Sửa đánh giá
                     </Button>
                   </>

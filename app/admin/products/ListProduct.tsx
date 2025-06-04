@@ -79,7 +79,7 @@ const ProductTable = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getAllProduct();
+      const response = (await getAllProduct()) as any;
       setData(response);
     };
     fetchData();
@@ -101,7 +101,7 @@ const ProductTable = () => {
   };
 
   const handleUpdateProduct = async (product: ProductForEdit) => {
-    const res = await updateProductApi(
+    const res = (await updateProductApi(
       product.id,
       product.name,
       product.price,
@@ -115,7 +115,7 @@ const ProductTable = () => {
       product.purpose?.toString(),
       product.occasion?.toString(),
       `[${product.delete_image_ids?.toString()}]`
-    );
+    )) as any;
 
     if (res.message === "successful") {
       setData((prev) => {
@@ -127,7 +127,6 @@ const ProductTable = () => {
       toast.success("Cập nhật sản phẩm thành công!");
     } else {
       toast.error("Cập nhật thất bại");
-      console.log(res);
     }
     setEditModalVisible(false);
     setEditingProduct(null);
@@ -151,7 +150,7 @@ const ProductTable = () => {
       values.occasion?.toString()
     );
     console.log(res);
-    const response = await getAllProduct();
+    const response = (await getAllProduct()) as any;
     setData(response);
     toast.success("Thêm sản phẩm thành công!");
 
@@ -159,7 +158,7 @@ const ProductTable = () => {
   };
 
   const handleDelete = async () => {
-    const res = await deleteProduct(idDelete.current);
+    const res = (await deleteProduct(idDelete.current)) as any;
     if (res.message === "successful") {
       toast.success("Xóa thành công sản phẩm");
       setData((prev) => prev.filter((p) => p.id !== idDelete.current));
@@ -178,7 +177,7 @@ const ProductTable = () => {
     {
       title: "Ảnh",
       dataIndex: "images",
-      render: (images?: string[]) =>
+      render: (images?: { id: number; url: string }[]) =>
         images && images.length > 0 ? (
           <Image src={images[0]?.url} width={100} height={80} alt="3" />
         ) : (

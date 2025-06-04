@@ -9,11 +9,11 @@ import { createUserApi } from "../util/api";
 import { useRouter } from "next/navigation";
 
 const Register = () => {
-  const [userName, setUserName] = useState<string>();
-  const [email, setEmail] = useState<string>();
-  const [password, setPassword] = useState<string>();
-  const [rePassword, setRePassword] = useState<string>();
-  const [phone, setPhone] = useState<string>();
+  const [userName, setUserName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [rePassword, setRePassword] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
   const router = useRouter();
   function isVietnamesePhoneNumber(phone: string): boolean {
     const regex = /^(0|\+84|84)(3|5|7|8|9)\d{8}$/;
@@ -34,7 +34,7 @@ const Register = () => {
       return;
     }
 
-    const res = await createUserApi(email, userName, phone, password);
+    const res = (await createUserApi(email, userName, phone, password)) as any;
     if (res?.message === "successfull") {
       toast.success("Đăng ký tài khoản thành công");
       router.push("/login");

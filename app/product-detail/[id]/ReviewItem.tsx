@@ -59,7 +59,7 @@ export default function ReviewItem({
       )}
 
       <div className="flex gap-2 flex-wrap ml-10">
-        {images?.map((img, idx) => (
+        {images?.map((img: any, idx: number) => (
           <div key={idx} className="relative w-24 h-24">
             <Image src={img.url} width={96} height={96} alt="" />
           </div>

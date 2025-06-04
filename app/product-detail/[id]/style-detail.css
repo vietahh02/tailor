@@ -235,3 +235,35 @@
 .slick-dots.slick-thumb li.slick-active img {
   border-color: #ff4081;
 }
+
+@media (max-width: 768px) {
+  .pd-product {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .pd-image {
+    width: 100%;
+  }
+
+  .pd-image img {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .slick-dots.slick-thumb li {
+    width: 50px;
+    height: 50px;
+  }
+
+  .slick-dots.slick-thumb li img {
+    object-fit: cover;
+  }
+
+  .pd-details {
+    width: 100%;
+  }
+}
+
+@media (max-width: 375px) {
+}

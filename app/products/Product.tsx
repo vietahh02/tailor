@@ -44,12 +44,12 @@ const Product = ({
 
   const handleFavorite = async () => {
     if (is_favorite && favorite_id) {
-      const res = await removeFavoriteApi(favorite_id);
+      const res = (await removeFavoriteApi(favorite_id)) as any;
       console.log(res);
       if (res.message === "successful") {
         setNumberFavorite((prev) => (prev ? prev - 1 : 0));
-        setProducts((prev) =>
-          prev?.map((p) => {
+        setProducts((prev: any) =>
+          prev?.map((p: any) => {
             if (p.id === id) {
               return { ...p, is_favorite: false, favorite_id: null };
             }
@@ -61,12 +61,12 @@ const Product = ({
         toast.error("Hệ thống đang lỗi hoặc quá tải vui lòng thử lại sau");
       }
     } else {
-      const res = await addNewFavoriteApi(id);
+      const res = (await addNewFavoriteApi(id)) as any;
       console.log(res);
       if (res.message === "successful") {
         setNumberFavorite((prev) => (prev ? prev + 1 : 1));
-        setProducts((prev) =>
-          prev?.map((p) => {
+        setProducts((prev: any) =>
+          prev?.map((p: any) => {
             if (p.id === id) {
               return { ...p, is_favorite: true, favorite_id: res.data.id };
             }
@@ -81,7 +81,7 @@ const Product = ({
   };
 
   const handleAddToCart = async () => {
-    const res = await addToCartApi(id, 1);
+    const res = (await addToCartApi(id, 1)) as any;
     if (res.message === "successful") {
       setNumberCart((prev) => (prev ? prev + 1 : 1));
       toast.success("Thêm sản phẩm thành công");

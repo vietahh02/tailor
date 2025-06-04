@@ -138,3 +138,15 @@
   font-weight: bold;
   cursor: pointer;
 }
+
+/* Responsive layout cho mobile */
+@media (max-width: 768px) {
+  .ct-main {
+    flex-direction: column;
+  }
+
+  .ct-right {
+    margin-left: 0;
+    margin-top: 2rem;
+  }
+}

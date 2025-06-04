@@ -5,14 +5,15 @@ import { Col, Empty, Pagination, Row } from "antd";
 import { getAllFavoriteApi } from "../util/api";
 import { toast } from "react-toastify";
 import ProductCard from "./Card";
+import CatLoader from "../loading/CatLoader";
 const PRODUCTS_PER_PAGE = 12;
 
 const Favorite = () => {
-  const [products, setProducts] = useState();
+  const [products, setProducts] = useState<any>();
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await getAllFavoriteApi();
+      const res = (await getAllFavoriteApi()) as any;
       if (res?.message === "Success") {
         setProducts(res.data);
       } else {
@@ -41,42 +42,48 @@ const Favorite = () => {
             </p>
           </div>
         </div>
-        <div className="row product_section_2 layout_padding">
-          {currentProducts && currentProducts?.length > 0 ? (
-            <>
-              <Row gutter={[16, 16]}>
-                {currentProducts?.map((product) => (
-                  <Col xs={24} sm={12} md={6} key={product.product.id}>
-                    {" "}
-                    <ProductCard
-                      product={{
-                        id: product?.product.id,
-                        name: product?.product.name,
-                        image: product?.product.images[0],
-                        price: product?.product.price,
-                        discountedPrice: product?.product.discount,
-                        average_rating: product?.product.average_rating,
-                        is_favorite: product?.product.is_favorite,
-                      }}
-                      id_favor={product.id}
-                      setProducts={setProducts}
-                    />
-                  </Col>
-                ))}
-              </Row>
-              <Pagination
-                className="mt-5"
-                current={currentPage}
-                pageSize={PRODUCTS_PER_PAGE}
-                total={products?.length}
-                onChange={handlePageChange}
-                align="center"
-              />
-            </>
-          ) : (
-            <Empty description="Hãy bắt đầu thăm quan shop của bọn mình nào" />
-          )}
-        </div>
+        {!products ? (
+          <CatLoader />
+        ) : (
+          <>
+            <div className="row product_section_2 layout_padding">
+              {currentProducts && currentProducts?.length > 0 ? (
+                <>
+                  <Row gutter={[16, 16]}>
+                    {currentProducts?.map((product: any) => (
+                      <Col xs={24} sm={12} md={6} key={product.product.id}>
+                        {" "}
+                        <ProductCard
+                          product={{
+                            id: product?.product.id,
+                            name: product?.product.name,
+                            image: product?.product.images[0],
+                            price: product?.product.price,
+                            discountedPrice: product?.product.discount,
+                            average_rating: product?.product.average_rating,
+                            is_favorite: product?.product.is_favorite,
+                          }}
+                          id_favor={product.id}
+                          setProducts={setProducts}
+                        />
+                      </Col>
+                    ))}
+                  </Row>
+                  <Pagination
+                    className="mt-5"
+                    current={currentPage}
+                    pageSize={PRODUCTS_PER_PAGE}
+                    total={products?.length}
+                    onChange={handlePageChange}
+                    align="center"
+                  />
+                </>
+              ) : (
+                <Empty description="Hãy bắt đầu thăm quan shop của bọn mình nào" />
+              )}
+            </div>{" "}
+          </>
+        )}
       </div>
     </div>
   );

@@ -23,11 +23,11 @@ const CheckoutPage: React.FC = () => {
 
   const { setNumberCart } = useAuth();
 
-  const [carts, setCarts] = useState();
+  const [carts, setCarts] = useState<any>();
   const router = useRouter();
   useEffect(() => {
     const fetchData = async () => {
-      const storedCarts = await getAllCartApi();
+      const storedCarts = (await getAllCartApi()) as any;
       if (storedCarts) {
         setCarts(storedCarts);
       }
@@ -92,7 +92,7 @@ const CheckoutPage: React.FC = () => {
       return;
     }
 
-    const res = await createOrderApi(
+    const res = (await createOrderApi(
       JSON.stringify({
         customer_name: formData.fullName,
         customer_phone: formData.phone,
@@ -101,7 +101,7 @@ const CheckoutPage: React.FC = () => {
           formData.address.reverse().join(", "),
         shipping_fee: formData.feeShip,
         note: formData.note,
-        items: carts?.items?.map((i) => {
+        items: carts?.items?.map((i: any) => {
           return {
             product_id: i.product_id,
             quantity: i.quantity,
@@ -110,7 +110,7 @@ const CheckoutPage: React.FC = () => {
         }),
       }),
       formData.image
-    );
+    )) as any;
     if (res.message === "successful") {
       await clearCartApi();
       toast.success("Đặt hàng thành công");
@@ -128,7 +128,7 @@ const CheckoutPage: React.FC = () => {
   }
 
   function calculateTotal(): string {
-    const total = carts?.items?.reduce((sum, item) => {
+    const total = carts?.items?.reduce((sum: any, item: any) => {
       const { quantity, product } = item;
       const discountedPrice = product.price * (1 - product.discount / 100);
       return sum + quantity * discountedPrice;
@@ -258,7 +258,7 @@ const CheckoutPage: React.FC = () => {
           </thead>
 
           <tbody>
-            {carts?.items.map((c) => (
+            {carts?.items.map((c: any) => (
               <tr key={c.id}>
                 <td>{c.product.name}</td>
                 <td className="text-center">{c.quantity}</td>

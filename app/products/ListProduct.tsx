@@ -5,11 +5,11 @@ import Product from "./Product";
 import { getTopSell } from "../util/api";
 
 const ListProduct = () => {
-  const [products, setProducts] = useState();
+  const [products, setProducts] = useState<any>();
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await getTopSell();
+      const res = (await getTopSell()) as any;
       if (!res?.message) {
         setProducts(res);
       }
@@ -30,7 +30,7 @@ const ListProduct = () => {
           </div>
         </div>
         <div className="row product_section_2 layout_padding">
-          {products?.map((p) => (
+          {products?.map((p: any) => (
             <Product
               key={p.id}
               id={p.id}

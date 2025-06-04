@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Tailor Nail | Desgin",
+  title: "Tailor Nail | Design",
   description: "Get in touch with us for any inquiries or support.",
 };
 

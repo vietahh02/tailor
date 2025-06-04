@@ -5,7 +5,7 @@ import "./search.css";
 import { IoIosSearch } from "react-icons/io";
 import { LuDelete } from "react-icons/lu";
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
 type Props = {
   isOpen: boolean;
   onClose: () => void;
@@ -14,6 +14,7 @@ type Props = {
 export default function Search({ isOpen, onClose }: Props) {
   const [value, setValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (isOpen) {
@@ -24,6 +25,10 @@ export default function Search({ isOpen, onClose }: Props) {
       setValue("");
     }
   }, [isOpen]);
+
+  const handleEnter = () => {
+    router.push(`/search?s=${value}`);
+  };
 
   return (
     <div className={`search ${isOpen ? "show-search" : ""}`}>
@@ -39,6 +44,7 @@ export default function Search({ isOpen, onClose }: Props) {
             value={value}
             ref={inputRef}
             onChange={(e) => setValue(e.target.value)}
+            onKeyDown={() => handleEnter()}
           />
           <IoIosSearch className="search__icon" />
           {value && (
