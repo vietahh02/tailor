@@ -14,7 +14,6 @@ const { Search } = Input;
 export default function NailFilterPage() {
   const searchParams = useSearchParams();
 
-  // ==== FILTER STATE ====
   const [selectedStyles, setSelectedStyles] = useState<string[]>([]);
   const [selectedJobs, setSelectedJobs] = useState<string[]>([]);
   const [patterns, setPatterns] = useState<string[]>([]);
@@ -23,7 +22,6 @@ export default function NailFilterPage() {
   const [specialOccasions, setSpecialOccasions] = useState<string[]>([]);
   const [search, setSearch] = useState<string>(searchParams.get("s") || "");
 
-  // ==== LOAD SAVED FILTER ====
   useEffect(() => {
     const saved = sessionStorage.getItem("filters");
     if (saved) {
@@ -37,7 +35,6 @@ export default function NailFilterPage() {
     }
   }, []);
 
-  // ==== SAVE FILTER ====
   useEffect(() => {
     const filters = {
       selectedStyles,

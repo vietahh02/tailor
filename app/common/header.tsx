@@ -15,9 +15,10 @@ import { useAuth } from "../context/auth.context";
 import { IoMdExit } from "react-icons/io";
 import { logoutApi } from "../util/api";
 // import { useRouter } from "next/navigation";
+import "./search.css";
 
 const Header = () => {
-  const [showSearch, setShowSearch] = useState(false);
+  const [showSearch, setShowSearch] = useState<boolean>(false);
   const refMenu = React.useRef<HTMLDivElement>(null);
   // const router = useRouter();
   const { auth, numberCart, numberFavorite, setAuth } = useAuth();

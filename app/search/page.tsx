@@ -1,10 +1,12 @@
 import React from "react";
-import NailFilterPage from "./NailFilterPage";
+import SearchPage from "./SearchPage";
+// import NailFilterPage from "./NailFilterPage";
 
 const Page = () => {
   return (
     <>
-      <NailFilterPage />
+      {/* <NailFilterPage /> */}
+      <SearchPage />
     </>
   );
 };
