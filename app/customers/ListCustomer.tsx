@@ -34,7 +34,7 @@ const ListCustomer = () => {
       <div className="container">
         <div className="row">
           <div className="col-sm-12">
-            <h1 className="customer_taital">What says customers</h1>
+            <h1 className="customer_taital">FEEDBACKS</h1>
           </div>
         </div>
         <div id="main_slider" className="carousel slide" data-ride="carousel">
