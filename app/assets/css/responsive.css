@@ -355,11 +355,11 @@
   }
   #main_slider button.carousel-control-next {
     right: -60px;
-    top: 420px;
+    top: 450px;
   }
   #main_slider button.carousel-control-prev {
     left: -60px;
-    top: 420px;
+    top: 450px;
   }
   .contact_text {
     font-size: 15px;
@@ -400,5 +400,16 @@
   }
   .image_1 {
     height: auto;
+  }
+}
+
+@media (max-width: 425px) {
+  #main_slider button.carousel-control-next {
+    right: -60px;
+    top: 500px;
+  }
+  #main_slider button.carousel-control-prev {
+    left: -60px;
+    top: 500px;
   }
 }

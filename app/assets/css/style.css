@@ -532,7 +532,7 @@ button {
 .btn_main {
   width: 100%;
   display: flex;
-  background-color: #000;
+  background-color: pink;
   height: auto;
   padding: 20px 10px 13px 10px;
 }
@@ -763,14 +763,20 @@ button {
   text-align: center;
 }
 
+.client_img img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+
 #main_slider button.carousel-control-prev {
   left: -60px;
-  top: 360px;
+  top: 325px;
 }
 
 #main_slider button.carousel-control-next {
   right: -60px;
-  top: 360px;
+  top: 325px;
 }
 
 #main_slider .carousel-control-next,

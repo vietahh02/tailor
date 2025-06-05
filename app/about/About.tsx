@@ -11,7 +11,10 @@ const About = () => {
           <div className="row">
             <div className="col-md-6">
               <div className="about_taital_main">
-                <h1 className="about_taital">YOUR NAILS 🎀YOUR STYLE</h1>
+                <h1 className="about_taital">
+                  YOUR NAILS 🎀
+                  <br /> YOUR STYLE
+                </h1>
                 <p className="about_text">
                   TailorNail xin chào cả nhà!
                   <br />

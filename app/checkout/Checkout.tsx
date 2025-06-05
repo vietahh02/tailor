@@ -350,7 +350,7 @@ const CheckoutPage: React.FC = () => {
       >
         <Image
           width="100%"
-          src="https://nailbox.vn/wp-content/uploads/2022/12/do-mong-tien-2-1.jpg"
+          src="https://res.cloudinary.com/dlpcempww/image/upload/v1749140128/ykjcszkctddhlh1ijbgs.jpg"
           alt="Ảnh mẫu"
         />
       </Modal>

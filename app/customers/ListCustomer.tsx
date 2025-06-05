@@ -1,7 +1,11 @@
 "use client";
 
 import React, { useRef } from "react";
-import client from "../assets/images/client-img.png";
+// import client from "../assets/images/client-img.png";
+import cus1 from "../assets/images/cus1.png";
+import cus2 from "../assets/images/cus2.png";
+import cus3 from "../assets/images/cus3.png";
+import cus4 from "../assets/images/cus4.png";
 import Image from "next/image";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import Slider from "react-slick";
@@ -40,7 +44,7 @@ const ListCustomer = () => {
                 <div className="client_main">
                   <div className="client_left">
                     <div className="client_img">
-                      <Image src={client} alt="Client Image" />
+                      <Image src={cus1} alt="Client Image" />
                     </div>
                   </div>
                   <div className="client_right">
@@ -57,7 +61,7 @@ const ListCustomer = () => {
                 <div className="client_main">
                   <div className="client_left">
                     <div className="client_img">
-                      <Image src={client} alt="Client Image" />
+                      <Image src={cus2} alt="Client Image" />
                     </div>
                   </div>
                   <div className="client_right">
@@ -74,7 +78,7 @@ const ListCustomer = () => {
                 <div className="client_main">
                   <div className="client_left">
                     <div className="client_img">
-                      <Image src={client} alt="Client Image" />
+                      <Image src={cus3} alt="Client Image" />
                     </div>
                   </div>
                   <div className="client_right">
@@ -92,7 +96,7 @@ const ListCustomer = () => {
                 <div className="client_main">
                   <div className="client_left">
                     <div className="client_img">
-                      <Image src={client} alt="Client Image" />
+                      <Image src={cus4} alt="Client Image" />
                     </div>
                   </div>
                   <div className="client_right">
