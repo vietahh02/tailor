@@ -1,17 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { FaLock, FaUser } from "react-icons/fa";
 import { loginApi } from "../util/api";
 // import { notification } from "antd";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../context/auth.context";
+import ForgotPasswordModal from "./ForgotPasswordModal";
+import { Button } from "antd";
 
 const Login = () => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [isForget, setIsForget] = useState(false);
   const { setAuth } = useAuth();
   const router = useRouter();
 
@@ -28,6 +31,7 @@ const Login = () => {
           email: res?.user?.email ?? "",
           user_name: res?.user?.user_name ?? "",
           role: res?.user?.role ?? "",
+          img: res?.user?.role ?? "",
         },
       });
       if (res?.user?.role === "admin") {
@@ -71,9 +75,13 @@ const Login = () => {
               <span className="checkmark"></span>
               Ghi nhớ
             </label>
-            <Link href="/" className="forgot">
+            <Button
+              type="text"
+              className="forgot"
+              onClick={() => setIsForget(true)}
+            >
               Quên mật khẩu?
-            </Link>
+            </Button>
           </div>
           <button type="button" className="formButton" onClick={onFinish}>
             Đăng nhập
@@ -88,6 +96,7 @@ const Login = () => {
           </div>
         </form>
       </div>
+      <ForgotPasswordModal open={isForget} onClose={() => setIsForget(false)} />
     </div>
   );
 };

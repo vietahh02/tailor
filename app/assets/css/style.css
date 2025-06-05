@@ -64,19 +64,25 @@ body {
 .logo img {
   position: relative;
   width: 150px;
-  left: 30%;
+  left: 25%;
 }
 @media only screen and (max-width: 769px) {
   .logo img {
-    position: relative;
-    width: 100px;
-    left: 30%;
+    width: 120px;
+    left: -15%;
+  }
+}
+@media only screen and (max-width: 575px) {
+  .logo img {
+    width: 90px;
+    left: -40%;
   }
 }
 
 .banner_img {
-  width: 500px;
-  margin-bottom: 90px;
+  width: 100%;
+  /* max-width: 500px; */
+  /* margin-bottom: 90px; */
 }
 
 body {
@@ -257,6 +263,9 @@ button {
   padding-top: 90px;
   padding-bottom: 0px;
 }
+.layout_padding_bottom {
+  padding-bottom: 40px;
+}
 
 .padding_0 {
   padding: 0px;
@@ -335,6 +344,24 @@ button {
   float: right;
 }
 
+.login_text_mobile {
+  display: none;
+}
+
+.login_text_mobile button {
+  border: 2px solid pink;
+  background: none;
+  color: rgb(255, 158, 174);
+  font-weight: 600;
+  /* padding: 5px 10px; */
+}
+
+.login_text_mobile button:hover {
+  border: 2px solid pink !important;
+  background: pink !important;
+  color: white !important;
+}
+
 .login_text ul {
   margin: 0px;
   padding: 0px;
@@ -386,7 +413,7 @@ button {
 
 .banner_section {
   width: 100%;
-  float: left;
+  /* float: left; */
   background-image: url(../images/banner-bg.png);
   height: auto;
   background-size: 100% 100%;
@@ -473,7 +500,7 @@ button {
   width: 100%;
   background-color: #ffffff;
   height: auto;
-  border: 1px solid #7d7d7c;
+  border: 3px solid pink;
   padding: 20px 0px 0px 0px;
   margin-top: 30px;
 }
@@ -611,10 +638,10 @@ button {
 .about_text {
   width: 100%;
   float: left;
-  font-size: 14px;
+  font-size: 18px;
   color: #252525;
   margin: 0px;
-  font-family: cursive;
+  /* font-family: cursive; */
 }
 
 .image_3 {
@@ -651,17 +678,19 @@ button {
   float: left;
   font-size: 16px;
   color: #ffffff;
-  background-color: #363636;
+  /* background-color: #363636; */
   text-align: center;
   padding: 10px 0px;
   border-radius: 5px;
   font-weight: bold;
   text-transform: uppercase;
+  background: pink;
 }
 
 .readmore_bt button:hover {
-  color: #50504f;
-  background-color: #ffffff;
+  color: pink !important;
+  background-color: #ffffff !important;
+  border: 2px solid pink !important;
 }
 
 /* about section end */
@@ -791,7 +820,7 @@ button {
   float: left;
   color: #252525;
   margin: 0px;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .contact_main {
@@ -1000,4 +1029,20 @@ button {
 
 .margin_top90 {
   margin-top: 90px;
+}
+
+/* Giới hạn tràn ra ngoài màn hình */
+.customer_section {
+  overflow: hidden;
+}
+
+.slick-track {
+  display: flex !important;
+}
+
+/* Đảm bảo các item co giãn tốt */
+.carousel-item {
+  width: 100% !important;
+  box-sizing: border-box;
+  padding: 0 10px; /* hoặc tùy chỉnh */
 }

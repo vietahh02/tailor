@@ -24,8 +24,7 @@ const ListProduct = () => {
           <div className="col-sm-12">
             <h1 className="product_taital">BESTSELLERS</h1>
             <p className="product_text">
-              💖 Nailbox siêu xinh cho nàng xinh – chỉ cần mở hộp là có ngay bộ
-              móng lung linh ✨, xinh hết nấc! 💅
+              ✨Nail Box siêu xinh - cho nàng lung linh✨
             </p>
           </div>
         </div>

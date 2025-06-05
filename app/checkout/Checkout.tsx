@@ -2,12 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import "./CheckoutPage.css";
-import { Form, Image, Input } from "antd";
+import { Button, Form, Image, Input, Modal } from "antd";
 import AddressSelector from "./VietNamAddress";
 import { toast } from "react-toastify";
 import { clearCartApi, createOrderApi, getAllCartApi } from "../util/api";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../context/auth.context";
+// import "../assets/images/do-mong-tien-2-1.jpg"
 
 const CheckoutPage: React.FC = () => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -20,6 +21,16 @@ const CheckoutPage: React.FC = () => {
     feeShip: 0 as number,
     image: null as File | null,
   });
+
+  const [visible, setVisible] = useState(false);
+
+  const handlePreview = () => {
+    setVisible(true);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+  };
 
   const { setNumberCart } = useAuth();
 
@@ -212,6 +223,13 @@ const CheckoutPage: React.FC = () => {
         <div className="mb-3">
           <label className="form-label">
             Ảnh size móng <span style={{ color: "red" }}>*</span>
+            <Button
+              style={{ marginLeft: 10 }}
+              type="primary"
+              onClick={handlePreview}
+            >
+              Hướng dẫn đo móng
+            </Button>
           </label>
           <input
             type="file"
@@ -323,6 +341,19 @@ const CheckoutPage: React.FC = () => {
           Đặt hàng
         </button>
       </div>
+
+      <Modal
+        open={visible}
+        onCancel={handleCancel}
+        footer={null}
+        title="Xem ảnh"
+      >
+        <Image
+          width="100%"
+          src="https://nailbox.vn/wp-content/uploads/2022/12/do-mong-tien-2-1.jpg"
+          alt="Ảnh mẫu"
+        />
+      </Modal>
     </div>
   );
 };

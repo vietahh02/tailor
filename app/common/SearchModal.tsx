@@ -26,8 +26,11 @@ export default function Search({ isOpen, onClose }: Props) {
     }
   }, [isOpen]);
 
-  const handleEnter = () => {
-    router.push(`/search?s=${value}`);
+  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      router.push(`/search?s=${value}`);
+      onClose();
+    }
   };
 
   return (
@@ -44,7 +47,7 @@ export default function Search({ isOpen, onClose }: Props) {
             value={value}
             ref={inputRef}
             onChange={(e) => setValue(e.target.value)}
-            onKeyDown={() => handleEnter()}
+            onKeyDown={(e) => handleEnter(e)}
           />
           <IoIosSearch className="search__icon" />
           {value && (

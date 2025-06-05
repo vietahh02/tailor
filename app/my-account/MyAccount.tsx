@@ -7,6 +7,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import { getInfoUser, updateUser } from "../util/api";
 import { toast } from "react-toastify";
 import FullScreenSpinner from "../loading/Spiner";
+import ChangePasswordModal from "./ChangePasswordModal";
 
 interface UserInfo {
   id: number;
@@ -38,6 +39,8 @@ export default function ProfilePage() {
   const [isChanged, setIsChanged] = useState(false);
   const userOld = useRef<UserInfo>(initialUserInfo);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [isChangePass, setIsChangePass] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -234,6 +237,12 @@ export default function ProfilePage() {
               Lưu
             </Button>
           </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" onClick={() => setIsChangePass(true)} block>
+              Đổi mật khẩu
+            </Button>
+          </Form.Item>
         </Form>
       )}
 
@@ -245,6 +254,11 @@ export default function ProfilePage() {
       >
         <Image src={previewImage} alt="Xem trước" style={{ width: "100%" }} />
       </Modal>
+
+      <ChangePasswordModal
+        open={isChangePass}
+        onClose={() => setIsChangePass(false)}
+      />
     </div>
   );
 }

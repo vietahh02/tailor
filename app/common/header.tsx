@@ -14,13 +14,14 @@ import { useAuth } from "../context/auth.context";
 // import { Button } from "antd";
 import { IoMdExit } from "react-icons/io";
 import { logoutApi } from "../util/api";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import "./search.css";
+import { Button, Image as ImageAntd } from "antd";
 
 const Header = () => {
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const refMenu = React.useRef<HTMLDivElement>(null);
-  // const router = useRouter();
+  const router = useRouter();
   const { auth, numberCart, numberFavorite, setAuth } = useAuth();
 
   function openNav() {
@@ -68,7 +69,7 @@ const Header = () => {
           <Link className="logo" href="/">
             <Image src={logo} alt="oke" />
           </Link>
-          <form className="form-inline ">
+          <form className="form-inline">
             <div className="login_text">
               <ul>
                 {auth?.user?.role === "admin" && (
@@ -95,8 +96,10 @@ const Header = () => {
                               email: "",
                               user_name: "",
                               role: "",
+                              img: "",
                             },
                           });
+                          router.push("/");
                         }}
                         title="Logout"
                         style={{
@@ -181,6 +184,38 @@ const Header = () => {
                   </Link>
                 </li>
               </ul>
+            </div>
+            <div className="login_text_mobile">
+              {auth.isAuthenticated ? (
+                <>
+                  <ImageAntd
+                    src={
+                      auth.user?.img !== ""
+                        ? auth.user?.img
+                        : "https://th.bing.com/th/id/OIP.GvNakgya1kk5A6CFQM6Z4gHaHZ?rs=1&pid=ImgDetMain"
+                    }
+                    alt=""
+                    width={55}
+                    height={55}
+                    className="avatar_header"
+                    preview={false}
+                    style={{ border: "50%" }}
+                    onClick={() => {
+                      router.push("/my-account");
+                    }}
+                  ></ImageAntd>
+                </>
+              ) : (
+                <>
+                  <Button
+                    onClick={() => {
+                      router.push("/login");
+                    }}
+                  >
+                    Login
+                  </Button>
+                </>
+              )}
             </div>
           </form>
         </nav>

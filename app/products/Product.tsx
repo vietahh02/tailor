@@ -95,7 +95,7 @@ const Product = ({
       <div className="product_box">
         <div onClick={() => handleRedirect()} className="cursor-pointer">
           <h4 className="bursh_text">{name}</h4>
-          <p className="lorem_text">{category}</p>
+          {/* <p className="lorem_text">{category}</p> */}
           <div style={{ display: "flex", justifyContent: "center" }}>
             <Image
               src={image}

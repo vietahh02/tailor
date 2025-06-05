@@ -24,6 +24,34 @@ const loginApi = (user_name: string, password: string) => {
   });
 };
 
+const forgetPasswordApi = (email: string) => {
+  return axios.post("/forgot-password", {
+    email: email,
+  });
+};
+
+const restPasswordApi = (
+  email: string,
+  otp_code: string,
+  new_password: string
+) => {
+  return axios.post("/reset-password", {
+    email,
+    otp_code,
+    new_password,
+  });
+};
+
+const changePasswordApi = (oldPass: string, newPass: string) => {
+  return axios.post("/change-password", {
+    old_password: oldPass,
+    new_password: newPass,
+  });
+};
+// {
+//     "message": "successful"
+// }
+
 const logoutApi = () => {
   return axios.get("/logout");
 };
@@ -210,4 +238,7 @@ export {
   getAllReviewForOrder,
   clearCartApi,
   logoutApi,
+  forgetPasswordApi,
+  changePasswordApi,
+  restPasswordApi,
 };

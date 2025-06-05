@@ -26,7 +26,7 @@ const ListCustomer = () => {
   };
 
   return (
-    <div className="customer_section layout_padding">
+    <div className="customer_section">
       <div className="container">
         <div className="row">
           <div className="col-sm-12">
@@ -44,11 +44,9 @@ const ListCustomer = () => {
                     </div>
                   </div>
                   <div className="client_right">
-                    <h3 className="name_text">Jonyro</h3>
+                    <h3 className="name_text">VÂN ANH</h3>
                     <p className="dolor_text">
-                      consectetur adipiscing elit, sed do eiusmod tempor
-                      incididunt ut labore et dolore magna aliqua. Ut enim ad
-                      minim veniam, quis nostrud exercitation eu{" "}
+                      Nail xinh lắm nha!!!! Mọi người nên thử và trải nghiệm.
                     </p>
                   </div>
                 </div>
@@ -63,11 +61,9 @@ const ListCustomer = () => {
                     </div>
                   </div>
                   <div className="client_right">
-                    <h3 className="name_text">Jonyro</h3>
+                    <h3 className="name_text">DIÊN VY</h3>
                     <p className="dolor_text">
-                      consectetur adipiscing elit, sed do eiusmod tempor
-                      incididunt ut labore et dolore magna aliqua. Ut enim ad
-                      minim veniam, quis nostrud exercitation eu{" "}
+                      Lần đầu tiên tự design móng trên web. Thích phết 😍
                     </p>
                   </div>
                 </div>
@@ -82,11 +78,29 @@ const ListCustomer = () => {
                     </div>
                   </div>
                   <div className="client_right">
-                    <h3 className="name_text">Jonyro</h3>
+                    <h3 className="name_text">KHÁNH MY</h3>
                     <p className="dolor_text">
-                      consectetur adipiscing elit, sed do eiusmod tempor
-                      incididunt ut labore et dolore magna aliqua. Ut enim ad
-                      minim veniam, quis nostrud exercitation eu{" "}
+                      Mẫu shop đa dạng phù hợp nhiều sự kiện lắm nha. Mình chốt
+                      liền 3 bộ luôn😁
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="carousel-item">
+              <div className="client_section_2">
+                <div className="client_main">
+                  <div className="client_left">
+                    <div className="client_img">
+                      <Image src={client} alt="Client Image" />
+                    </div>
+                  </div>
+                  <div className="client_right">
+                    <h3 className="name_text">DỊU THẢO</h3>
+                    <p className="dolor_text">
+                      Shop đóng gói cẩn thận lắm, ship hàng còn nhanh nữa. Cảm
+                      ơn quà tặng của shop nha. Mình sẽ giới thiệu các bạn cùng
+                      mua!!!!
                     </p>
                   </div>
                 </div>

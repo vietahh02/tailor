@@ -13,12 +13,12 @@ const DesignNail = () => {
   };
   return (
     <div className="about_section layout_padding">
-      <div className="container">
+      <div className="container banner-container">
         <div className="about_section_main ">
           <div className="row">
             <div className="col-md-6">
               <div className="about_taital_main pl-0 pr-4">
-                <h1 className="about_taital">design nail</h1>
+                <h1 className="about_taital">DESIGN YOUR NAILS</h1>
                 <p className="about_text">
                   TailorNail xin chào cả nhà! TailorNail là nền tảng giúp bạn
                   yêu thích làm nail có thể tự thiết kế, thử mẫu và đặt hàng
@@ -29,7 +29,6 @@ const DesignNail = () => {
                   của mình – nhanh, đẹp, tiện và không cần ra tiệm! ✨
                 </p>
                 <div className="readmore_bt">
-                  {/* <Link href="/design">Design Now</Link> */}
                   <Button
                     onClick={() => handleDesign()}
                     style={{ padding: 20 }}

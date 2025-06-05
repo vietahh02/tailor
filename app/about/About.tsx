@@ -11,21 +11,21 @@ const About = () => {
           <div className="row">
             <div className="col-md-6">
               <div className="about_taital_main">
-                <h1 className="about_taital">
-                  Nailbox – chiếc hộp nhỏ cho đôi tay thêm xinh 💅✨
-                </h1>
+                <h1 className="about_taital">YOUR NAILS 🎀YOUR STYLE</h1>
                 <p className="about_text">
-                  TailorNail xin chào cả nhà! TailorNail là nền tảng giúp bạn
-                  yêu thích làm nail có thể tự thiết kế, thử mẫu và đặt hàng
-                  Nail Box ngay tại nhà với sự hỗ trợ từ công nghệ AI/AR. Chúng
-                  mình biến đam mê làm đẹp thành trải nghiệm cá nhân hóa cho
-                  từng bạn! 💖 TailorNail ra đời để mang đến những bộ móng “may
-                  đo” chuẩn gu, giúp bạn tự tin thể hiện cá tính theo cách riêng
-                  của mình – nhanh, đẹp, tiện và không cần ra tiệm! ✨
+                  TailorNail xin chào cả nhà!
+                  <br />
+                  <br />
+                  TailorNail là nền tảng giúp bạn yêu thích làm nail có thể tự
+                  thiết kế, thử mẫu và đặt hàng Nail Box ngay tại nhà với sự hỗ
+                  trợ từ công nghệ AI/AR. Chúng mình biến đam mê làm đẹp thành
+                  trải nghiệm cá nhân hóa cho từng bạn!
+                  <br />
+                  <br />
+                  TailorNail ra đời để mang đến những bộ móng “may đo” chuẩn gu,
+                  giúp bạn tự tin thể hiện cá tính theo cách riêng của mình –
+                  nhanh, đẹp, tiện và không cần ra tiệm!
                 </p>
-                <div className="readmore_bt">
-                  <Link href="#">Read More</Link>
-                </div>
               </div>
             </div>
             <div className="col-md-6">

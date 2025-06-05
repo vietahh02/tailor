@@ -3,13 +3,13 @@ import Banner from "./Banner";
 
 const ListBanner = () => {
   return (
-    <div className="banner_section layout_padding">
+    <div className="banner_section layout_padding layout_padding_bottom">
       <div
-        id="carouselExampleIndicators"
+        id="carouselExampleIndicators "
         className="carousel slide"
         data-ride="carousel"
       >
-        <div className="carousel-inner">
+        <div className="carousel-inner container">
           <Banner />
         </div>
       </div>

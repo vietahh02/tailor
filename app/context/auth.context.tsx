@@ -9,6 +9,7 @@ interface User {
   email: string;
   user_name: string;
   role: string;
+  img: string;
 }
 
 // Define the structure of the auth state
@@ -46,6 +47,7 @@ export const AuthWrapper = ({ children }: AuthWrapperProps) => {
       email: "",
       user_name: "",
       role: "",
+      img: "",
     },
   });
 
@@ -83,6 +85,7 @@ export const AuthWrapper = ({ children }: AuthWrapperProps) => {
               email: res.email,
               user_name: res.user_name,
               role: res.role,
+              img: res.avatar_image,
             },
           });
         } else {
