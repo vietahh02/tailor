@@ -570,7 +570,8 @@ button {
 
 .price_text {
   font-size: 16px;
-  color: #fefefd;
+  /* color: #fefefd; */
+  color: #000;
   width: 42%;
   padding-top: 5px;
   text-align: right;
@@ -1019,7 +1020,7 @@ button {
 
 .copyright_text {
   width: 100%;
-  color: #000;
+  color: #fff;
   text-align: center;
   font-size: 16px;
   margin: 20px 0px;

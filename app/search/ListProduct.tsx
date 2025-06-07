@@ -6,7 +6,7 @@ import { getAllProduct } from "../util/api";
 import { toast } from "react-toastify";
 import ProductCard from "./Card";
 import CatLoader from "../loading/CatLoader";
-const PRODUCTS_PER_PAGE = 12;
+const PRODUCTS_PER_PAGE = 9;
 
 type Props = {
   search: string;
@@ -44,6 +44,7 @@ const ListProduct = ({
   }, []);
 
   const filterProducts = products?.filter((p: any) => {
+    console.log("p", p);
     const a =
       (isSubstring(search, p?.name) || isSubstring(search, p?.description)) &&
       hasCommonElement(selectedStyles, p?.category?.split(",") || []) &&

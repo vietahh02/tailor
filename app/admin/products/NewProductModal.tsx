@@ -185,11 +185,9 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
         <Form.Item
           label="Độ dài móng"
           name="nail_length"
-          rules={
-            [
-              // { required: true, message: "Vui lòng chọn độ dài móng phù hợp!" },
-            ]
-          }
+          rules={[
+            { required: true, message: "Vui lòng chọn độ dài móng phù hợp!" },
+          ]}
         >
           <Radio.Group options={length} />
         </Form.Item>
@@ -197,9 +195,11 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
         <Form.Item
           label="Mục đích làm móng"
           name="purpose"
-          rules={[
-            { required: true, message: "Vui lòng chọn độ dài móng phù hợp!" },
-          ]}
+          rules={
+            [
+              // { required: true, message: "Vui lòng chọn độ dài móng phù hợp!" },
+            ]
+          }
         >
           <Checkbox.Group options={purpose} />
         </Form.Item>

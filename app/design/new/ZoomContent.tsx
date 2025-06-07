@@ -48,6 +48,15 @@ const initialDesign = {
       zIndex: 1,
       deg: 0,
     },
+    {
+      id: 1,
+      charm: 0,
+      name: "Charm 1",
+      x: 50,
+      y: 50,
+      zIndex: 1,
+      deg: 20,
+    },
   ],
 };
 

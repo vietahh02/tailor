@@ -44,6 +44,7 @@ const ContentFooter = <T extends DesignState>({ setDesignNow }: Props<T>) => {
               prev?.design?.listCharm[prev?.design?.listCharm?.length - 1]?.id +
                 1 || 0,
             charm: item,
+            deg: 0,
             name: "Charm 1",
             x: 50,
             y: 50,
