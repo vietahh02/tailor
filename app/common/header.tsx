@@ -150,7 +150,7 @@ const Header = () => {
                     <span
                       style={{
                         position: "absolute",
-                        bottom: -7,
+                        bottom: -8,
                         right: -7,
                         backgroundColor: "red",
                         color: "white",
@@ -180,7 +180,7 @@ const Header = () => {
                     <span
                       style={{
                         position: "absolute",
-                        bottom: -7,
+                        bottom: -8,
                         right: -7,
                         backgroundColor: "red",
                         color: "white",

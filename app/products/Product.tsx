@@ -124,7 +124,12 @@ const Product = ({
                 <div
                   onClick={() => handleFavorite()}
                   className="d-flex"
-                  style={{ fontSize: "22px", gap: "5px", color: "red" }}
+                  style={{
+                    fontSize: "22px",
+                    gap: "5px",
+                    color: "red",
+                    cursor: "pointer",
+                  }}
                 >
                   {is_favorite ? <FaHeart /> : <FaRegHeart />}
                 </div>
