@@ -1,4 +1,4 @@
-@import "tailwindcss";
+/* @import "tailwindcss"; */
 
 @font-face {
   font-family: "Open Sans";
@@ -339,6 +339,21 @@ button {
   }
 }
 
+.logout {
+  /* position: absolute; */
+  /* top: 0; */
+  /* right: 0; */
+  /* padding: 10px 20px; */
+  color: #fff;
+  /* background-color: #f00; */
+  border-radius: 5px;
+  color: red;
+  /* font-size: 16px; */
+  cursor: pointer;
+  /* border-color: red; */
+  /* text-transform: capitalize !important; */
+}
+
 .login_text {
   width: 100%;
   float: right;
@@ -392,6 +407,11 @@ button {
 }
 
 .login_text a {
+  color: black;
+  position: "relative";
+  display: "inline-block";
+}
+.login_text button {
   color: black;
   position: "relative";
   display: "inline-block";

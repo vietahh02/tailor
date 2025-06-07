@@ -32,6 +32,21 @@ const Header = () => {
     refMenu.current?.style.setProperty("width", "0%");
   }
 
+  async function logout() {
+    await logoutApi();
+    localStorage.removeItem("access_token");
+    setAuth({
+      isAuthenticated: false,
+      user: {
+        email: "",
+        user_name: "",
+        role: "",
+        img: "",
+      },
+    });
+    router.push("/");
+  }
+
   return (
     <div className="header_section">
       <div className="container">
@@ -86,34 +101,40 @@ const Header = () => {
                 ) : (
                   <>
                     <li>
-                      <div
-                        onClick={async () => {
-                          await logoutApi();
-                          localStorage.removeItem("access_token");
-                          setAuth({
-                            isAuthenticated: false,
-                            user: {
-                              email: "",
-                              user_name: "",
-                              role: "",
-                              img: "",
-                            },
-                          });
-                          router.push("/");
-                        }}
+                      <span
+                        className="logout"
+                        onClick={async () => logout()}
                         title="Logout"
-                        style={{
-                          color: "red",
-                          fontSize: "24px",
-                          cursor: "pointer",
-                        }}
                       >
                         <IoMdExit />
-                      </div>
+                      </span>
                     </li>
-                    <li>
+                    {/* <li>
                       <Link href="/my-account" title="My Account">
                         <FaUserAlt />
+                      </Link>
+                    </li> */}
+                    <li>
+                      <Link
+                        href="/my-account"
+                        title="My Account"
+                        className="avatar_header_pc"
+                      >
+                        <ImageAntd
+                          src={
+                            auth.user?.img !== ""
+                              ? auth.user?.img
+                              : "https://th.bing.com/th/id/OIP.GvNakgya1kk5A6CFQM6Z4gHaHZ?rs=1&pid=ImgDetMain"
+                          }
+                          alt=""
+                          width={45}
+                          height={45}
+                          preview={false}
+                          style={{ borderRadius: "50%" }}
+                          onClick={() => {
+                            router.push("/my-account");
+                          }}
+                        ></ImageAntd>
                       </Link>
                     </li>
                   </>
@@ -199,7 +220,7 @@ const Header = () => {
                     height={55}
                     className="avatar_header"
                     preview={false}
-                    style={{ border: "50%" }}
+                    style={{ borderRadius: "50%" }}
                     onClick={() => {
                       router.push("/my-account");
                     }}

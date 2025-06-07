@@ -4,10 +4,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { Button, Form, Input, Upload, Modal, Image } from "antd";
 import { RcFile, UploadFile } from "antd/es/upload/interface";
 import { PlusOutlined } from "@ant-design/icons";
-import { getInfoUser, updateUser } from "../util/api";
+import { getInfoUser, logoutApi, updateUser } from "../util/api";
 import { toast } from "react-toastify";
 import FullScreenSpinner from "../loading/Spiner";
 import ChangePasswordModal from "./ChangePasswordModal";
+import { useAuth } from "../context/auth.context";
+import { useRouter } from "next/navigation";
 
 interface UserInfo {
   id: number;
@@ -41,6 +43,8 @@ export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(true);
 
   const [isChangePass, setIsChangePass] = useState(false);
+  const router = useRouter();
+  const { setAuth } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -147,6 +151,20 @@ export default function ProfilePage() {
       toast.error("Lỗi khi lưu thông tin!");
     }
   };
+  const logout = async () => {
+    await logoutApi();
+    localStorage.removeItem("access_token");
+    setAuth({
+      isAuthenticated: false,
+      user: {
+        email: "",
+        user_name: "",
+        role: "",
+        img: "",
+      },
+    });
+    router.push("/");
+  };
 
   return (
     <div style={{ maxWidth: 650, margin: "30px auto", padding: "20px" }}>
@@ -241,6 +259,18 @@ export default function ProfilePage() {
           <Form.Item>
             <Button type="primary" onClick={() => setIsChangePass(true)} block>
               Đổi mật khẩu
+            </Button>
+          </Form.Item>
+
+          <Form.Item>
+            <Button
+              type="primary"
+              danger
+              onClick={() => logout()}
+              style={{ fontWeight: "bold" }}
+              block
+            >
+              Đăng xuất
             </Button>
           </Form.Item>
         </Form>
