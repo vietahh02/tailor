@@ -29,7 +29,8 @@ const ProductCard = () => {
     const fetchProduct = async () => {
       const res = (await getProductById(Number(id))) as any;
       if (res.detail) {
-        router.push("/");
+        router.push("/product-detail");
+        return;
       }
       setProduct(res);
     };
@@ -50,7 +51,7 @@ const ProductCard = () => {
       setNumberCart((prev) => (prev ? prev + quantity : quantity));
       toast.success("Thêm sản phẩm thành công");
     } else {
-      toast.error("Thêm sản phẩm khoogn thành công");
+      toast.error("Thêm sản phẩm không thành công");
     }
   };
 

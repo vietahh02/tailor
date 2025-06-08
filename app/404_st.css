@@ -1,16 +1,7 @@
-@import "tailwindcss";
+/* @import "tailwindcss"; */
 /*======================
     404 page
 =======================*/
-
-@font-face {
-  font-family: "Great Vibes";
-  src: url("../public/fonts/great-vibes/great-vibes-v19-latin-regular.woff2")
-    format("woff2");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
 
 .page_404 {
   margin: auto;

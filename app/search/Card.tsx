@@ -152,7 +152,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, setProducts }) => {
 
             <Rate
               disabled
-              defaultValue={product.average_rating || 1}
+              defaultValue={product.average_rating || 0}
               allowHalf
               style={{ fontSize: 14 }}
             />

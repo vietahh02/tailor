@@ -86,7 +86,7 @@ const Product = ({
       setNumberCart((prev) => (prev ? prev + 1 : 1));
       toast.success("Thêm sản phẩm thành công");
     } else {
-      toast.error("Thêm sản phẩm khoogn thành công");
+      toast.error("Thêm sản phẩm không thành công");
     }
   };
 
