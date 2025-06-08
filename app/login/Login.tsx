@@ -18,7 +18,8 @@ const Login = () => {
   const { setAuth, updateNumberCart, updateNumberFavorite } = useAuth();
   const router = useRouter();
 
-  const onFinish = async () => {
+  const onFinish = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const res = (await loginApi(userName, password)) as any;
     if (!res?.user) {
       toast.error("Tài khoản hoặc mật khẩu không chính xác");
@@ -47,7 +48,7 @@ const Login = () => {
   return (
     <div className="login_bg">
       <div className="wapper">
-        <form className="form">
+        <form className="form" onSubmit={onFinish}>
           <h1>Đăng nhập</h1>
           <div className="formGroup">
             <input
@@ -85,7 +86,7 @@ const Login = () => {
               Quên mật khẩu?
             </Button>
           </div>
-          <button type="button" className="formButton" onClick={onFinish}>
+          <button type="submit" className="formButton">
             Đăng nhập
           </button>
           <div className="register">

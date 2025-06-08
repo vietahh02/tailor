@@ -20,7 +20,8 @@ const Register = () => {
     return regex.test(phone);
   }
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (userName === "" || email === "" || password === "" || phone === "") {
       toast.error("Hãy nhập đầy đủ thông tin");
       return;
@@ -45,7 +46,7 @@ const Register = () => {
   return (
     <div className="login_bg">
       <div className="wapper">
-        <form className="form">
+        <form className="form" onSubmit={handleSubmit}>
           <h1>Đăng ký</h1>
           <div className="formGroup">
             <input
@@ -97,7 +98,7 @@ const Register = () => {
             />
             <FaPhone className="icon" />
           </div>
-          <button type="button" className="formButton" onClick={handleSubmit}>
+          <button type="submit" className="formButton">
             Đăng ký
           </button>
           <div className="register">
