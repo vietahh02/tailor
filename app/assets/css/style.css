@@ -1,4 +1,4 @@
-/* @import "tailwindcss"; */
+@import "tailwindcss";
 
 @font-face {
   font-family: "Open Sans";
@@ -388,22 +388,24 @@ button {
   text-transform: uppercase;
   float: left;
   padding-left: 15px;
+  line-height: 45px;
+  position: relative;
 }
 
 .login_text .under_number {
-  position: "absolute";
+  position: absolute;
   bottom: -7;
   right: -7;
-  background-color: "red";
-  color: "white";
-  border-radius: "50%";
-  padding: "2px 6px";
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
   font-size: 12;
-  font-weight: "bold";
+  font-weight: bold;
   line-height: 1;
   min-width: 18;
-  text-align: "center";
-  box-shadow: "0 0 2px rgba(0,0,0,0.3)";
+  text-align: center;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
 }
 
 .login_text a {

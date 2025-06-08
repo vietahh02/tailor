@@ -23,10 +23,21 @@ export default function ReviewItem({
   return (
     <div className="border-b pb-4 mb-4">
       <div className="flex items-center ml-10">
-        <div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden mr-2">
-          {avatar && <Image src={avatar} alt="avatar" width={40} height={40} />}
+        <div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
+          {avatar ? (
+            <Image src={avatar} alt="avatar" width={40} height={40} />
+          ) : (
+            <Image
+              src={
+                "https://th.bing.com/th/id/OIP.GvNakgya1kk5A6CFQM6Z4gHaHZ?rs=1&pid=ImgDetMain"
+              }
+              alt="avatar"
+              width={40}
+              height={40}
+            />
+          )}
         </div>
-        <div>
+        <div style={{ paddingLeft: 15 }}>
           <p style={{ padding: 0, margin: 0 }} className="font-medium">
             {user_name}
           </p>
@@ -46,12 +57,12 @@ export default function ReviewItem({
 
       {comment && (
         <p
-          className="text-gray-800 ml-10"
+          className="text-gray-800 "
           style={{
             padding: 0,
             margin: 0,
             paddingBottom: 10,
-            marginLeft: 40,
+            marginLeft: 20,
           }}
         >
           <strong>Nhận xét:</strong> {comment}

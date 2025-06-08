@@ -14,6 +14,7 @@ interface Product {
   nail_length?: string;
   purpose?: string;
   occasion?: string;
+  imageAr?: string;
 }
 
 interface ViewProductModalProps {
@@ -86,6 +87,17 @@ const ViewProductModal: React.FC<ViewProductModalProps> = ({
                 alt=""
               />
             ))}
+          </Descriptions.Item>
+          <Descriptions.Item label="Hình ảnh AR">
+            {product.imageAr && (
+              <Image
+                width={80}
+                src={product.imageAr}
+                style={{ paddingRight: 4, cursor: "pointer" }}
+                preview={true}
+                alt=""
+              />
+            )}
           </Descriptions.Item>
         </Descriptions>
       </Modal>

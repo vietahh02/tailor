@@ -194,7 +194,12 @@ const UserTable: React.FC = () => {
           Thêm mới người dùng
         </Button>
       </div>
-      <Table columns={columns} dataSource={users} rowKey="id" />
+      <Table
+        columns={columns}
+        dataSource={users}
+        rowKey="id"
+        pagination={{ pageSize: 8 }}
+      />
       <UserDetailModal
         open={modalOpen}
         user={selectedUser}

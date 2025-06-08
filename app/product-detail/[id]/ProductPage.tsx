@@ -138,12 +138,16 @@ const ProductCard = () => {
                     ).toLocaleString()}{" "}
                     ₫
                   </p>
-                  <p className="pd-price-old">
-                    {product.price.toLocaleString()} ₫
-                  </p>
-                  <p className="pd-discount">
-                    {product.discount.toLocaleString()}%
-                  </p>
+                  {product.discount != 0 && (
+                    <p className="pd-price-old">
+                      {product.price.toLocaleString()} ₫
+                    </p>
+                  )}
+                  {product.discount != 0 && (
+                    <p className="pd-discount">
+                      {product.discount.toLocaleString()}%
+                    </p>
+                  )}
                 </Space>
 
                 <div className="pd-quantity-add">

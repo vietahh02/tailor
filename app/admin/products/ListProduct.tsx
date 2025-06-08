@@ -35,6 +35,7 @@ interface Product {
   nail_length?: string;
   purpose?: string;
   occasion?: string;
+  imageAr?: string;
 }
 
 interface ProductForEdit {
@@ -51,6 +52,7 @@ interface ProductForEdit {
   purpose?: string;
   occasion?: string;
   delete_image_ids?: string;
+  imageAr?: File;
 }
 
 export interface ProductFormValues {
@@ -65,6 +67,7 @@ export interface ProductFormValues {
   nail_length?: string;
   purpose?: string[];
   occasion?: string[];
+  imageAr?: File;
 }
 
 const ProductTable = () => {
@@ -114,7 +117,8 @@ const ProductTable = () => {
       product.nail_length,
       product.purpose?.toString(),
       product.occasion?.toString(),
-      `[${product.delete_image_ids?.toString()}]`
+      `[${product.delete_image_ids?.toString()}]`,
+      product.imageAr
     )) as any;
 
     if (res.message === "successful") {
@@ -134,9 +138,9 @@ const ProductTable = () => {
 
   const handleAddProduct = async (values: ProductFormValues) => {
     console.log("Giá trị sản phẩm:", values);
-    console.log(values.images);
+    console.log(values.imageAr);
 
-    const res = await createProduct(
+    const res = (await createProduct(
       values.name,
       values.price,
       values.category.toString(),
@@ -147,9 +151,13 @@ const ProductTable = () => {
       values.pattern?.toString(),
       values.nail_length,
       values.purpose?.toString(),
-      values.occasion?.toString()
-    );
-    console.log(res);
+      values.occasion?.toString(),
+      values.imageAr
+    )) as any;
+    if (res.message !== "successful") {
+      toast.error("Thêm sản phẩm không thành công hãy đăng nhập lại");
+      return;
+    }
     const response = (await getAllProduct()) as any;
     setData(response);
     toast.success("Thêm sản phẩm thành công!");
@@ -163,7 +171,7 @@ const ProductTable = () => {
       toast.success("Xóa thành công sản phẩm");
       setData((prev) => prev.filter((p) => p.id !== idDelete.current));
     } else {
-      toast.error("Xóa không thành công");
+      toast.error("Xóa không thành công hãy đăng nhập lại");
     }
     setOpenConfirm(false);
     idDelete.current = -1;
@@ -192,6 +200,11 @@ const ProductTable = () => {
       title: "Giá",
       dataIndex: "price",
       render: (price: number) => `${price.toLocaleString()} VND`,
+    },
+    {
+      title: "Giảm giá",
+      dataIndex: "discount",
+      render: (discount: number) => `${discount.toLocaleString()} %`,
     },
     {
       title: "Hành động",
@@ -236,7 +249,7 @@ const ProductTable = () => {
         rowKey="id"
         dataSource={data}
         columns={columns}
-        pagination={{ pageSize: 5 }}
+        pagination={{ pageSize: 8 }}
       />
       <AddProductModal
         visible={openModal}

@@ -23,7 +23,8 @@ const createProduct = (
   pattern?: string,
   nail_length?: string,
   purpose?: string,
-  occasion?: string
+  occasion?: string,
+  imageAr?: File
 ) => {
   const formData = new FormData();
   formData.append("name", name);
@@ -43,6 +44,9 @@ const createProduct = (
       formData.append("images", img);
     });
   }
+  if (imageAr) {
+    formData.append("imageAr", imageAr);
+  }
 
   return axios.post("/products/create-product", formData);
 };
@@ -59,7 +63,8 @@ const updateProductApi = (
   nail_length?: string,
   purpose?: string,
   occasion?: string,
-  delete_image_ids?: string
+  delete_image_ids?: string,
+  imageAr?: File
 ) => {
   const formData = new FormData();
   formData.append("name", name);
@@ -80,6 +85,10 @@ const updateProductApi = (
     images.forEach((img: File) => {
       formData.append("images", img);
     });
+  }
+
+  if (imageAr) {
+    formData.append("imageAr", imageAr);
   }
 
   return axios.put(`/products/update-product/${id}`, formData);

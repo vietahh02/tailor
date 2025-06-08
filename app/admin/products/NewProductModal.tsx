@@ -26,6 +26,7 @@ export interface ProductFormValues {
   nail_length?: string;
   purpose?: string[];
   occasion?: string[];
+  imageAr?: File;
 }
 
 interface AddProductModalProps {
@@ -68,6 +69,37 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewTitle, setPreviewTitle] = useState("");
 
+  const [previewOpenAr, setPreviewOpenAr] = useState(false);
+  const [previewImageAr, setPreviewImageAr] = useState("");
+  const [previewTitleAr, setPreviewTitleAr] = useState("");
+  const [fileListAr, setFileListAr] = useState<UploadFile[]>([]);
+
+  const handleCancelAr = () => setPreviewOpenAr(false);
+
+  const handlePreviewAr = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64Ar(file.originFileObj as File);
+    }
+
+    setPreviewImageAr(file.url || (file.preview as string));
+    setPreviewOpenAr(true);
+    setPreviewTitleAr(
+      file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
+    );
+  };
+
+  const handleChangeAr = ({ fileList }: { fileList: UploadFile[] }) => {
+    setFileListAr(fileList.slice(-1)); // giữ lại ảnh cuối cùng (chỉ 1 ảnh)
+  };
+
+  const getBase64Ar = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+
   const normFile = (
     e: import("antd/es/upload/interface").UploadChangeParam<UploadFile>
   ) => {
@@ -80,8 +112,9 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
       const images = values.images?.map(
         (file: UploadFile) => file.originFileObj
       );
-      onSubmit({ ...values, images });
+      onSubmit({ ...values, images, imageAr: fileListAr[0]?.originFileObj });
       form.resetFields();
+      setFileListAr([]);
     });
   };
 
@@ -231,17 +264,43 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
             </div>
           </Upload>
         </Form.Item>
-      </Form>
 
-      {/* Modal preview ảnh */}
-      <Modal
-        open={previewOpen}
-        title={previewTitle}
-        footer={null}
-        onCancel={() => setPreviewOpen(false)}
-      >
-        <Image alt="preview" style={{ width: "100%" }} src={previewImage} />
-      </Modal>
+        <Form.Item label="Ảnh AR" name="imageAr">
+          <Upload
+            listType="picture-card"
+            fileList={fileListAr}
+            onPreview={handlePreviewAr}
+            onChange={handleChangeAr}
+            beforeUpload={() => false}
+          >
+            {fileListAr.length >= 1 ? null : (
+              <div>
+                <PlusOutlined />
+                <div style={{ marginTop: 8 }}>Thêm ảnh</div>
+              </div>
+            )}
+          </Upload>
+        </Form.Item>
+
+        <Modal
+          open={previewOpenAr}
+          title={previewTitleAr}
+          footer={null}
+          onCancel={handleCancelAr}
+        >
+          <Image alt="Ảnh AR" style={{ width: "100%" }} src={previewImageAr} />
+        </Modal>
+
+        {/* Modal preview ảnh */}
+        <Modal
+          open={previewOpen}
+          title={previewTitle}
+          footer={null}
+          onCancel={() => setPreviewOpen(false)}
+        >
+          <Image alt="preview" style={{ width: "100%" }} src={previewImage} />
+        </Modal>
+      </Form>
     </Modal>
   );
 };

@@ -86,7 +86,7 @@ const Header = () => {
           </Link>
           <form className="form-inline">
             <div className="login_text">
-              <ul>
+              <ul className="d-flex align-items-center">
                 {auth?.user?.role === "admin" && (
                   <li>
                     <Link href="/admin">Admin</Link>
@@ -139,63 +139,17 @@ const Header = () => {
                     </li>
                   </>
                 )}
-                <li
-                  style={{
-                    position: "relative",
-                    display: "inline-block",
-                  }}
-                >
+                <li>
                   <Link href="/cart">
                     <SlHandbag />
-                    <span
-                      style={{
-                        position: "absolute",
-                        bottom: 0,
-                        right: -7,
-                        backgroundColor: "red",
-                        color: "white",
-                        borderRadius: "50%",
-                        padding: "2px 6px",
-                        fontSize: 12,
-                        fontWeight: "bold",
-                        lineHeight: 1,
-                        minWidth: 18,
-                        textAlign: "center",
-                        boxShadow: "0 0 2px rgba(0,0,0,0.3)",
-                      }}
-                    >
-                      {numberCart}
-                    </span>
+                    <span className="under_number">{numberCart}</span>
                   </Link>
                 </li>
 
-                <li
-                  style={{
-                    position: "relative",
-                    display: "inline-block",
-                  }}
-                >
+                <li>
                   <Link href="/favorite">
                     <GoHeart />
-                    <span
-                      style={{
-                        position: "absolute",
-                        bottom: 0,
-                        right: -7,
-                        backgroundColor: "red",
-                        color: "white",
-                        borderRadius: "50%",
-                        padding: "2px 6px",
-                        fontSize: 12,
-                        fontWeight: "bold",
-                        lineHeight: 1,
-                        minWidth: 18,
-                        textAlign: "center",
-                        boxShadow: "0 0 2px rgba(0,0,0,0.3)",
-                      }}
-                    >
-                      {numberFavorite}
-                    </span>
+                    <span className="under_number">{numberFavorite}</span>
                   </Link>
                 </li>
 

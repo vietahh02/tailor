@@ -32,6 +32,7 @@ export interface ProductFormValues {
   purpose?: string;
   occasion?: string;
   delete_image_ids?: string;
+  imageAr?: File;
 }
 
 interface EditProductModalProps {
@@ -51,6 +52,7 @@ interface EditProductModalProps {
     nail_length?: string;
     purpose?: string;
     occasion?: string;
+    imageAr?: string;
   };
 }
 
@@ -98,7 +100,39 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
   const [selectedLength, setSelectedLength] = useState<string>();
   const [deleteImage, setDeleteImage] = useState<string[]>([]);
 
+  const [previewOpenAr, setPreviewOpenAr] = useState(false);
+  const [previewImageAr, setPreviewImageAr] = useState("");
+  const [previewTitleAr, setPreviewTitleAr] = useState("");
+  const [fileListAr, setFileListAr] = useState<UploadFile[]>([]);
+
+  const handleCancelAr = () => setPreviewOpenAr(false);
+
+  const handlePreviewAr = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64Ar(file.originFileObj as File);
+    }
+
+    setPreviewImageAr(file.url || (file.preview as string));
+    setPreviewOpenAr(true);
+    setPreviewTitleAr(
+      file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
+    );
+  };
+
+  const handleChangeAr = ({ fileList }: { fileList: UploadFile[] }) => {
+    setFileListAr(fileList.slice(-1)); // giữ lại ảnh cuối cùng (chỉ 1 ảnh)
+  };
+
+  const getBase64Ar = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+
   useEffect(() => {
+    console.log("Product data:", product);
     if (product) {
       form.setFieldsValue({
         id: product.id,
@@ -166,6 +200,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
         occasion: selectedOccasion,
         nail_length: selectedLength,
         delete_image_ids: deleteImage?.toString(),
+        imageAr: fileListAr[0].originFileObj,
 
         images: newImages || [],
       });
@@ -322,7 +357,44 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
             </div>
           </Upload>
         </Form.Item>
+
+        {product.imageAr && (
+          <Form.Item label="Ảnh AR cũ">
+            <Image
+              width={80}
+              src={product.imageAr}
+              alt="Ảnh AR cũ"
+              style={{ borderRadius: 6 }}
+            />
+          </Form.Item>
+        )}
+
+        <Form.Item label="Ảnh AR mới" name="imageAr">
+          <Upload
+            listType="picture-card"
+            fileList={fileListAr}
+            onPreview={handlePreviewAr}
+            onChange={handleChangeAr}
+            beforeUpload={() => false}
+          >
+            {fileListAr.length >= 1 ? null : (
+              <div>
+                <PlusOutlined />
+                <div style={{ marginTop: 8 }}>Thêm ảnh</div>
+              </div>
+            )}
+          </Upload>
+        </Form.Item>
       </Form>
+
+      <Modal
+        open={previewOpenAr}
+        title={previewTitleAr}
+        footer={null}
+        onCancel={handleCancelAr}
+      >
+        <Image alt="Ảnh AR" style={{ width: "100%" }} src={previewImageAr} />
+      </Modal>
 
       {/* Preview Modal */}
       <Modal
