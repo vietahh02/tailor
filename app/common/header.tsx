@@ -22,7 +22,7 @@ const Header = () => {
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const refMenu = React.useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const { auth, numberCart, numberFavorite, setAuth } = useAuth();
+  const { auth, numberCart, numberFavorite, setAuth, loadingAuth } = useAuth();
 
   function openNav() {
     refMenu.current?.style.setProperty("width", "100%");
@@ -122,7 +122,7 @@ const Header = () => {
                       >
                         <ImageAntd
                           src={
-                            auth.user?.img !== ""
+                            auth.user?.img
                               ? auth.user?.img
                               : "https://th.bing.com/th/id/OIP.GvNakgya1kk5A6CFQM6Z4gHaHZ?rs=1&pid=ImgDetMain"
                           }
@@ -150,7 +150,7 @@ const Header = () => {
                     <span
                       style={{
                         position: "absolute",
-                        bottom: -8,
+                        bottom: 0,
                         right: -7,
                         backgroundColor: "red",
                         color: "white",
@@ -180,7 +180,7 @@ const Header = () => {
                     <span
                       style={{
                         position: "absolute",
-                        bottom: -8,
+                        bottom: 0,
                         right: -7,
                         backgroundColor: "red",
                         color: "white",

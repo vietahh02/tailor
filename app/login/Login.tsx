@@ -15,7 +15,7 @@ const Login = () => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [isForget, setIsForget] = useState(false);
-  const { setAuth } = useAuth();
+  const { setAuth, updateNumberCart, updateNumberFavorite } = useAuth();
   const router = useRouter();
 
   const onFinish = async () => {
@@ -31,9 +31,11 @@ const Login = () => {
           email: res?.user?.email ?? "",
           user_name: res?.user?.user_name ?? "",
           role: res?.user?.role ?? "",
-          img: res?.user?.role ?? "",
+          img: res?.user?.avatar_image ?? "",
         },
       });
+      updateNumberCart();
+      updateNumberFavorite();
       if (res?.user?.role === "admin") {
         router.push("/admin");
       } else {

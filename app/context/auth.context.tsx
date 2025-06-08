@@ -30,6 +30,8 @@ interface AuthContextType {
   checkAdmin: () => boolean;
   checkLogin: () => boolean;
   loadingAuth: boolean;
+  updateNumberCart: () => Promise<void>;
+  updateNumberFavorite: () => Promise<void>;
 }
 
 // Create the context
@@ -56,23 +58,25 @@ export const AuthWrapper = ({ children }: AuthWrapperProps) => {
 
   const [loadingAuth, setLoadingAuth] = useState(true);
 
+  const updateNumberCart = async () => {
+    const res = (await getAllCartApi()) as any;
+    if (res.total_quantity) {
+      setNumberCart(res.total_quantity);
+    } else {
+      setNumberCart(0);
+    }
+  };
+
+  const updateNumberFavorite = async () => {
+    const res = await getAllFavoriteApi();
+    if (res.data) {
+      setNumberFavorite(res.data.length);
+    } else {
+      setNumberFavorite(0);
+    }
+  };
+
   useEffect(() => {
-    const updateNumberCart = async () => {
-      const res = (await getAllCartApi()) as any;
-      if (res.total_quantity) {
-        setNumberCart(res.total_quantity);
-      } else {
-        setNumberCart(0);
-      }
-    };
-    const updateNumberFavorite = async () => {
-      const res = await getAllFavoriteApi();
-      if (res.data) {
-        setNumberFavorite(res.data.length);
-      } else {
-        setNumberFavorite(0);
-      }
-    };
     const fetchAccount = async () => {
       try {
         if (auth.isAuthenticated) return;
@@ -132,6 +136,8 @@ export const AuthWrapper = ({ children }: AuthWrapperProps) => {
         checkAdmin,
         loadingAuth,
         checkLogin,
+        updateNumberCart,
+        updateNumberFavorite,
       }}
     >
       {children}
