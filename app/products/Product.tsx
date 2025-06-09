@@ -58,7 +58,8 @@ const Product = ({
         );
         toast.success("Bỏ yêu thích thành công");
       } else {
-        toast.error("Hệ thống đang lỗi hoặc quá tải vui lòng thử lại sau");
+        toast.error("Phiên đăng nhập đã hết hạn, hãy đăng nhập lại");
+        router.push("/login");
       }
     } else {
       const res = (await addNewFavoriteApi(id)) as any;
@@ -75,7 +76,8 @@ const Product = ({
         );
         toast.success("Thêm vào yêu thích thành công");
       } else {
-        toast.error("Hệ thống đang lỗi hoặc quá tải vui lòng thử lại sau");
+        toast.info("Hãy đăng nhập để thêm sản phẩm vào yêu thích");
+        router.push("/login");
       }
     }
   };
@@ -86,7 +88,8 @@ const Product = ({
       setNumberCart((prev) => (prev ? prev + 1 : 1));
       toast.success("Thêm sản phẩm thành công");
     } else {
-      toast.error("Thêm sản phẩm không thành công");
+      toast.info("Hãy đăng nhập để thêm sản phẩm vào giỏ hàng");
+      router.push("/login");
     }
   };
 

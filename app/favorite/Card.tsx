@@ -46,7 +46,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
       setNumberCart((prev) => (prev ? prev + 1 : 1));
       toast.success("Thêm sản phẩm thành công");
     } else {
-      toast.error("Thêm sản phẩm không thành công hãy thử lại sau");
+      toast.info("Hãy đăng nhập để thêm sản phẩm vào yêu thích");
+      router.push("/login");
     }
   };
   const handleFavorite = async () => {
@@ -56,7 +57,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
       setProducts((prev: any) => prev?.filter((p: any) => p.id !== id_favor));
       toast.success("Bỏ yêu thích thành công");
     } else {
-      toast.error("Hệ thống đang lỗi hoặc quá tải vui lòng thử lại sau");
+      toast.error("Phiên đăng nhập đã hết hạn, hãy đăng nhập lại");
+      router.push("/login");
     }
   };
 
