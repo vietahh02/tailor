@@ -105,7 +105,7 @@ const ShoppingCart: React.FC = () => {
                       height={100}
                       style={{ objectFit: "cover" }}
                     />
-                    <div className="ml-5">
+                    <div style={{ marginLeft: 15 }}>
                       <div>{c.product.name}</div>
                       <div className="ct-item-weight">{c.product.category}</div>
                     </div>

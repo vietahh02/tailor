@@ -22,7 +22,7 @@ type FormDataType = {
 
 type Props = {
   formData: FormDataType;
-  setFormData: React.Dispatch<FormDataType>;
+  setFormData: React.Dispatch<React.SetStateAction<FormDataType>>;
 };
 
 const AddressSelector = ({ formData, setFormData }: Props) => {

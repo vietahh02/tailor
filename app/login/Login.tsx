@@ -32,7 +32,7 @@ const Login = () => {
           email: res?.user?.email ?? "",
           user_name: res?.user?.user_name ?? "",
           role: res?.user?.role ?? "",
-          img: res?.user?.avatar_image ?? "",
+          img: res?.user?.avatar ?? "",
         },
       });
       updateNumberCart();

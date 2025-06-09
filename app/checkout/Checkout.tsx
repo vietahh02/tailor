@@ -2,78 +2,106 @@
 
 import React, { useEffect, useState } from "react";
 import "./CheckoutPage.css";
-import { Button, Form, Image, Input, Modal } from "antd";
+import { Button, Form, Image, Input, Modal, Upload, UploadFile } from "antd";
 import AddressSelector from "./VietNamAddress";
 import { toast } from "react-toastify";
 import { clearCartApi, createOrderApi, getAllCartApi } from "../util/api";
+import { UploadOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../context/auth.context";
 // import "../assets/images/do-mong-tien-2-1.jpg"
 
 const CheckoutPage: React.FC = () => {
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
     address: [] as string[],
     address2: "",
     note: "",
-    feeShip: 0 as number,
-    image: null as File | null,
+    images: [] as File[],
+    feeShip: 0,
   });
 
-  const [visible, setVisible] = useState(false);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [carts, setCarts] = useState<any>(null);
 
-  const handlePreview = () => {
-    setVisible(true);
-  };
-
-  const handleCancel = () => {
-    setVisible(false);
-  };
-
+  const router = useRouter();
   const { setNumberCart } = useAuth();
 
-  const [carts, setCarts] = useState<any>();
-  const router = useRouter();
   useEffect(() => {
-    const fetchData = async () => {
-      const storedCarts = (await getAllCartApi()) as any;
-      if (storedCarts) {
-        setCarts(storedCarts);
+    const fetchCart = async () => {
+      try {
+        const res = await getAllCartApi();
+        setCarts(res);
+      } catch (error) {
+        console.error("Error fetching cart:", error);
       }
     };
-    fetchData();
+    fetchCart();
   }, []);
-
-  // Clean up previous preview URL to prevent memory leaks
-  useEffect(() => {
-    return () => {
-      if (previewImage) {
-        URL.revokeObjectURL(previewImage);
-      }
-    };
-  }, [previewImage]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    console.log("Form data updated:", { ...formData, [name]: value });
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // Cleanup old preview URL
-      if (previewImage) {
-        URL.revokeObjectURL(previewImage);
-      }
+  const handleUploadChange = ({ fileList }: { fileList: UploadFile[] }) => {
+    setFileList(fileList);
 
-      const objectUrl = URL.createObjectURL(file);
-      setPreviewImage(objectUrl);
-      setFormData((prev) => ({ ...prev, image: file }));
+    const files = fileList
+      .map((file) => file.originFileObj)
+      .filter(Boolean) as File[];
+
+    setFormData((prev) => ({
+      ...prev,
+      images: files,
+    }));
+  };
+
+  const handleRemove = (file: UploadFile) => {
+    const newList = fileList.filter((item) => item.uid !== file.uid);
+    setFileList(newList);
+
+    const remainingFiles = newList
+      .map((file) => file.originFileObj)
+      .filter(Boolean) as File[];
+
+    setFormData((prev) => ({
+      ...prev,
+      images: remainingFiles,
+    }));
+  };
+
+  const handleImagePreview = async (file: UploadFile) => {
+    let src = file.url as string;
+    if (!src && file.originFileObj) {
+      src = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj as File);
+        reader.onload = () => resolve(reader.result as string);
+      });
     }
+
+    setPreviewImage(src);
+    setPreviewOpen(true);
+    setPreviewTitle(file.name || "Ảnh xem trước");
+  };
+
+  const [visible, setVisible] = useState(false);
+  const handlePreview = () => {
+    setVisible(true);
+  };
+  const handleCancel = () => {
+    setVisible(false);
   };
 
   function getShippingFee(locations: string[]): number {
@@ -92,17 +120,11 @@ const CheckoutPage: React.FC = () => {
     if (
       formData.fullName === "" ||
       formData.address.length < 3 ||
-      formData.phone === "" ||
-      formData.image === null
+      formData.phone === ""
     ) {
       toast.error("Hãy nhập đầy đủ thông tin");
       return;
     }
-    if (!isValidVietnamPhone(formData.phone)) {
-      toast.error("Hãy nhập đúng định dạng số điện thoại");
-      return;
-    }
-
     const res = (await createOrderApi(
       JSON.stringify({
         customer_name: formData.fullName,
@@ -120,7 +142,7 @@ const CheckoutPage: React.FC = () => {
           };
         }),
       }),
-      formData.image
+      formData.images
     )) as any;
     if (res.message === "successful") {
       await clearCartApi();
@@ -131,12 +153,6 @@ const CheckoutPage: React.FC = () => {
       toast.error("Hãy đăng nhập để đặt hàng");
     }
   };
-
-  function isValidVietnamPhone(phone: string): boolean {
-    const regexVNPhone =
-      /^(0|\+84)(3[2-9]|5[6|8|9]|7[0|6-9]|8[1-5]|9[0-9])[0-9]{7}$/;
-    return regexVNPhone.test(phone);
-  }
 
   function calculateTotal(): string {
     const total = carts?.items?.reduce((sum: any, item: any) => {
@@ -150,116 +166,110 @@ const CheckoutPage: React.FC = () => {
 
   return (
     <div className="container ck-container">
-      <Form className="ck-form-section">
+      <Form className="ck-form-section" layout="vertical">
         <h2>Thông tin khách hàng</h2>
 
-        {/* Full name */}
-        <div className="mb-3">
-          <label className="form-label">
-            Họ và tên <span style={{ color: "red" }}>*</span>
-          </label>
+        <Form.Item
+          label="Họ và tên"
+          name="fullName"
+          rules={[{ required: true, message: "Vui lòng nhập họ tên" }]}
+        >
           <Input
             size="large"
-            type="text"
             name="fullName"
             placeholder="Nhập họ tên"
             value={formData.fullName}
             onChange={handleChange}
-            required
           />
-        </div>
+        </Form.Item>
 
-        {/* Phone */}
-        <div className="mb-3">
-          <label className="form-label">
-            Số điện thoại <span style={{ color: "red" }}>*</span>
-          </label>
+        <Form.Item
+          label="Số điện thoại"
+          name="phone"
+          rules={[
+            { required: true, message: "Vui lòng nhập số điện thoại" },
+            {
+              pattern: /^[0-9]{10}$/,
+              message: "Số điện thoại phải gồm 10 chữ số",
+            },
+          ]}
+        >
           <Input
             size="large"
-            type="tel"
             name="phone"
             placeholder="Nhập số điện thoại"
-            className="ck-input-full"
             value={formData.phone}
             onChange={handleChange}
-            required
-            pattern="[0-9]{10}"
-            title="Số điện thoại phải gồm 10 chữ số"
             onKeyPress={(e) => {
               if (!/[0-9]/.test(e.key)) {
-                e.preventDefault(); // chặn nếu không phải số
+                e.preventDefault();
               }
             }}
           />
-        </div>
+        </Form.Item>
 
-        {/* Address */}
-        <div className="mb-3">
-          <label className="form-label">
-            Địa chỉ <span style={{ color: "red" }}>*</span>
-          </label>
-          <br />
+        <Form.Item label="Địa chỉ" required>
           <AddressSelector formData={formData} setFormData={setFormData} />
-        </div>
+        </Form.Item>
 
-        {/* Address 2 */}
-        <div className="mb-3">
-          <label className="form-label">
-            Địa chỉ cụ thể <span style={{ color: "red" }}>*</span>
-          </label>
+        <Form.Item
+          label="Địa chỉ cụ thể"
+          name="address2"
+          rules={[{ required: true, message: "Vui lòng nhập địa chỉ cụ thể" }]}
+        >
           <Input
             size="large"
-            type="text"
             name="address2"
             placeholder="Nhập địa chỉ"
-            className="ck-input-full"
             value={formData.address2}
             onChange={handleChange}
-            required
           />
-        </div>
+        </Form.Item>
 
-        {/* Image Upload */}
-        <div className="mb-3">
-          <label className="form-label">
-            Ảnh size móng <span style={{ color: "red" }}>*</span>
-            <Button
-              style={{ marginLeft: 10 }}
-              type="primary"
-              onClick={handlePreview}
-            >
+        {/* Upload ảnh với preview và xóa */}
+        <Form.Item label="Ảnh size móng">
+          <div style={{ marginBottom: 8 }}>
+            <Button type="primary" onClick={handlePreview}>
               Hướng dẫn đo móng
             </Button>
-          </label>
-          <input
-            type="file"
+          </div>
+          <Upload
+            listType="picture-card"
+            multiple
             accept="image/*"
-            className="ck-input-full"
-            onChange={handleImageChange}
-          />
-          {previewImage && (
-            <div className="mt-2">
-              <Image
-                src={previewImage}
-                alt="Preview"
-                className="img-thumbnail"
-                style={{ maxWidth: "200px" }}
-              />
-            </div>
-          )}
-        </div>
+            fileList={fileList}
+            beforeUpload={() => false}
+            onChange={handleUploadChange}
+            onRemove={handleRemove}
+            onPreview={handleImagePreview}
+          >
+            {fileList.length >= 8 ? null : (
+              <div>
+                <UploadOutlined />
+                <div style={{ marginTop: 8 }}>Tải ảnh lên</div>
+              </div>
+            )}
+          </Upload>
 
-        {/* Note */}
-        <div className="mb-3">
-          <label className="form-label">Ghi chú (tuỳ chọn)</label>
-          <textarea
+          <Modal
+            open={previewOpen}
+            title={previewTitle}
+            footer={null}
+            onCancel={() => setPreviewOpen(false)}
+          >
+            <img alt="preview" style={{ width: "100%" }} src={previewImage} />
+          </Modal>
+        </Form.Item>
+
+        <Form.Item label="Ghi chú (tuỳ chọn)" name="note">
+          <Input.TextArea
             name="note"
             placeholder="Nhập ghi chú nếu có"
-            className="ck-textarea"
             value={formData.note}
             onChange={handleChange}
-          ></textarea>
-        </div>
+            rows={4}
+          />
+        </Form.Item>
       </Form>
 
       {/* Order summary */}

@@ -7,6 +7,7 @@ import "./style/Zoom.scss";
 import ContentLeft from "./ContentLeft";
 import ContentFooter from "./ContentFooter";
 import CatLoader from "./CatLoader";
+import FullScreenSpinner from "@/app/loading/Spiner";
 
 type Charm = {
   id: number;
@@ -88,7 +89,7 @@ const ZoomContent = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1);
+    }, 1000);
 
     window.addEventListener("click", () => setContextMenu(null));
 
@@ -348,7 +349,7 @@ const ZoomContent = () => {
             <div className="content-right-draggable-content">
               <div ref={scrollContainerRef} className="scroll-container">
                 {isLoading ? (
-                  <CatLoader />
+                  <FullScreenSpinner />
                 ) : (
                   <div className="scroll-content">
                     <div className="scroll-content-layer1">

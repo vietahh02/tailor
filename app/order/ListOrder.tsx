@@ -43,7 +43,7 @@ interface Order {
   created_at: string;
   status: string;
   order_items: OrderItem[];
-  image_url?: string;
+  image_urls?: string[];
   note?: string;
   total_price: number;
   order_code: string;
@@ -58,7 +58,7 @@ interface OrderDetail {
   created_at: string;
   status: string;
   items: OrderItem[];
-  image_url?: string;
+  image_urls?: string[];
   note?: string;
   total_price: number;
   order_code: string;
@@ -245,11 +245,24 @@ const Orders: NextPage = () => {
                 <Paragraph>
                   <Text strong>Size:</Text>
                   <br />
-                  <Image
-                    src={selectedOrder.image_url || ""}
-                    alt="size"
-                    style={{ maxWidth: 300, maxHeight: 150, padding: 10 }}
-                  />
+                  {selectedOrder.image_urls &&
+                  selectedOrder.image_urls.length > 0 ? (
+                    selectedOrder.image_urls.map((url, idx) => (
+                      <Image
+                        key={idx}
+                        src={url}
+                        alt="size"
+                        style={{
+                          maxWidth: 150,
+                          maxHeight: 150,
+                          padding: 10,
+                          objectFit: "cover",
+                        }}
+                      />
+                    ))
+                  ) : (
+                    <span>Không có ảnh size</span>
+                  )}
                 </Paragraph>
                 <Paragraph>
                   <Text strong>Note:</Text>{" "}

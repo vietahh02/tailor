@@ -32,7 +32,7 @@ interface Order {
   created_at: string;
   status: string;
   order_items: OrderItem[];
-  image_url?: string;
+  image_urls?: string[];
   note?: string;
   total_price: number;
   order_code: string;

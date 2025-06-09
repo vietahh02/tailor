@@ -124,16 +124,14 @@ const getAllOrderUser = () => {
   return axios.get("/users/list-orders");
 };
 
-const createOrderApi = (order_data: string, image: File) => {
+const createOrderApi = (order_data: string, images?: File[] | null) => {
   const formData = new FormData();
   formData.append("order_data", order_data);
-  formData.append("image", image);
-
-  return axios.post("/orders/create-order", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
+  images?.forEach((image) => {
+    formData.append("images", image);
   });
+
+  return axios.post("/orders/create-order", formData);
 };
 
 const changeStatusOrderApi = (id: number, status: string) => {

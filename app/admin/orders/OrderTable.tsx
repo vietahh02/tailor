@@ -26,7 +26,7 @@ type Order = {
   created_at: string;
   status: string;
   items: OrderItem[];
-  image_url?: string;
+  image_urls?: string[];
   note?: string;
   total_price: number;
   order_code: string;
@@ -197,7 +197,23 @@ const OrderTable: React.FC = () => {
             <p>
               <strong>Hình ảnh size:</strong>
             </p>
-            <Image src={selectedOrder.image_url} alt="Size" width={150} />
+            {selectedOrder.image_urls && (
+              <Image.PreviewGroup>
+                {selectedOrder.image_urls.map((url: string, idx: number) => (
+                  <Image
+                    key={url || idx}
+                    src={url}
+                    alt="Size"
+                    width={150}
+                    height={150}
+                    style={{
+                      objectFit: "cover",
+                      padding: 10,
+                    }}
+                  />
+                ))}
+              </Image.PreviewGroup>
+            )}
 
             <p>
               <strong>Sản phẩm:</strong>
