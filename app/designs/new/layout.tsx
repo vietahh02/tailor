@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import Header from "../common/header";
-import Footer from "../common/footer";
 
 export const metadata: Metadata = {
   title: "Tailor Nail | Design",
@@ -12,11 +10,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <>
-      <Header />
-      {children}
-      <Footer />
-    </>
-  );
+  return <>{children}</>;
 }

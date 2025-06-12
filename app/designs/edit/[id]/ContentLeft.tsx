@@ -2,7 +2,7 @@
 import React, { useRef, useEffect, memo } from "react";
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
-import { getListM } from "./GetListCharm";
+import { getListM } from "../../common/GetListCharm";
 import Image from "next/image";
 
 const ContentLeft = ({

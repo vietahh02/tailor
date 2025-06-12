@@ -70,6 +70,7 @@ const Header = () => {
             {auth?.user?.role === "admin" && (
               <Link href={"/admin"}>Trang Admin</Link>
             )}
+            <Link href="/designs">Thiết kế móng</Link>
             <Link href="/search">Sản phẩm</Link>
             <Link href="/about">Giới thiệu</Link>
             <Link href="/customers">Khách hàng</Link>

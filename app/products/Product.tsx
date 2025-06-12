@@ -97,7 +97,17 @@ const Product = ({
     <div className="col-lg-3 col-sm-6">
       <div className="product_box">
         <div onClick={() => handleRedirect()} className="cursor-pointer">
-          <h4 className="bursh_text">{name}</h4>
+          <h4
+            className="bursh_text"
+            style={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              padding: "0 15px",
+            }}
+          >
+            {name}
+          </h4>
           {/* <p className="lorem_text">{category}</p> */}
           <div style={{ display: "flex", justifyContent: "center" }}>
             <Image

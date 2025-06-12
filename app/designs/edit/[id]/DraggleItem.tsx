@@ -1,9 +1,9 @@
 "use client";
 import React, { memo, useEffect, useState } from "react";
 import { Rnd } from "react-rnd";
-import "./style/Draggle.scss";
+import "../../style/Draggle.scss";
 import styled from "styled-components";
-import { getCharmByIndex } from "./GetListCharm";
+import { getCharmByIndex } from "../../common/GetListCharm";
 
 const Element = styled.div`
   position: absolute;
@@ -49,7 +49,7 @@ type Props = {
   charm: Charm;
   activeIdCharm: number;
   setActiveIdCharm?: React.Dispatch<React.SetStateAction<number>>;
-  setContextMenu: React.Dispatch<React.SetStateAction<Menu | null>>;
+  // setContextMenu: React.Dispatch<React.SetStateAction<Menu | null>>;
   rotate: number;
 };
 
@@ -60,7 +60,7 @@ const DraggleItem = ({
   charm,
   activeIdCharm,
   setActiveIdCharm,
-  setContextMenu,
+  // setContextMenu,
   rotate,
 }: Props) => {
   const [position, setPosition] = useState({ x: charm.x, y: charm.y });
@@ -76,20 +76,20 @@ const DraggleItem = ({
     handleDragStop?.(charm.id, newPosition);
   };
 
-  const handleContextMenu = (event: React.MouseEvent, id: number) => {
-    event.preventDefault();
-    setContextMenu({
-      position: {
-        x: event.pageX,
-        y: event.pageY,
-      },
-      id,
-    });
-  };
+  // const handleContextMenu = (event: React.MouseEvent, id: number) => {
+  //   event.preventDefault();
+  //   setContextMenu({
+  //     position: {
+  //       x: event.pageX,
+  //       y: event.pageY,
+  //     },
+  //     id,
+  //   });
+  // };
 
   return (
     <Rnd
-      size={{ width: 200, height: 200 }}
+      // size={{ width: 200, height: 200 }}
       position={position}
       onDragStart={handleDragStart}
       onDragStop={onDragStop}
@@ -110,7 +110,10 @@ const DraggleItem = ({
               activeIdCharm !== charm.id ? charm.deg : rotate
             }deg)`,
           }}
-          onContextMenu={(e) => handleContextMenu(e, charm.id)}
+          // onContextMenu={(e) => handleContextMenu(e, charm.id)}
+          onContextMenu={(e) => {
+            e.preventDefault();
+          }}
         />
       </Element>
     </Rnd>

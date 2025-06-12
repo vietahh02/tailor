@@ -6,10 +6,13 @@ import { getAllFavoriteApi } from "../util/api";
 import { toast } from "react-toastify";
 import ProductCard from "./Card";
 import CatLoader from "../loading/CatLoader";
+import { useRouter } from "next/navigation";
 const PRODUCTS_PER_PAGE = 12;
 
 const Favorite = () => {
   const [products, setProducts] = useState<any>();
+
+  const route = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,7 +20,8 @@ const Favorite = () => {
       if (res?.message === "Success") {
         setProducts(res.data);
       } else {
-        toast.error("lỗi hệ thống");
+        toast.info("Hãy đăng nhập để xem danh sách yêu thích");
+        route.push("/login");
       }
     };
     fetchData();

@@ -1,8 +1,8 @@
 "use client";
 
 import React, { memo } from "react";
-import "./style/Background.scss";
-import { getMByIndex } from "./GetListCharm";
+import "../style/Background.scss";
+import { getMByIndex } from "../common/GetListCharm";
 import Image from "next/image";
 
 type Charm = {

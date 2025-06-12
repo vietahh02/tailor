@@ -1,7 +1,7 @@
 "use client";
 import React, { memo, useEffect } from "react";
 import Background from "./Background";
-import "./style/ListDraggleItem.scss";
+import "../style/ListDraggleItem.scss";
 import DraggleItem from "./DraggleItem";
 
 type Charm = {
@@ -39,12 +39,13 @@ type Props = {
   handleDragStart: () => void;
   handleDragStop: (id: number, position: { x: number; y: number }) => void;
   designNow: DesignState;
-  handleDeleteCharm?: () => void;
-  setContextMenu: React.Dispatch<React.SetStateAction<Menu | null>>;
+  // handleDeleteCharm?: () => void;
+  // setContextMenu: React.Dispatch<React.SetStateAction<Menu | null>>;
   // handleRotateDeg?: (id: number, deg: number) => void;
   activeIdCharm: number;
   setActiveIdCharm: React.Dispatch<React.SetStateAction<number>>;
   rotate: number;
+  componentRef: React.RefObject<HTMLDivElement | null>;
 };
 
 const ListDraggleItem = ({
@@ -55,8 +56,9 @@ const ListDraggleItem = ({
   // handleDeleteCharm,
   activeIdCharm,
   setActiveIdCharm,
-  setContextMenu,
+  // setContextMenu,
   rotate,
+  componentRef,
 }: // handleRotateDeg,
 Props) => {
   const baseHeight = 1512;
@@ -121,7 +123,7 @@ Props) => {
                 handleDragStart={handleDragStart}
                 handleDragStop={handleDragStop}
                 // handleDeleteCharm={handleDeleteCharm}
-                setContextMenu={setContextMenu}
+                // setContextMenu={setContextMenu}
                 // handleRotateDeg={handleRotateDeg}
               />
             ))}

@@ -74,9 +74,9 @@ export default function SearchContent() {
 
       <div className="container responsive-columns" style={{ padding: 20 }}>
         {/* FILTER COLUMN */}
-        <div style={{ width: 300, marginRight: 20 }}>
+        <div style={{ width: 250, marginRight: 20 }}>
           <h3>
-            🧍‍♀️ <strong>Thông tin cá nhân & sở thích</strong>
+            <strong>Thông tin cá nhân & sở thích</strong>
           </h3>
 
           <Divider plain>

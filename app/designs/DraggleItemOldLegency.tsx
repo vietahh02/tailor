@@ -4,7 +4,7 @@ import Draggable from "react-draggable";
 import type { DraggableEvent, DraggableData } from "react-draggable";
 import "./style/Draggle.scss";
 import styled from "styled-components";
-import { getCharmByIndex } from "./GetListCharm";
+import { getCharmByIndex } from "./new/GetListCharm";
 
 const Element = styled.div`
   position: absolute;

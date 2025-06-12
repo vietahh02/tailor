@@ -21,12 +21,18 @@ body {
     gap: 2;
     margin: 0 auto;
     user-select: none;
-    padding: 0 150px;
+    padding: 0 50px;
     .zoom-container-header-left {
+      align-items: center;
+      .zoom-container-header-left-buttons {
+        border-left: 2px solid #fff;
+        border-right: 2px solid #fff;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
       display: flex;
-      gap: 10px;
-      border-left: 1px solid #fff;
-      border-right: 1px solid #fff;
+      gap: 5px;
       button {
         border-radius: 10px;
         border: none;
@@ -90,6 +96,7 @@ body {
             }
             img {
               border-radius: 10px;
+              background-color: #fff;
             }
           }
         }
@@ -132,7 +139,8 @@ body {
                   transition: padding 0.25s ease-in-out;
                   .scroll-content-layer3 {
                     margin: 10px;
-                    background-color: lightgray;
+                    // background-color: lightgray;
+                    background-color: white;
                     z-index: 0;
                     position: relative;
                     .scroll-content-layer4 {

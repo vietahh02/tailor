@@ -212,6 +212,42 @@ const getInfoUser = () => {
   return axios.get("/info-user");
 };
 
+const getAllDesignApi = () => {
+  return axios.get("/designs/get-by-user");
+};
+
+const deleteDesignApi = (id: number) => {
+  return axios.delete(`/designs/delete/${id}`);
+};
+
+const getDesignById = async (id: number) => {
+  const response = (await getAllDesignApi()) as any;
+  const designs = response;
+  const result = designs.find((item: any) => item.id === id);
+  return result;
+};
+
+const updateDesignApi = (
+  id: number,
+  data: string,
+  preview: File | undefined
+) => {
+  const formData = new FormData();
+  formData.append("data", data);
+  if (preview) {
+    formData.append("preview", preview);
+  }
+  return axios.put(`/designs/update/${id}`, formData);
+};
+const createDesignApi = (data: string, preview: File | undefined) => {
+  const formData = new FormData();
+  formData.append("data", data);
+  if (preview) {
+    formData.append("preview", preview);
+  }
+  return axios.post("/designs/create-design", formData);
+};
+
 export {
   createUserApi,
   loginApi,
@@ -239,4 +275,9 @@ export {
   forgetPasswordApi,
   changePasswordApi,
   restPasswordApi,
+  getAllDesignApi,
+  createDesignApi,
+  deleteDesignApi,
+  getDesignById,
+  updateDesignApi,
 };

@@ -3,13 +3,23 @@
 import React from "react";
 import im from "../../assets/images/new1.jpg";
 import Image from "next/image";
-// import Link from "next/link";
 import { Button } from "antd";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/context/auth.context";
 import { toast } from "react-toastify";
 
 const DesignNail = () => {
+  const route = useRouter();
+
+  const { auth } = useAuth();
+
   const handleDesign = () => {
-    toast.info("Chức năng đang trong thời gian nâng cấp hãy thử lại sau");
+    if (!auth.isAuthenticated) {
+      toast.info("Hãy đăng nhập để trải nghiệm chức năng tự thiết kế!!!");
+      route.push("/login");
+      return;
+    }
+    route.push("/designs");
   };
   return (
     <div className="about_section layout_padding">

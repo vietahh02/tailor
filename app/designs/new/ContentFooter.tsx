@@ -1,7 +1,7 @@
 "use client";
 
 import React, { memo } from "react";
-import { getListCharms } from "./GetListCharm";
+import { getListCharms } from "../common/GetListCharm";
 import Image from "next/image";
 type Charm = {
   id: number;
