@@ -12,6 +12,8 @@
     "@ant-design/plots": "^2.4.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@mediapipe/camera_utils": "^0.3.1675466862",
+    "@mediapipe/hands": "^0.4.1675469240",
     "antd": "^5.25.2",
     "axios": "^1.9.0",
     "bootstrap": "^5.3.6",

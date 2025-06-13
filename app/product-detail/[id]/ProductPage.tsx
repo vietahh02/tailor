@@ -14,10 +14,12 @@ import { Image, Space } from "antd";
 import { toast } from "react-toastify";
 import { useAuth } from "@/app/context/auth.context";
 import CatLoader from "@/app/loading/CatLoader";
+import NailModal from "@/app/common/NailModal";
 
 const ProductCard = () => {
   const [quantity, setQuantity] = useState<number>(1);
   const [product, setProduct] = useState<any>();
+  const [showModalAr, setShowModalAr] = useState(false);
 
   const router = useRouter();
   const params = useParams();
@@ -67,7 +69,11 @@ const ProductCard = () => {
   };
 
   const handleTryOn = () => {
-    toast.info("Chức năng đang trong thời gian nâng cấp hãy thử lại sau");
+    if (!product.imageAr) {
+      toast.info("Sản phẩm này chưa có chức năng AR hãy thử lại sau");
+      return;
+    }
+    setShowModalAr(true);
   };
 
   const settings = {
@@ -192,6 +198,12 @@ const ProductCard = () => {
             </div>
             <FeedBack id={product?.id} />
           </div>
+          {showModalAr && (
+            <NailModal
+              onClose={() => setShowModalAr(false)}
+              url={product.imageAr ?? undefined}
+            />
+          )}
         </>
       )}
     </>

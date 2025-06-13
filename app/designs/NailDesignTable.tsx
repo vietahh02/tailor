@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Table, Button, Image, Space } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useRouter } from "next/navigation";
 import { deleteDesignApi, getAllDesignApi } from "../util/api";
 import { toast } from "react-toastify";
 import ConfirmModal from "../common/ConfirmModal";
+import NailModal from "../common/NailModal";
 
 type Charm = {
   id: number;
@@ -27,10 +28,14 @@ type Design = {
 };
 
 const NailDesignTable: React.FC = () => {
-  const [designs, setDesigns] = React.useState<Design[]>([]);
-  const [openConfirm, setOpenConfirm] = React.useState(false);
-  const [id, setId] = React.useState<number>(-1);
-  const [name, setName] = React.useState<string>("");
+  const [designs, setDesigns] = useState<Design[]>([]);
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [id, setId] = useState<number>(-1);
+  const [name, setName] = useState<string>("");
+  const [showModalAr, setShowModalAr] = useState<{
+    show: boolean;
+    url: string | null;
+  }>({ show: false, url: null });
   const router = useRouter();
 
   useEffect(() => {
@@ -53,7 +58,7 @@ const NailDesignTable: React.FC = () => {
   };
 
   const handleTryOn = (record: Design) => {
-    toast.info(`Đang thử thiết kế: ${record.name}`);
+    setShowModalAr({ show: true, url: record.preview });
   };
 
   const handleEdit = (record: Design) => {
@@ -160,6 +165,13 @@ const NailDesignTable: React.FC = () => {
         onConfirm={() => handleDelete(id)}
         content={`Bạn có chắc chắn muốn xoá thiết kế "${name}" không?`}
       />
+
+      {showModalAr.show && (
+        <NailModal
+          onClose={() => setShowModalAr({ show: false, url: null })}
+          url={showModalAr.url ?? undefined}
+        />
+      )}
     </div>
   );
 };
