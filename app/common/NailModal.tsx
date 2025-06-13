@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface NailModalProps {
   url?: string;
@@ -13,7 +13,25 @@ const NailModal: React.FC<NailModalProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const cameraRef = useRef<any>(null);
 
+  const [videoInputs, setVideoInputs] = useState<MediaDeviceInfo[]>([]);
+  const [currentCameraId, setCurrentCameraId] = useState<string | null>(null);
+
   useEffect(() => {
+    navigator.mediaDevices.enumerateDevices().then((devices) => {
+      const videoDevices = devices.filter(
+        (device) => device.kind === "videoinput"
+      );
+      setVideoInputs(videoDevices);
+      if (videoDevices.length > 0) {
+        setCurrentCameraId(videoDevices[0].deviceId);
+      }
+      console.log(videoDevices);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!currentCameraId) return;
+
     let hands: any;
 
     const loadMediapipe = async () => {
@@ -99,6 +117,14 @@ const NailModal: React.FC<NailModalProps> = ({
         }
       });
 
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          deviceId: currentCameraId ? { exact: currentCameraId } : undefined,
+        },
+      });
+
+      video.srcObject = stream;
+
       const camera = new Camera(video, {
         onFrame: async () => {
           await hands.send({ image: video });
@@ -124,15 +150,34 @@ const NailModal: React.FC<NailModalProps> = ({
         cameraRef.current.stop();
         cameraRef.current = null;
       }
+      if (videoRef.current?.srcObject) {
+        const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
+        tracks.forEach((track) => track.stop());
+        videoRef.current.srcObject = null;
+      }
     };
-  }, [url]);
+  }, [currentCameraId, url]);
 
   const handleClose = () => {
     if (cameraRef.current) {
       cameraRef.current.stop();
       cameraRef.current = null;
     }
+    if (videoRef.current?.srcObject) {
+      const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
+      tracks.forEach((track) => track.stop());
+      videoRef.current.srcObject = null;
+    }
     onClose();
+  };
+
+  const switchCamera = () => {
+    if (videoInputs.length <= 1) return;
+    const currentIndex = videoInputs.findIndex(
+      (d) => d.deviceId === currentCameraId
+    );
+    const nextIndex = (currentIndex + 1) % videoInputs.length;
+    setCurrentCameraId(videoInputs[nextIndex].deviceId);
   };
 
   return (
@@ -179,6 +224,26 @@ const NailModal: React.FC<NailModalProps> = ({
         >
           ×
         </button>
+
+        {videoInputs.length > 1 && (
+          <button
+            onClick={switchCamera}
+            style={{
+              position: "absolute",
+              bottom: 10,
+              right: 10,
+              background: "#007bff",
+              color: "#fff",
+              border: "none",
+              borderRadius: "4px",
+              padding: "6px 12px",
+              cursor: "pointer",
+            }}
+          >
+            Đổi camera
+          </button>
+        )}
+
         <video
           ref={videoRef}
           autoPlay
