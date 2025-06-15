@@ -84,7 +84,7 @@ const ShoppingCart: React.FC = () => {
     <div className="container ct-container">
       <h1 className="ct-title">Giỏ hàng</h1>
       <p className="ct-shipping-note">
-        Miễn ship ở tất cả mọi khu vực ở Hòa Lạc
+        Miễn ship ở tất cả mọi khu vực ở Thạch Hoà, Thạch Thất, Hòa Lạc
       </p>
       <p className="ct-return-note">
         Miễn phí đổi trả trong vòng 7 ngày nếu có lỗi từ phía shop
