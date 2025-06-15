@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Card, Button, Rate, Image } from "antd";
+import { Card, Button, Image } from "antd";
 import { HeartFilled, ShoppingCartOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../context/auth.context";

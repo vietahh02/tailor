@@ -34,14 +34,6 @@ type Charm = {
   deg: number;
 };
 
-type Menu = {
-  position: {
-    x: number;
-    y: number;
-  };
-  id: number;
-};
-
 type Props = {
   scale: number;
   handleDragStart: () => void;

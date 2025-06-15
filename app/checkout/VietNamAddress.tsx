@@ -2,7 +2,7 @@
 
 import { Cascader, Spin } from "antd";
 import React, { useEffect, useState } from "react";
-import { Prev } from "react-bootstrap/esm/PageItem";
+// import { Prev } from "react-bootstrap/esm/PageItem";
 
 interface AddressOption {
   label: string;
@@ -71,7 +71,7 @@ const AddressSelector = ({ formData, setFormData }: Props) => {
 
   // Load xã/phường của quận/huyện
   const loadWardData = async (selectedOptions: AddressOption[]) => {
-    const parent = selectedOptions[selectedOptions.length - 2];
+    // const parent = selectedOptions[selectedOptions.length - 2];
     const district = selectedOptions[selectedOptions.length - 1] as any;
     district.loading = true;
 

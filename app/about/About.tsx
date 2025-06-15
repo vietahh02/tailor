@@ -2,7 +2,6 @@ import React from "react";
 import Image from "next/image";
 
 import about from "../assets/images/new1.jpg";
-import Link from "next/link";
 const About = () => {
   return (
     <div className="about_section layout_padding">

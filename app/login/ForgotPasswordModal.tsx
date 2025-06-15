@@ -2,9 +2,9 @@
 // components/ForgotPasswordModal.tsx
 
 import { Modal, Form, Input } from "antd";
-import { FC, useRef, useState } from "react";
+import { FC, useState } from "react";
 import { toast } from "react-toastify";
-import { forgetPasswordApi, restPasswordApi } from "../util/api";
+import { forgetPasswordApi } from "../util/api";
 import RestPasswordModal from "./RestPasswordModal";
 
 interface Props {
@@ -32,6 +32,7 @@ const ForgotPasswordModal: FC<Props> = ({ open, onClose }) => {
         toast.error("Email không đúng hoặc không hợp lệ!!!");
       }
     } catch (error) {
+      console.log(error);
       toast.error("Email không đúng hoặc không hợp lệ!!!");
     }
   };

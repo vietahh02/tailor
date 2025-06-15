@@ -1,5 +1,5 @@
 "use client";
-import { Button, Image, Input, Slider, Space, Typography } from "antd";
+import { Button, Input, Slider, Space, Typography } from "antd";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import PerfectScrollbar from "perfect-scrollbar";
 import ListDraggleItem from "./ListDraggleItem";
@@ -14,7 +14,6 @@ import { toast } from "react-toastify";
 import { createDesignApi } from "@/app/util/api";
 import { useRouter } from "next/navigation";
 import { FaHome } from "react-icons/fa";
-import { useAuth } from "@/app/context/auth.context";
 
 type Charm = {
   id: number;

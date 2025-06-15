@@ -205,7 +205,7 @@ const HandTracking: React.FC<HandTrackingProps> = ({ url, onClose }) => {
         <canvas
           ref={canvasRef}
           style={{
-            width: "100% ",
+            width: "100vw",
             maxWidth: "100%",
             height: "auto",
             maxHeight: "80vh",

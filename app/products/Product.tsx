@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 type Props = {
   id: number;
   name: string;
-  category: string;
+  category?: string;
   image: string;
   price: number;
   discount: number;
@@ -27,7 +27,7 @@ type Props = {
 const Product = ({
   id,
   name,
-  category,
+  // category,
   image,
   price,
   discount,

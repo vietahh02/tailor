@@ -22,7 +22,7 @@ const Header = () => {
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const refMenu = React.useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const { auth, numberCart, numberFavorite, setAuth, loadingAuth } = useAuth();
+  const { auth, numberCart, numberFavorite, setAuth } = useAuth();
 
   function openNav() {
     refMenu.current?.style.setProperty("width", "100%");

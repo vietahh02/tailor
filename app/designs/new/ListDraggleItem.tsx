@@ -26,14 +26,6 @@ type DesignState = {
   index: number;
 };
 
-type Menu = {
-  position: {
-    x: number;
-    y: number;
-  };
-  id: number;
-};
-
 type Props = {
   scale: number;
   handleDragStart: () => void;
@@ -45,7 +37,7 @@ type Props = {
   activeIdCharm: number;
   setActiveIdCharm: React.Dispatch<React.SetStateAction<number>>;
   rotate: number;
-  componentRef: React.RefObject<HTMLDivElement | null>;
+  componentRef?: React.RefObject<HTMLDivElement | null>;
 };
 
 const ListDraggleItem = ({
@@ -58,8 +50,8 @@ const ListDraggleItem = ({
   setActiveIdCharm,
   // setContextMenu,
   rotate,
-  componentRef,
-}: // handleRotateDeg,
+}: // componentRef,
+// handleRotateDeg,
 Props) => {
   const baseHeight = 1512;
   const baseWidth = 1512;

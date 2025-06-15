@@ -166,10 +166,10 @@ const NailDesignTable: React.FC = () => {
         content={`Bạn có chắc chắn muốn xoá thiết kế "${name}" không?`}
       />
 
-      {showModalAr.show && (
+      {showModalAr.show && showModalAr.url && (
         <NailModal
           onClose={() => setShowModalAr({ show: false, url: null })}
-          url={showModalAr.url ?? undefined}
+          url={showModalAr.url}
         />
       )}
     </div>

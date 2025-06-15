@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
   // typescript: {
   //   ignoreBuildErrors: true, // ❗ Bỏ qua lỗi TypeScript khi build
   // },
+  reactStrictMode: false,
 };
 // module.exports = {
 //   output: "export", // 👈 yêu cầu bắt buộc để export static

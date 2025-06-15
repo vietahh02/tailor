@@ -2,7 +2,7 @@
 
 import { changeStatusOrderApi } from "@/app/util/api";
 import { getAllOrderForAdmin } from "@/app/util/apiAdmin";
-import { Table, Button, Modal, Tag, Image, message } from "antd";
+import { Table, Button, Modal, Tag, Image } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
