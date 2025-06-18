@@ -140,3 +140,7 @@
     text-overflow: ellipsis; */
   }
 }
+
+.address {
+  max-width: calc(100vw - 60px);
+}
