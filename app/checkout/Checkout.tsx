@@ -125,8 +125,8 @@ const CheckoutPage: React.FC = () => {
       return;
     }
 
-    if (formData.images.length > 4) {
-      toast.error("Chỉ được phép thêm tối đa 4 ảnh");
+    if (formData.images.length > 2) {
+      toast.error("Chỉ được phép thêm tối đa 2 ảnh");
       return;
     }
 
@@ -143,7 +143,7 @@ const CheckoutPage: React.FC = () => {
         shipping_address:
           (formData.address2 && formData.address2 + ", ") +
           formData.address.reverse().join(", "),
-        shipping_fee: formData.feeShip,
+        shipping_fee: getShippingFee(formData.address),
         note: formData.note,
         items: carts?.items?.map((i: any) => {
           return {

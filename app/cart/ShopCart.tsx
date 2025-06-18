@@ -109,31 +109,38 @@ const ShoppingCart: React.FC = () => {
                     />
                     <div style={{ marginLeft: 15 }}>
                       <div>{c.product.name}</div>
-                      <div className="ct-item-weight">{c.product.category}</div>
                     </div>
                   </div>
                   <div className="ct-item-actions">
-                    <div className="ct-qty-control">
+                    <div className="d-flex gap-2">
+                      <div className="ct-qty-control">
+                        <button
+                          className="ct-qty-btn"
+                          onClick={() =>
+                            handleDecrease(c.product_id, c.quantity)
+                          }
+                        >
+                          −
+                        </button>
+                        <span className="ct-qty-value">{c.quantity}</span>
+                        <button
+                          className="ct-qty-btn"
+                          onClick={() =>
+                            handleIncrease(c.product_id, c.quantity)
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
                       <button
-                        className="ct-qty-btn"
-                        onClick={() => handleDecrease(c.product_id, c.quantity)}
+                        className="ct-remove-btn"
+                        onClick={() =>
+                          handleDeleteCart(c.product_id, c.quantity)
+                        }
                       >
-                        −
-                      </button>
-                      <span className="ct-qty-value">{c.quantity}</span>
-                      <button
-                        className="ct-qty-btn"
-                        onClick={() => handleIncrease(c.product_id, c.quantity)}
-                      >
-                        +
+                        ✕
                       </button>
                     </div>
-                    <button
-                      className="ct-remove-btn"
-                      onClick={() => handleDeleteCart(c.product_id, c.quantity)}
-                    >
-                      ✕
-                    </button>
                     <div className="ct-price">
                       {(
                         (c.product.price * (100 - c.product.discount)) /

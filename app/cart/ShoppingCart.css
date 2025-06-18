@@ -149,4 +149,7 @@
     margin-left: 0;
     margin-top: 2rem;
   }
+  .ct-item-actions {
+    display: grid;
+  }
 }
