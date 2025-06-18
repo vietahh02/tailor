@@ -108,7 +108,7 @@ const UserTable: React.FC = () => {
     },
     {
       title: "Tên",
-      dataIndex: "user_name",
+      dataIndex: "full_name",
       key: "name",
     },
     {
