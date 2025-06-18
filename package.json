@@ -17,6 +17,7 @@
     "antd": "^5.25.2",
     "axios": "^1.9.0",
     "bootstrap": "^5.3.6",
+    "browser-image-compression": "^2.0.2",
     "cloudinary": "^2.6.1",
     "cookie": "^1.0.2",
     "formidable": "^3.5.4",

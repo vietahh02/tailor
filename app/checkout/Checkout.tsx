@@ -125,11 +125,16 @@ const CheckoutPage: React.FC = () => {
       return;
     }
 
-    for (const im of formData.images) {
-      if (im.size > 1 * 1024 * 1024) {
-        toast.error("Ảnh quá nặng! Vui lòng chọn ảnh nhẹ hơn 1MB.");
-      }
+    if (formData.images.length > 4) {
+      toast.error("Chỉ được phép thêm tối đa 4 ảnh");
+      return;
     }
+
+    // for (const im of formData.images) {
+    //   if (im.size > 1 * 1024 * 1024) {
+    //     toast.error("Ảnh quá nặng! Vui lòng chọn ảnh nhẹ hơn 1MB.");
+    //   }
+    // }
 
     const res = (await createOrderApi(
       JSON.stringify({

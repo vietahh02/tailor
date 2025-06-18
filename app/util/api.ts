@@ -1,4 +1,5 @@
 import axios from "./axios.customize";
+import { compressMultipleImages, compressSingleImage } from "./comparePicture";
 
 const createUserApi = (
   email: string,
@@ -64,7 +65,7 @@ const getProductById = (id: number) => {
   return axios.get(`/products/${id}`);
 };
 
-const updateUser = (
+const updateUser = async (
   id: number,
   email?: string,
   phone?: string,
@@ -78,7 +79,10 @@ const updateUser = (
   if (phone) formData.append("phone", phone);
   if (address) formData.append("address", address);
   if (full_name) formData.append("full_name", full_name);
-  if (image) formData.append("image", image);
+  if (image) {
+    const img = await compressSingleImage(image);
+    formData.append("image", img);
+  }
 
   return axios.put(`/users/${id}`, formData, {
     headers: {
@@ -124,12 +128,16 @@ const getAllOrderUser = () => {
   return axios.get("/users/list-orders");
 };
 
-const createOrderApi = (order_data: string, images?: File[] | null) => {
+const createOrderApi = async (order_data: string, images?: File[] | null) => {
   const formData = new FormData();
   formData.append("order_data", order_data);
-  images?.forEach((image) => {
-    formData.append("images", image);
-  });
+
+  if (images) {
+    const imgs = await compressMultipleImages(images);
+    imgs?.forEach((image) => {
+      formData.append("images", image);
+    });
+  }
 
   return axios.post("/orders/create-order", formData);
 };
