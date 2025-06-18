@@ -219,7 +219,11 @@ const CheckoutPage: React.FC = () => {
           />
         </Form.Item>
 
-        <Form.Item label="Địa chỉ" required>
+        <Form.Item
+          label="Địa chỉ"
+          style={{ maxWidth: window.innerWidth - 60 }}
+          required
+        >
           <AddressSelector formData={formData} setFormData={setFormData} />
         </Form.Item>
 
