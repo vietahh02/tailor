@@ -200,7 +200,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
         occasion: selectedOccasion,
         nail_length: selectedLength,
         delete_image_ids: deleteImage?.toString(),
-        imageAr: fileListAr[0].originFileObj,
+        imageAr: fileListAr[0]?.originFileObj,
 
         images: newImages || [],
       });
