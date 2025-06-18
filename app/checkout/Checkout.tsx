@@ -9,7 +9,6 @@ import { clearCartApi, createOrderApi, getAllCartApi } from "../util/api";
 import { UploadOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../context/auth.context";
-// import "../assets/images/do-mong-tien-2-1.jpg"
 
 const CheckoutPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -125,6 +124,13 @@ const CheckoutPage: React.FC = () => {
       toast.error("Hãy nhập đầy đủ thông tin");
       return;
     }
+
+    for (const im of formData.images) {
+      if (im.size > 1 * 1024 * 1024) {
+        toast.error("Ảnh quá nặng! Vui lòng chọn ảnh nhẹ hơn 1MB.");
+      }
+    }
+
     const res = (await createOrderApi(
       JSON.stringify({
         customer_name: formData.fullName,

@@ -86,7 +86,7 @@ const Orders: NextPage = () => {
       const res = (await getAllOrderUser()) as any;
       console.log(res);
       if (!res.message) {
-        setOrders(res);
+        setOrders(res.reverse());
       } else {
         toast.info("Hãy đăng nhập để xem danh sách đơn hàng");
         router.push("/login");

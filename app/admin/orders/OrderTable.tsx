@@ -44,7 +44,7 @@ const OrderTable: React.FC = () => {
       const res = (await getAllOrderForAdmin()) as any;
       console.log(res);
       if (!res.detail) {
-        setOrders(res);
+        setOrders(res.reverse());
       } else {
         toast.info("Hãy đăng nhập để xem danh sách đơn hàng");
         router.push("/login");

@@ -119,3 +119,24 @@
 .ck-place-order:hover {
   /* background-color: #d4d4d4; */
 }
+
+@media screen and (max-width: 768px) {
+  .ck-container {
+    display: grid;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .ck-summary-section {
+    padding: 10px;
+  }
+
+  .ck-summary-table th,
+  .ck-summary-table td {
+    padding: 3px;
+    font-size: 10px;
+    /* white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; */
+  }
+}

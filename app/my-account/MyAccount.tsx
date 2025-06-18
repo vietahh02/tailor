@@ -132,6 +132,10 @@ export default function ProfilePage() {
       const avatarFile =
         avatarFileList.length > 0 ? avatarFileList[0].originFileObj : undefined;
 
+      if (avatarFile != undefined && avatarFile.size > 1 * 1024 * 1024) {
+        toast.error("Ảnh quá nặng! Vui lòng chọn ảnh nhẹ hơn 1MB.");
+      }
+
       const res = (await updateUser(
         userInfo.id,
         userOld?.current?.email !== values.email ? values.email : undefined,

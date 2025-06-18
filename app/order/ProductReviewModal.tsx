@@ -94,6 +94,12 @@ const ProductReviewModal = ({
       return;
     }
 
+    for (const im of newImages) {
+      if (im.size > 1 * 1024 * 1024) {
+        toast.error("Ảnh quá nặng! Vui lòng chọn ảnh nhẹ hơn 1MB.");
+      }
+    }
+
     const res = (await createNewReviewApi(
       selectedOrderItem.product_id,
       values.rating,
@@ -150,6 +156,12 @@ const ProductReviewModal = ({
     if (totalImages > 5) {
       toast.error("Tổng số ảnh không được vượt quá 5");
       return;
+    }
+
+    for (const im of newImages) {
+      if (im.size > 1 * 1024 * 1024) {
+        toast.error("Ảnh quá nặng! Vui lòng chọn ảnh nhẹ hơn 1MB.");
+      }
     }
 
     const res = (await updateReviewApi(
