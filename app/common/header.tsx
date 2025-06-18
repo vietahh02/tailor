@@ -131,7 +131,7 @@ const Header = () => {
                           width={45}
                           height={45}
                           preview={false}
-                          style={{ borderRadius: "50%" }}
+                          style={{ borderRadius: "50%", objectFit: "cover" }}
                           onClick={() => {
                             router.push("/my-account");
                           }}
@@ -168,14 +168,14 @@ const Header = () => {
                     src={
                       auth.user?.img !== ""
                         ? auth.user?.img
-                        : "https://th.bing.com/th/id/OIP.GvNakgya1kk5A6CFQM6Z4gHaHZ?rs=1&pid=ImgDetMain"
+                        : "https://res.cloudinary.com/dlpcempww/image/upload/v1750232285/tqap6v7xhqlwqf1ulyjs.jpg"
                     }
                     alt=""
                     width={55}
                     height={55}
                     className="avatar_header"
                     preview={false}
-                    style={{ borderRadius: "50%" }}
+                    style={{ borderRadius: "50%", objectFit: "cover" }}
                     onClick={() => {
                       router.push("/my-account");
                     }}

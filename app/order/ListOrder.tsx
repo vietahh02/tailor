@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import CatLoader from "../loading/CatLoader";
 import type { Breakpoint } from "antd/es/_util/responsiveObserver";
+import "./order.css";
 
 const { Content } = Layout;
 const { Title, Paragraph, Text } = Typography;
@@ -237,7 +238,8 @@ const Orders: NextPage = () => {
                   <Text strong>Ngày đặt:</Text> {selectedOrder.created_at}
                 </Paragraph>
                 <Paragraph>
-                  <Text strong>Trạng thái:</Text> {selectedOrder.status}
+                  <Text strong>Trạng thái:</Text>{" "}
+                  {getStatusTag(selectedOrder.status)}
                 </Paragraph>
                 <Paragraph>
                   <Text strong>Phí Ship:</Text> {selectedOrder.shipping_fee} ₫
@@ -270,6 +272,7 @@ const Orders: NextPage = () => {
                 </Paragraph>
 
                 <Table
+                  className="responsive-order-table"
                   dataSource={selectedOrder.items.map((item, index) => ({
                     ...item,
                     key: index,
@@ -285,9 +288,7 @@ const Orders: NextPage = () => {
                       title: "Ảnh",
                       dataIndex: "image",
                       key: "image",
-                      render: (src) => (
-                        <Image src={src} width={80} height={80} alt="" />
-                      ),
+                      render: (src) => <Image src={src} alt="" />,
                     },
                     {
                       title: "Số lượng",
