@@ -54,6 +54,10 @@ const NailDesignTable: React.FC = () => {
   }, []);
 
   const handleCreateNew = () => {
+    if (typeof window !== "undefined" && window.innerWidth < 786) {
+      toast.info("Tính năng này chỉ hỗ trợ trên máy tính.");
+      return;
+    }
     router.push("/designs/new");
   };
 
@@ -62,7 +66,10 @@ const NailDesignTable: React.FC = () => {
   };
 
   const handleEdit = (record: Design) => {
-    // console.log(record);
+    if (typeof window !== "undefined" && window.innerWidth < 786) {
+      toast.info("Tính năng này chỉ hỗ trợ trên máy tính.");
+      return;
+    }
     router.push(`/designs/edit/${record.id}`);
   };
 
