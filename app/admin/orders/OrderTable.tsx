@@ -1,6 +1,6 @@
 "use client";
 
-import { changeStatusOrderApi } from "@/app/util/api";
+import { changeStatusOrderApi, getProductById } from "@/app/util/api";
 import { getAllOrderForAdmin } from "@/app/util/apiAdmin";
 import { Table, Button, Modal, Tag, Image } from "antd";
 import type { ColumnsType } from "antd/es/table";
@@ -73,6 +73,11 @@ const OrderTable: React.FC = () => {
     setOrders(updatedOrders);
     setSelectedOrder((prev) => (prev ? { ...prev, status: newStatus } : null));
     toast.success(`Cập nhật trạng thái sang "${newStatus}" thành công`);
+  };
+
+  const getProductDetail = async (p: any) => {
+    const pd = (await getProductById(p.id)) as any;
+    return pd.price - (pd.price * pd.discount) / 100;
   };
 
   const columns: ColumnsType<Order> = [
@@ -237,7 +242,8 @@ const OrderTable: React.FC = () => {
                   title: "Giá (VNĐ)",
                   dataIndex: "price",
                   key: "price",
-                  render: (price) => price.toLocaleString(),
+                  render: (_, record: OrderItem) =>
+                    getProductDetail(record).toLocaleString(),
                 },
                 {
                   title: "Tổng",
