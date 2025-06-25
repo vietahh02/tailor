@@ -28,7 +28,7 @@ type Order = {
   items: OrderItem[];
   image_urls?: string[];
   note?: string;
-  total_price: number;
+  total_amount: number;
   order_code: string;
 };
 
@@ -75,8 +75,8 @@ const OrderTable: React.FC = () => {
     toast.success(`Cập nhật trạng thái sang "${newStatus}" thành công`);
   };
 
-  const getProductDetail = async (p: any) => {
-    const pd = (await getProductById(p.id)) as any;
+  const getProductPrice = async (p: any) => {
+    const pd = (await getProductById(p.product_id)) as any;
     return pd.price - (pd.price * pd.discount) / 100;
   };
 
@@ -243,13 +243,15 @@ const OrderTable: React.FC = () => {
                   dataIndex: "price",
                   key: "price",
                   render: (_, record: OrderItem) =>
-                    getProductDetail(record).toLocaleString(),
+                    getProductPrice(record).toLocaleString(),
                 },
                 {
                   title: "Tổng",
                   key: "total",
                   render: (_, record: OrderItem) =>
-                    (record.price * record.quantity).toLocaleString(),
+                    (
+                      Number(getProductPrice(record)) * record.quantity
+                    ).toLocaleString(),
                 },
               ]}
               footer={() => (
@@ -264,12 +266,7 @@ const OrderTable: React.FC = () => {
                 >
                   <strong>Tổng cộng: </strong>
                   <strong>
-                    {formatCurrency(
-                      selectedOrder?.items?.reduce(
-                        (sum, item) => sum + item.price * item.quantity,
-                        0
-                      ) || 0
-                    )}
+                    {selectedOrder?.total_amount.toLocaleString()}
                   </strong>
                 </div>
               )}
