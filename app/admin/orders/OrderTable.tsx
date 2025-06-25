@@ -75,11 +75,6 @@ const OrderTable: React.FC = () => {
     toast.success(`Cập nhật trạng thái sang "${newStatus}" thành công`);
   };
 
-  const getProductPrice = async (p: any) => {
-    const pd = (await getProductById(p.product_id)) as any;
-    return pd.price - (pd.price * pd.discount) / 100;
-  };
-
   const columns: ColumnsType<Order> = [
     { title: "ID", dataIndex: "id", key: "id" },
     {
@@ -242,16 +237,13 @@ const OrderTable: React.FC = () => {
                   title: "Giá (VNĐ)",
                   dataIndex: "price",
                   key: "price",
-                  render: (_, record: OrderItem) =>
-                    getProductPrice(record).toLocaleString(),
+                  render: (price) => price.toLocaleString(),
                 },
                 {
                   title: "Tổng",
                   key: "total",
                   render: (_, record: OrderItem) =>
-                    (
-                      Number(getProductPrice(record)) * record.quantity
-                    ).toLocaleString(),
+                    (record.price * record.quantity).toLocaleString(),
                 },
               ]}
               footer={() => (
