@@ -149,7 +149,7 @@ const CheckoutPage: React.FC = () => {
           return {
             product_id: i.product_id,
             quantity: i.quantity,
-            price: i.product.price,
+            price: i.product.price - i.product.price * i.product.discount,
           };
         }),
       }),
