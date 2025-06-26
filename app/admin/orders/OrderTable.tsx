@@ -32,26 +32,15 @@ type Order = {
   order_code: string;
 };
 
-const OrderTable: React.FC = () => {
-  const [orders, setOrders] = useState<Order[]>([]);
+const OrderTable = ({
+  orders,
+  setOrders,
+}: {
+  orders: Order[];
+  setOrders: React.Dispatch<React.SetStateAction<Order[]>>;
+}) => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
-
-  const router = useRouter();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = (await getAllOrderForAdmin()) as any;
-      console.log(res);
-      if (!res.detail) {
-        setOrders(res.reverse());
-      } else {
-        toast.info("Hãy đăng nhập để xem danh sách đơn hàng");
-        router.push("/login");
-      }
-    };
-    fetchData();
-  }, []);
 
   const handleViewDetail = (record: Order) => {
     setSelectedOrder(record);

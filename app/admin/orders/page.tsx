@@ -1,12 +1,34 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Breadcrumb, Layout, theme } from "antd";
 import OrderTable from "./OrderTable";
+import { getAllOrderForAdmin } from "@/app/util/apiAdmin";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import ExportOrdersWithFilter from "./OrderExportWithFilter";
 
 const { Content } = Layout;
 
 const App: React.FC = () => {
+  const [orders, setOrders] = useState<any[]>([]);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = (await getAllOrderForAdmin()) as any;
+      console.log(res);
+      if (!res.detail) {
+        setOrders(res.reverse());
+      } else {
+        toast.info("Hãy đăng nhập để xem danh sách đơn hàng");
+        router.push("/login");
+      }
+    };
+    fetchData();
+  }, []);
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -27,8 +49,11 @@ const App: React.FC = () => {
           }}
         >
           <main style={{ padding: 24 }}>
-            <h1>Danh sách đơn hàng</h1>
-            <OrderTable />
+            <div>
+              <h1>Danh sách đơn hàng</h1>
+              <ExportOrdersWithFilter orders={orders.reverse()} />
+            </div>
+            <OrderTable orders={orders} setOrders={setOrders} />
           </main>
         </div>
       </Content>
