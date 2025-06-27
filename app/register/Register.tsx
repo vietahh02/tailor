@@ -26,6 +26,11 @@ const Register = () => {
       toast.error("Hãy nhập đầy đủ thông tin");
       return;
     }
+    if (password.length() < 6) {
+      toast.error("Mật khẩu phải từ 6 ký tự trở lên");
+      return;
+    }
+
     if (password !== rePassword) {
       toast.error("Mật khẩu và mật khẩu nhập lại không trùng nhau");
       return;
