@@ -20,7 +20,7 @@ const App: React.FC = () => {
       const res = (await getAllOrderForAdmin()) as any;
       console.log(res);
       if (!res.detail) {
-        setOrders(res.reverse());
+        setOrders(res);
       } else {
         toast.info("Hãy đăng nhập để xem danh sách đơn hàng");
         router.push("/login");
