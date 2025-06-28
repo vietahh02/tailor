@@ -74,7 +74,14 @@ export const exportOrdersToExcel = async (
   worksheet.getColumn("total").numFmt = '#,##0" ₫"';
 
   // Add total row
-  const total = orders.reduce((sum, o) => sum + o.total_amount, 0);
+  const total = orders.reduce(
+    (sum, o) => {
+      if (o.status === "cancelled") return 0;
+      return sum + o.total_amount;
+    },
+
+    0
+  );
   const totalRow = worksheet.addRow({
     index: "",
     customer: "",

@@ -59,7 +59,7 @@ const OrderTable = ({
     const updatedOrders = orders.map((order) =>
       order.id === selectedOrder.id ? { ...order, status: newStatus } : order
     );
-    setOrders(updatedOrders);
+    setOrders(updatedOrders.reverse());
     setSelectedOrder((prev) => (prev ? { ...prev, status: newStatus } : null));
     toast.success(`Cập nhật trạng thái sang "${newStatus}" thành công`);
   };
