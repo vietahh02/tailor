@@ -10,6 +10,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthWrapper } from "./context/auth.context";
 import "./common/search.css";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "Tailor Nail",
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body>
         <AuthWrapper>{children}</AuthWrapper>
         <ToastContainer />
+        <Analytics />
       </body>
     </html>
   );
