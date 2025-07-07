@@ -327,7 +327,7 @@ const Orders: NextPage = () => {
                           selectedOrder.items.reduce(
                             (sum, item) => sum + item.price * item.quantity,
                             0
-                          )
+                          ) + selectedOrder.shipping_fee
                         )}
                       </strong>
                     </div>
